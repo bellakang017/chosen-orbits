@@ -2120,6 +2120,11 @@
       // Re-observe sections for intersection
       observeSections();
 
+      // Refresh ScrollTrigger positions after DOM reorder
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
+
       if (shouldScroll !== false) {
         const firstChapter = chaptersContainer.querySelector('.chapter-section');
         if (firstChapter) {
@@ -2344,6 +2349,41 @@
         copyBtn.textContent = 'Copied';
         setTimeout(() => { copyBtn.textContent = 'Copy to Obsidian'; }, 2000);
       });
+    }
+
+    /* ===== GSAP Scroll-Triggered Fade-In Animations ===== */
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initScrollAnimations() {
+      // Only animate narrative chapters (exclude my-orbit, appendix, colophon)
+      const narrativeScope = '.chapter-section:not(.section-my-orbit):not(.section-appendix):not(.section-colophon)';
+      const selectors = [
+        narrativeScope + ' .chapter-header',
+        narrativeScope + ' .crisis-hook',
+        narrativeScope + ' .chapter-prose p',
+        narrativeScope + ' .pull-quote'
+      ].join(', ');
+
+      const animTargets = document.querySelectorAll(selectors);
+
+      animTargets.forEach(el => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 20,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            once: true
+          }
+        });
+      });
+    }
+
+    // Only run animations if user has not requested reduced motion
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      initScrollAnimations();
     }
   </script>
 
