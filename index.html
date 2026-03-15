@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chosen Orbits</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -504,7 +505,11 @@
 
     /* -- Chapter container (for future chapters) -- */
     #chapters {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
+      height: 100vh;
     }
 
     /* ===== Per-person color classes ===== */
@@ -1827,7 +1832,7 @@
   </section>
 
   <!-- ===== Chapters Container ===== -->
-  <div id="chapters" style="position:relative;">
+  <div id="chapters">
 
     <section class="chapter-section book-page person-piaget" data-person="piaget" data-number="01" id="chapter-piaget">
       <div class="chapter-gradient-bar grad-piaget"></div>
@@ -3274,25 +3279,17 @@
       const oldPage = allPages[currentPageIndex];
       const newPage = allPages[index];
 
+      console.log('showPage', index, direction, 'newPage:', newPage.id || newPage.dataset.person);
+
       // Deactivate old page
       if (oldPage && oldPage !== newPage) {
         oldPage.classList.remove('active');
         oldPage.classList.add(direction === 'next' ? 'exit-left' : 'exit-right');
       }
 
-      // Position off-screen (no transition)
-      newPage.classList.remove('exit-left', 'exit-right', 'active');
-      newPage.style.transition = 'none';
-      newPage.style.opacity = '0';
-      newPage.style.transform = direction === 'next' ? 'translateX(40px)' : 'translateX(-40px)';
-
-      // Force reflow
-      void newPage.offsetWidth;
-
-      // Animate in
-      newPage.style.transition = '';
-      newPage.style.opacity = '';
-      newPage.style.transform = '';
+      // Skip animation — just show immediately
+      newPage.classList.remove('exit-left', 'exit-right');
+      newPage.style.cssText = '';
       newPage.classList.add('active');
 
       // Scroll to top
@@ -3306,7 +3303,7 @@
           oldPage.classList.remove('exit-left', 'exit-right');
         }
         isTransitioning = false;
-      }, 350);
+      }, 100);
     }
 
     /* ===== Navigation ===== */
