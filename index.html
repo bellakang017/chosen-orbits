@@ -815,6 +815,147 @@
       display: block;
     }
 
+    /* -- Appendix: Data Cards -- */
+    .appendix-card {
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+      background: #fff;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .appendix-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .appendix-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .appendix-card-gradient {
+      width: 36px;
+      height: 6px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .appendix-card-header h3 {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0;
+      flex: 1;
+      color: #3a3a3a;
+    }
+    .expand-indicator {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      color: #999;
+      transition: transform 0.2s;
+    }
+    .appendix-card.expanded .expand-indicator {
+      transform: rotate(45deg);
+    }
+    .appendix-card-body {
+      display: none;
+      padding: 0.5rem 1rem 1rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    .appendix-card.expanded .appendix-card-body {
+      display: block;
+    }
+    .data-field {
+      display: flex;
+      gap: 0.6rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+    .data-field:last-child { border-bottom: none; }
+    .field-label {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      color: #777;
+      min-width: 7.5rem;
+      flex-shrink: 0;
+    }
+    .field-value {
+      font-family: var(--font-body);
+      color: #3a3a3a;
+    }
+
+    /* -- Appendix: Cross-Analysis Tables -- */
+    .cross-table {
+      margin-bottom: 2.5rem;
+    }
+    .cross-table h3 {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #3a3a3a;
+    }
+    .cross-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    .cross-table th {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.5rem 0.7rem;
+      border-bottom: 2px solid rgba(0,0,0,0.12);
+      color: #555;
+    }
+    .cross-table td {
+      font-family: var(--font-body);
+      padding: 0.45rem 0.7rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      color: #3a3a3a;
+    }
+    .cross-table tr:nth-child(even) td {
+      background: rgba(0,0,0,0.02);
+    }
+    .cross-table .table-summary {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 0.4rem;
+      font-style: italic;
+    }
+
+    /* -- Appendix: Relationship Map -- */
+    .relationship-map-wrap {
+      text-align: center;
+      overflow-x: auto;
+    }
+    .relationship-map-wrap svg {
+      max-width: 100%;
+      height: auto;
+    }
+    .map-legend {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-top: 1rem;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      color: #888;
+    }
+    .map-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .map-legend-line {
+      width: 24px;
+      height: 2px;
+    }
+
     /* -- Colophon -- */
     .section-colophon {
       background-color: #2a2a2a;
@@ -1975,9 +2116,400 @@
           <button class="appendix-tab-btn" data-tab="cross-analysis">Cross-Analysis</button>
           <button class="appendix-tab-btn" data-tab="relationship-map">Relationship Map</button>
         </div>
-        <div class="appendix-tab-content active" id="tab-data-cards"></div>
-        <div class="appendix-tab-content" id="tab-cross-analysis"></div>
-        <div class="appendix-tab-content" id="tab-relationship-map"></div>
+        <div class="appendix-tab-content active" id="tab-data-cards">
+
+          <div class="appendix-card" data-person="piaget">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-piaget-start), var(--grad-piaget-end));"></div>
+              <h3>01 Jean Piaget</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">INTP, unstoppable observer</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">84 years, active until death</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">Swiss (French-speaking)</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Leo, 1896.08.09</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Apolitical scholar, education democratization</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Father Arthur (medieval lit professor), Mother Rebecca Jackson (emotionally unstable)</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Eldest son</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Valentine Chatenay (1923, research partner)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Theodore Simon (used tools, rejected conclusions)</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Constructivist cognitive development theory</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">84 (1896--1980)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">Jacqueline, Lucienne, Laurent (all research subjects)</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="montessori">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-montessori-start), var(--grad-montessori-end));"></div>
+              <h3>02 Maria Montessori</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">ENFJ, "no" means nothing</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">81, globally active</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">Italian</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Virgo, 1870.08.31</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Complex (early Mussolini support, then exile 1934)</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Father Alessandro (conservative military), Mother Renilde (education champion)</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Only child</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Giuseppe Montesano (unmarried, gave up son)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Sergi, Itard, Seguin (expanded their tools)</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Montessori Method, 22000+ schools</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">81 (1870--1952)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">Mario Montessori (reunited, ran AMI)</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="bateson">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-bateson-start), var(--grad-bateson-end));"></div>
+              <h3>03 Gregory Bateson</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">INTP, denied all categories</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">76</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">English</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Taurus, 1904.05.09</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">OSS in WWII, anti-war after</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Father William (geneticist, named him after Mendel), Mother Beatrice</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Older brother (WWI KIA), Martin (suicide 1922)</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Margaret Mead (1936--50), Betty Sumner (1951--57), Lois Cammack (1961--80)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Haddon, Mead, Norbert Wiener</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Double-bind theory, Steps to an Ecology of Mind</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">76 (1904--1980)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">Mary Catherine Bateson, John, Nora Bateson</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="papert">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-papert-start), var(--grad-papert-end));"></div>
+              <h3>04 Seymour Papert</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">ENTP, theory-practice unity</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">78 active, then 10yr decline after 2006 accident</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">South African (white)</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Pisces, 1928.02.29</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Anti-apartheid activist, voluntary exile</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Limited info</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Unknown</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Dona Strauss, Androula Henriques, Sherry Turkle, Suzanne Massie (24yr)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Piaget (Geneva), Minsky (MIT)</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Logo, Mindstorms, constructionism</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">88 (1928--2016)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">Artemis Papert, 3 stepchildren</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="simon">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-simon-start), var(--grad-simon-end));"></div>
+              <h3>05 Herbert Simon</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">INTJ, follows problems not fields</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">85, active at Carnegie Mellon</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">German-Jewish + German-American</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Gemini, 1916.06.15</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Progressive family, data over ideology</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Father Arthur (engineer/inventor), Mother Edna (pianist)</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Limited info</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Dorothea Pye (1937, 63 years)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Uncle Harold, Henry Schultz, Carnap, Lasswell, Merriam (network)</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Nobel 1978, Turing 1975, bounded rationality</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">85 (1916--2001)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">Katherine, Peter, Barbara</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="csikszentmihalyi">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-csikszentmihalyi-start), var(--grad-csikszentmihalyi-end));"></div>
+              <h3>06 Mihaly Csikszentmihalyi</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">INFJ, meaning from trauma</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">87</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">Hungarian (noble family)</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Libra, 1934.09.29</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Apolitical, anti-consumerism through research</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Father Alfred (diplomat), Mother Edith (UN worker after war)</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Brother (died in war)</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Isabella Selega (1961, 60 years)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Chicago psychology tradition, Seligman (colleague)</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Flow theory, Quality of Life Research Center</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">87 (1934--2021)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">Christopher (Cornell professor), Mark (UC Berkeley, East Asian studies)</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="meadows">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-meadows-start), var(--grad-meadows-end));"></div>
+              <h3>07 Donella Meadows</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">INFP to ENFJ, data into story</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">Died suddenly at 59, bacterial meningitis</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">American (white)</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Pisces, 1941.03.13</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Environmental activist, organic farmer</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Limited info</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Unknown</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Dennis Meadows (divorced, continued collaboration)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Jay Forrester (MIT systems dynamics)</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Limits to Growth, Thinking in Systems (posthumous bestseller)</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">59 (1941--2001)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">None recorded</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="fuller">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-fuller-start), var(--grad-fuller-end));"></div>
+              <h3>08 Buckminster Fuller</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">ENTP, pushed ideas to the end</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">Suicide crisis 1927, active to 87</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">American (New England WASP)</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Cancer, 1895.07.12</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Refused political labels, "comprehensive designer"</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">New England upper class</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Limited info</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Anne Hewlett (1917, 66 years, died 36 hours apart)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">None (autodidact, twice expelled from Harvard)</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Geodesic dome, Spaceship Earth, 47 honorary doctorates</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">87 (1895--1983)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">Alexandra (died 1922, age 4), Allegra (UCLA dance professor)</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="capra">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-capra-start), var(--grad-capra-end));"></div>
+              <h3>09 Fritjof Capra</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">INFJ, connector of worlds</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">87, still active</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">Austrian-American</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Aquarius, 1939.02.01</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Deep ecology, anti-consumerism</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Father Heinz (lawyer/philosopher), Mother Ingeborg (poet)</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Unknown</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Elizabeth Hawk (1985, designer)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Geoffrey Chew (Bootstrap theory), Heisenberg (indirect)</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Tao of Physics (43 languages), Web of Life, Systems View of Life</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">87+ (1939--)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">1 daughter</span></div>
+            </div>
+          </div>
+
+          <div class="appendix-card" data-person="rosch">
+            <div class="appendix-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+              <div class="appendix-card-gradient" style="background: linear-gradient(90deg, var(--grad-rosch-start), var(--grad-rosch-end));"></div>
+              <h3>10 Eleanor Rosch</h3>
+              <span class="expand-indicator">+</span>
+            </div>
+            <div class="appendix-card-body">
+              <div class="data-field"><span class="field-label">Temperament</span><span class="field-value">INFP, quiet revolutionary</span></div>
+              <div class="data-field"><span class="field-label">Health</span><span class="field-value">87, still active</span></div>
+              <div class="data-field"><span class="field-label">Ethnicity</span><span class="field-value">American (Russian + English)</span></div>
+              <div class="data-field"><span class="field-label">Zodiac</span><span class="field-value">Cancer, 1938.07.09</span></div>
+              <div class="data-field"><span class="field-label">Politics</span><span class="field-value">Berkeley 1970s context</span></div>
+              <div class="data-field"><span class="field-label">Parents</span><span class="field-value">Father (English teacher), Mother (Russian refugee)</span></div>
+              <div class="data-field"><span class="field-label">Siblings</span><span class="field-value">Unknown</span></div>
+              <div class="data-field"><span class="field-label">Partner</span><span class="field-value">Karl Heider (divorced after 2 years)</span></div>
+              <div class="data-field"><span class="field-label">Mentor</span><span class="field-value">Wittgenstein (philosophical), Harvard Social Relations</span></div>
+              <div class="data-field"><span class="field-label">Trajectory</span><span class="field-value">Prototype Theory, Buddhism + cognitive science</span></div>
+              <div class="data-field"><span class="field-label">Lifespan</span><span class="field-value">87+ (1938--)</span></div>
+              <div class="data-field"><span class="field-label">Children</span><span class="field-value">None recorded</span></div>
+            </div>
+          </div>
+
+        </div>
+        <div class="appendix-tab-content" id="tab-cross-analysis">
+
+          <div class="cross-table">
+            <h3>Table 1: Zodiac Distribution</h3>
+            <table>
+              <thead><tr><th>Person</th><th>Zodiac</th><th>Element</th></tr></thead>
+              <tbody>
+                <tr><td>Piaget</td><td>Leo</td><td>Fire</td></tr>
+                <tr><td>Montessori</td><td>Virgo</td><td>Earth</td></tr>
+                <tr><td>Bateson</td><td>Taurus</td><td>Earth</td></tr>
+                <tr><td>Papert</td><td>Pisces</td><td>Water</td></tr>
+                <tr><td>Simon</td><td>Gemini</td><td>Air</td></tr>
+                <tr><td>Csikszentmihalyi</td><td>Libra</td><td>Air</td></tr>
+                <tr><td>Meadows</td><td>Pisces</td><td>Water</td></tr>
+                <tr><td>Fuller</td><td>Cancer</td><td>Water</td></tr>
+                <tr><td>Capra</td><td>Aquarius</td><td>Air</td></tr>
+                <tr><td>Rosch</td><td>Cancer</td><td>Water</td></tr>
+              </tbody>
+            </table>
+            <p class="table-summary">Summary: Water (4) > Air (3) > Earth (2) > Fire (1)</p>
+          </div>
+
+          <div class="cross-table">
+            <h3>Table 2: Mentor Patterns</h3>
+            <table>
+              <thead><tr><th>Pattern</th><th>People</th></tr></thead>
+              <tbody>
+                <tr><td>Used mentor's tools, rejected conclusions</td><td>Piaget, Montessori</td></tr>
+                <tr><td>Applied framework to different context</td><td>Bateson, Papert, Capra</td></tr>
+                <tr><td>Mentor network (not one person)</td><td>Simon</td></tr>
+                <tr><td>Experience replaced mentors</td><td>Csikszentmihalyi, Fuller</td></tr>
+                <tr><td>Philosophy to data verification</td><td>Rosch</td></tr>
+                <tr><td>Methodology to policy expansion</td><td>Meadows</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="cross-table">
+            <h3>Table 3: Partner Types</h3>
+            <table>
+              <thead><tr><th>Type</th><th>People</th><th>Duration</th></tr></thead>
+              <tbody>
+                <tr><td>Lifelong research partner</td><td>Simon (63yr), Csikszentmihalyi (60yr), Fuller (66yr)</td><td>Longest</td></tr>
+                <tr><td>Research partner, then divorced</td><td>Bateson-Mead, Meadows-Dennis, Rosch-Heider</td><td>Medium</td></tr>
+                <tr><td>Unmarried / independent</td><td>Montessori</td><td>--</td></tr>
+                <tr><td>Multiple marriages (intellectual partners)</td><td>Bateson (3x), Papert (4x)</td><td>Varied</td></tr>
+                <tr><td>Stable late marriage</td><td>Capra</td><td>--</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="cross-table">
+            <h3>Table 4: Failure-Transformation Arcs</h3>
+            <table>
+              <thead><tr><th>Person</th><th>Crisis</th><th>Transformation</th></tr></thead>
+              <tbody>
+                <tr><td>Piaget</td><td>Adolescent religion-science conflict</td><td>Lifelong epistemology</td></tr>
+                <tr><td>Montessori</td><td>Gave up son</td><td>Education for ALL children</td></tr>
+                <tr><td>Bateson</td><td>Brothers' deaths</td><td>Anthropology, "pattern of patterns"</td></tr>
+                <tr><td>Papert</td><td>Anti-apartheid exile</td><td>Education as liberation</td></tr>
+                <tr><td>Simon</td><td>(Relatively stable)</td><td>--</td></tr>
+                <tr><td>Csikszentmihalyi</td><td>War trauma, brother's death</td><td>"Happiness is internal state"</td></tr>
+                <tr><td>Meadows</td><td>Limits to Growth attacked</td><td>Practice (farm, ecovillage)</td></tr>
+                <tr><td>Fuller</td><td>Daughter's death, near-suicide</td><td>"My life belongs to the universe"</td></tr>
+                <tr><td>Capra</td><td>Rejected by both camps</td><td>Independent East-West synthesis</td></tr>
+                <tr><td>Rosch</td><td>Divorce, category research limits</td><td>Buddhism + cognitive science</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="cross-table">
+            <h3>Table 5: Bella Intersection Mapping</h3>
+            <table>
+              <thead><tr><th>Bella's Trait</th><th>Most Similar Person</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td>Advertising to Education</td><td>Montessori (Medicine to Education)</td><td>Applied existing tools to education</td></tr>
+                <tr><td>Cannot memorize, only understand</td><td>Piaget (definition of constructivism)</td><td>Understanding-through-construction is the only way</td></tr>
+                <tr><td>Authority challenger</td><td>Bateson (denied fields themselves)</td><td>Healthy suspicion of existing categories</td></tr>
+                <tr><td>AI + Education fusion</td><td>Papert (constructionism)</td><td>Technology + education intersection</td></tr>
+                <tr><td>Spirituality + science interest</td><td>Capra, Rosch</td><td>East-West integration</td></tr>
+                <tr><td>Meaning-first learning</td><td>Csikszentmihalyi (WHY before WHAT)</td><td>Extract meaning from experience</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        <div class="appendix-tab-content" id="tab-relationship-map">
+          <div class="relationship-map-wrap">
+            <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Cormorant Garamond', serif;">
+
+              <!-- Lines: Solid = mentor, Dashed = influenced-by, Dotted = shared concepts -->
+              <!-- Piaget -> Papert (mentor) -->
+              <line x1="150" y1="80" x2="300" y2="140" stroke="#8AAE92" stroke-width="1.5" />
+              <!-- Forrester -> Meadows (mentor) — Forrester not shown, line from off-canvas hint -->
+              <!-- Bateson -> Capra (influenced-by) -->
+              <line x1="420" y1="70" x2="480" y2="280" stroke="#6B8FA3" stroke-width="1.2" stroke-dasharray="6,3" />
+              <!-- Fuller -> Meadows (influenced-by) -->
+              <line x1="120" y1="300" x2="180" y2="210" stroke="#7E7F96" stroke-width="1.2" stroke-dasharray="6,3" />
+              <!-- Bateson -> Meadows (influenced-by) -->
+              <line x1="420" y1="70" x2="180" y2="210" stroke="#6B8FA3" stroke-width="1.2" stroke-dasharray="6,3" />
+              <!-- Simon <-> Rosch (shared concepts) -->
+              <line x1="540" y1="160" x2="360" y2="320" stroke="#7D8BA8" stroke-width="1.0" stroke-dasharray="2,3" />
+              <!-- Csikszentmihalyi <-> Fuller (shared concepts) -->
+              <line x1="300" y1="260" x2="120" y2="300" stroke="#C8B68E" stroke-width="1.0" stroke-dasharray="2,3" />
+              <!-- Piaget -> Montessori shared era (dotted) -->
+              <line x1="150" y1="80" x2="60" y2="160" stroke="#B8A4AE" stroke-width="1.0" stroke-dasharray="2,3" />
+              <!-- Capra -> Rosch (influenced-by) -->
+              <line x1="480" y1="280" x2="360" y2="320" stroke="#5A9BAD" stroke-width="1.2" stroke-dasharray="6,3" />
+
+              <!-- Person circles -->
+              <!-- Piaget -->
+              <circle cx="150" cy="80" r="22" fill="#8AAE92" opacity="0.85" />
+              <text x="150" y="84" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">JP</text>
+              <text x="150" y="112" text-anchor="middle" fill="#555" font-size="9">Piaget</text>
+
+              <!-- Montessori -->
+              <circle cx="60" cy="160" r="22" fill="#B8A4AE" opacity="0.85" />
+              <text x="60" y="164" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">MM</text>
+              <text x="60" y="192" text-anchor="middle" fill="#555" font-size="9">Montessori</text>
+
+              <!-- Bateson -->
+              <circle cx="420" cy="70" r="22" fill="#6B8FA3" opacity="0.85" />
+              <text x="420" y="74" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">GB</text>
+              <text x="420" y="102" text-anchor="middle" fill="#555" font-size="9">Bateson</text>
+
+              <!-- Papert -->
+              <circle cx="300" cy="140" r="22" fill="#5BAFA6" opacity="0.85" />
+              <text x="300" y="144" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">SP</text>
+              <text x="300" y="172" text-anchor="middle" fill="#555" font-size="9">Papert</text>
+
+              <!-- Simon -->
+              <circle cx="540" cy="160" r="22" fill="#7D8BA8" opacity="0.85" />
+              <text x="540" y="164" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">HS</text>
+              <text x="540" y="192" text-anchor="middle" fill="#555" font-size="9">Simon</text>
+
+              <!-- Csikszentmihalyi -->
+              <circle cx="300" cy="260" r="22" fill="#C8B68E" opacity="0.85" />
+              <text x="300" y="264" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">MC</text>
+              <text x="300" y="292" text-anchor="middle" fill="#555" font-size="8">Csikszentmihalyi</text>
+
+              <!-- Meadows -->
+              <circle cx="180" cy="210" r="22" fill="#6EA87A" opacity="0.85" />
+              <text x="180" y="214" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">DM</text>
+              <text x="180" y="242" text-anchor="middle" fill="#555" font-size="9">Meadows</text>
+
+              <!-- Fuller -->
+              <circle cx="120" cy="300" r="22" fill="#7E7F96" opacity="0.85" />
+              <text x="120" y="304" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">BF</text>
+              <text x="120" y="332" text-anchor="middle" fill="#555" font-size="9">Fuller</text>
+
+              <!-- Capra -->
+              <circle cx="480" cy="280" r="22" fill="#5A9BAD" opacity="0.85" />
+              <text x="480" y="284" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">FC</text>
+              <text x="480" y="312" text-anchor="middle" fill="#555" font-size="9">Capra</text>
+
+              <!-- Rosch -->
+              <circle cx="360" cy="320" r="22" fill="#9B89AD" opacity="0.85" />
+              <text x="360" y="324" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">ER</text>
+              <text x="360" y="352" text-anchor="middle" fill="#555" font-size="9">Rosch</text>
+
+              <!-- Legend -->
+              <line x1="120" y1="395" x2="148" y2="395" stroke="#666" stroke-width="1.5" />
+              <text x="154" y="399" fill="#888" font-size="9">Mentor</text>
+              <line x1="220" y1="395" x2="248" y2="395" stroke="#666" stroke-width="1.2" stroke-dasharray="6,3" />
+              <text x="254" y="399" fill="#888" font-size="9">Influenced-by</text>
+              <line x1="360" y1="395" x2="388" y2="395" stroke="#666" stroke-width="1.0" stroke-dasharray="2,3" />
+              <text x="394" y="399" fill="#888" font-size="9">Shared concepts</text>
+
+            </svg>
+          </div>
+        </div>
       </div>
     </section>
 
