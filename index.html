@@ -527,6 +527,252 @@
       color: var(--diary-ink);
     }
 
+    .diary-container {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 3rem 2rem 2rem 2rem;
+      background: #FDF8F0;
+      position: relative;
+      box-shadow:
+        0 1px 3px rgba(0,0,0,0.08),
+        3px 3px 0 #f5ede2,
+        3px 3px 3px rgba(0,0,0,0.06),
+        6px 6px 0 #f0e8da,
+        6px 6px 3px rgba(0,0,0,0.04);
+      border-radius: 2px;
+    }
+
+    .diary-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 60px;
+      width: 1px;
+      background: rgba(212,181,160,0.4);
+      pointer-events: none;
+    }
+
+    .diary-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 63px;
+      width: 1px;
+      background: rgba(212,181,160,0.25);
+      pointer-events: none;
+    }
+
+    .diary-ornament {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.8em;
+      color: #D4B5A0;
+      font-size: 1.2em;
+      margin-bottom: 1rem;
+    }
+
+    .diary-cover-title {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2em;
+      font-weight: 600;
+      color: var(--diary-ink);
+      margin-bottom: 0.3rem;
+    }
+
+    .diary-cover-subtitle {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4em;
+      font-style: italic;
+      color: #B5707A;
+      margin-bottom: 1.5rem;
+    }
+
+    .diary-epigraph {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95em;
+      color: #8a7a6a;
+      border-top: 1px solid #D4B5A0;
+      border-bottom: 1px solid #D4B5A0;
+      padding: 1rem 1.5rem;
+      margin: 0 auto 2.5rem auto;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .diary-epigraph cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-style: normal;
+      font-size: 0.85em;
+      color: #a09080;
+    }
+
+    .diary-intro {
+      padding-left: 80px;
+      padding-right: 1rem;
+      margin-bottom: 2rem;
+      background:
+        repeating-linear-gradient(
+          transparent,
+          transparent 31px,
+          rgba(180,160,140,0.12) 31px,
+          rgba(180,160,140,0.12) 32px
+        );
+      line-height: 32px;
+      font-family: 'Gowun Batang', serif;
+      font-size: 0.95em;
+    }
+
+    .diary-intro p {
+      margin-bottom: 0;
+    }
+
+    .diary-intro p + p {
+      margin-top: 0.5em;
+    }
+
+    .diary-how-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3em;
+      font-weight: 600;
+      color: var(--diary-ink);
+      margin-bottom: 1rem;
+      padding-left: 80px;
+    }
+
+    .diary-how-list {
+      list-style: none;
+      padding-left: 80px;
+      padding-right: 1rem;
+      margin-bottom: 2.5rem;
+      font-family: 'Gowun Batang', serif;
+      font-size: 0.93em;
+      line-height: 1.8;
+    }
+
+    .diary-how-list li::before {
+      content: '\2014\00a0';
+      color: #a09080;
+    }
+
+    .diary-how-list li {
+      margin-bottom: 0.3em;
+    }
+
+    .diary-prompts-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3em;
+      font-weight: 600;
+      color: var(--diary-ink);
+      margin-bottom: 1rem;
+      padding-left: 80px;
+    }
+
+    .diary-prompt {
+      border-left: 3px solid #B5707A;
+      padding: 0.8rem 1rem 0.8rem 1rem;
+      margin-left: 80px;
+      margin-right: 1rem;
+      margin-bottom: 0.8rem;
+      background: rgba(181,112,122,0.04);
+      font-family: 'Gowun Batang', serif;
+      font-size: 0.93em;
+      line-height: 1.6;
+    }
+
+    .diary-prompt-label {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82em;
+      font-weight: 600;
+      color: #B5707A;
+      margin-bottom: 0.2em;
+      letter-spacing: 0.03em;
+    }
+
+    .diary-writing-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3em;
+      font-weight: 600;
+      color: var(--diary-ink);
+      margin: 2rem 0 1rem 0;
+      padding-left: 80px;
+    }
+
+    .diary-textarea {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 300px;
+      padding: 1rem 1rem 1rem 80px;
+      border: 1px solid rgba(212,181,160,0.4);
+      border-radius: 2px;
+      background:
+        #FDF8F0
+        repeating-linear-gradient(
+          transparent,
+          transparent 31px,
+          rgba(180,160,140,0.12) 31px,
+          rgba(180,160,140,0.12) 32px
+        );
+      font-family: 'Caveat', cursive;
+      font-weight: 400;
+      font-size: 1.1em;
+      line-height: 32px;
+      color: var(--diary-ink);
+      resize: vertical;
+      outline: none;
+    }
+
+    .diary-textarea::placeholder {
+      color: rgba(90,74,58,0.35);
+      font-family: 'Caveat', cursive;
+      font-weight: 400;
+    }
+
+    .diary-textarea:focus {
+      border-color: rgba(181,112,122,0.4);
+    }
+
+    .diary-copy-btn {
+      display: inline-block;
+      margin-top: 0.8rem;
+      margin-left: 80px;
+      padding: 0.4rem 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9em;
+      color: #B5707A;
+      background: transparent;
+      border: 1px solid #B5707A;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .diary-copy-btn:hover {
+      background: rgba(181,112,122,0.08);
+    }
+
+    .diary-footer {
+      text-align: center;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9em;
+      color: #a09080;
+    }
+
+    .diary-footer .diary-ornament {
+      margin-bottom: 0.5rem;
+    }
+
     /* -- Appendix -- */
     .section-appendix {
       background-color: #F4F5F7;
@@ -1626,9 +1872,97 @@
 
     <!-- Chapter 11: My Orbit -->
     <section class="chapter-section section-my-orbit" id="my-orbit" data-person="my-orbit">
-      <div class="chapter-placeholder">
-        <h2 class="chapter-placeholder__name">My Orbit</h2>
-        <p class="chapter-placeholder__sub">Diary coming soon</p>
+      <div class="diary-container">
+
+        <!-- Cover -->
+        <div class="diary-ornament">* * *</div>
+        <h2 class="diary-cover-title">Chapter Eleven</h2>
+        <div class="diary-cover-subtitle">My Orbit</div>
+        <blockquote class="diary-epigraph">
+          One cannot think well, love well, sleep well, if one has not dined well.
+          <cite>Virginia Woolf, <em>A Room of One's Own</em></cite>
+        </blockquote>
+
+        <!-- Introduction -->
+        <div class="diary-intro">
+          <p>이 장은 비어 있습니다. 의도적으로.</p>
+          <p>앞의 열 개의 궤도를 읽은 후, 이곳에 당신의 궤도를 기록하세요. 완성할 필요 없습니다. 날짜를 쓰고, 떠오르는 것을 적으세요. 이 방은 당신의 것입니다.</p>
+        </div>
+
+        <!-- How to Use -->
+        <h3 class="diary-how-title">How to Use This Room</h3>
+        <ul class="diary-how-list">
+          <li>날짜를 먼저 적으세요</li>
+          <li>읽은 챕터에서 떠오른 문장이나 장면을 하나 옮겨 적으세요</li>
+          <li>그것이 당신의 어떤 기억을 건드렸는지 써보세요</li>
+          <li>다 쓰지 않아도 됩니다. 한 문장이면 충분합니다</li>
+          <li>며칠 후 다시 와서 읽어보세요. 그때 보이는 것이 다릅니다</li>
+        </ul>
+
+        <!-- Writing Prompts -->
+        <h3 class="diary-prompts-title">Writing Prompts</h3>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Piaget</span>
+          나는 어린 시절 무엇을 멈출 수 없이 관찰했는가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Montessori</span>
+          "안 된다"는 말을 들었을 때, 나는 어떻게 반응했는가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Bateson</span>
+          나는 어떤 경계를 부정하고 있는가? 그것은 언제 시작되었는가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Papert</span>
+          내가 만든 도구 중, 정신은 무시되고 겉만 채택된 것이 있는가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Simon</span>
+          나는 문제를 따라가는가, 분야를 따라가는가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Csikszentmihalyi</span>
+          나는 언제 시간을 잊는가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Meadows</span>
+          내가 데이터로 증명하고 싶은 불편한 진실은 무엇인가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Fuller</span>
+          내 삶에서 가장 가까웠던 포기의 순간은? 그 이후 무엇이 바뀌었는가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Capra</span>
+          나는 어떤 두 세계를 연결하려 하는가?
+        </div>
+
+        <div class="diary-prompt">
+          <span class="diary-prompt-label">After Reading Rosch</span>
+          내가 분류하던 것 중, 실은 경계가 흐릿했던 것은?
+        </div>
+
+        <!-- Writing Space -->
+        <h3 class="diary-writing-title">Your First Entry</h3>
+        <textarea id="diary-textarea" class="diary-textarea" placeholder="2026. 3. 15.&#10;오늘 읽은 사람:&#10;떠오른 문장:&#10;그 문장이 불러온 기억:"></textarea>
+        <button id="diary-copy-btn" class="diary-copy-btn">Copy to Obsidian</button>
+
+        <!-- Footer -->
+        <div class="diary-footer">
+          <div class="diary-ornament">* * *</div>
+          <p>This room belongs to you. Fill it at your own pace.</p>
+        </div>
+
       </div>
     </section>
 
@@ -1991,6 +2325,25 @@
     // Restore saved reading mode on load
     if (readingMode === 'hybrid') {
       applyReadingMode('hybrid');
+    }
+
+    /* ===== Chapter 11: Diary localStorage + Clipboard ===== */
+    const diary = document.getElementById('diary-textarea');
+    if (diary) {
+      const saved = localStorage.getItem('chosen-orbits-diary');
+      if (saved) diary.value = saved;
+      diary.addEventListener('input', () => {
+        localStorage.setItem('chosen-orbits-diary', diary.value);
+      });
+    }
+
+    const copyBtn = document.getElementById('diary-copy-btn');
+    if (copyBtn && diary) {
+      copyBtn.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(diary.value);
+        copyBtn.textContent = 'Copied';
+        setTimeout(() => { copyBtn.textContent = 'Copy to Obsidian'; }, 2000);
+      });
     }
   </script>
 
