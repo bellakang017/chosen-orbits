@@ -959,8 +959,126 @@
     /* -- Colophon -- */
     .section-colophon {
       background-color: #2a2a2a;
+      color: rgba(255,255,255,0.7);
+      min-height: auto;
+      padding: 5rem 2rem 4rem;
+    }
+
+    .colophon-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .colophon-container h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
+
+    .colophon-container h3 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: rgba(232,180,184,0.85);
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.04em;
+    }
+
+    .colophon-container p,
+    .colophon-container li {
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .colophon-container ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 1rem;
+    }
+
+    .colophon-container ul li {
+      padding-left: 1.2rem;
+      position: relative;
+      margin-bottom: 0.35rem;
+    }
+
+    .colophon-container ul li::before {
+      content: '\2014';
+      position: absolute;
+      left: 0;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .colophon-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .colophon-table th {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.55rem 0.7rem;
+      border-bottom: 2px solid rgba(255,255,255,0.15);
+      color: rgba(232,180,184,0.8);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+    }
+
+    .colophon-table td {
+      font-family: var(--font-body);
+      padding: 0.5rem 0.7rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.6);
+      vertical-align: top;
+    }
+
+    .colophon-table td:first-child {
       color: rgba(255,255,255,0.75);
-      min-height: 60vh;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .colophon-table td:last-child {
+      color: rgba(255,255,255,0.45);
+      font-family: var(--font-heading);
+      font-size: 0.82rem;
+    }
+
+    .colophon-transparency {
+      border-left: 2px solid rgba(232,180,184,0.35);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.6);
+      font-style: italic;
+    }
+
+    .colophon-rule {
+      border: none;
+      width: 40px;
+      margin: 2.5rem auto;
+      height: 0;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .colophon-footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.35);
     }
 
     /* ===== Chapter Narrative Styles ===== */
@@ -1000,6 +1118,11 @@
     .person-bateson .chapter-fields { color: var(--grad-bateson-start); }
     .person-papert .chapter-fields { color: var(--grad-papert-start); }
     .person-simon .chapter-fields { color: var(--grad-simon-start); }
+    .person-csikszentmihalyi .chapter-fields { color: var(--grad-csikszentmihalyi-start); }
+    .person-meadows .chapter-fields { color: var(--grad-meadows-start); }
+    .person-fuller .chapter-fields { color: var(--grad-fuller-start); }
+    .person-capra .chapter-fields { color: var(--grad-capra-start); }
+    .person-rosch .chapter-fields { color: var(--grad-rosch-start); }
 
     .crisis-hook {
       text-align: center;
@@ -1018,7 +1141,7 @@
     hr.ornamental-divider {
       border: none;
       width: 40px;
-      margin: 2rem auto;
+      margin: 3.5rem auto;
       height: 0;
       border-top: 1px solid currentColor;
       opacity: 0.5;
@@ -1029,6 +1152,11 @@
     .person-bateson hr.ornamental-divider { border-top-color: var(--grad-bateson-start); }
     .person-papert hr.ornamental-divider { border-top-color: var(--grad-papert-start); }
     .person-simon hr.ornamental-divider { border-top-color: var(--grad-simon-start); }
+    .person-csikszentmihalyi hr.ornamental-divider { border-top-color: var(--grad-csikszentmihalyi-start); }
+    .person-meadows hr.ornamental-divider { border-top-color: var(--grad-meadows-start); }
+    .person-fuller hr.ornamental-divider { border-top-color: var(--grad-fuller-start); }
+    .person-capra hr.ornamental-divider { border-top-color: var(--grad-capra-start); }
+    .person-rosch hr.ornamental-divider { border-top-color: var(--grad-rosch-start); }
 
     .chapter-prose {
       max-width: 600px;
@@ -1041,7 +1169,7 @@
     .chapter-prose p {
       font-family: var(--font-body);
       line-height: 1.9;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.4rem;
       font-size: 1em;
     }
 
@@ -1069,6 +1197,11 @@
     .person-bateson .pull-quote { border-color: var(--grad-bateson-start); }
     .person-papert .pull-quote { border-color: var(--grad-papert-start); }
     .person-simon .pull-quote { border-color: var(--grad-simon-start); }
+    .person-csikszentmihalyi .pull-quote { border-color: var(--grad-csikszentmihalyi-start); }
+    .person-meadows .pull-quote { border-color: var(--grad-meadows-start); }
+    .person-fuller .pull-quote { border-color: var(--grad-fuller-start); }
+    .person-capra .pull-quote { border-color: var(--grad-capra-start); }
+    .person-rosch .pull-quote { border-color: var(--grad-rosch-start); }
 
     .pull-quote p {
       font-family: var(--font-heading);
@@ -1114,9 +1247,14 @@
     .person-bateson .chapter-next a { color: var(--grad-bateson-start); }
     .person-papert .chapter-next a { color: var(--grad-papert-start); }
     .person-simon .chapter-next a { color: var(--grad-simon-start); }
+    .person-csikszentmihalyi .chapter-next a { color: var(--grad-csikszentmihalyi-start); }
+    .person-meadows .chapter-next a { color: var(--grad-meadows-start); }
+    .person-fuller .chapter-next a { color: var(--grad-fuller-start); }
+    .person-capra .chapter-next a { color: var(--grad-capra-start); }
+    .person-rosch .chapter-next a { color: var(--grad-rosch-start); }
 
     /* -- Responsive -- */
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       .paths {
         flex-direction: column;
         align-items: center;
@@ -1137,6 +1275,44 @@
       .appendix-tabs {
         flex-wrap: wrap;
       }
+
+      .chapter-section {
+        padding: 3rem 1rem;
+      }
+
+      .chapter-prose {
+        padding: 0 1rem;
+      }
+
+      .diary-container {
+        padding: 2rem 1rem 1.5rem 1rem;
+      }
+
+      .diary-container::before { left: 30px; }
+      .diary-container::after { left: 33px; }
+      .diary-intro,
+      .diary-how-title,
+      .diary-how-list,
+      .diary-prompts-title,
+      .diary-writing-title { padding-left: 44px; }
+      .diary-prompt { margin-left: 44px; }
+      .diary-textarea { padding-left: 44px; }
+      .diary-copy-btn { margin-left: 44px; }
+
+      .colophon-container {
+        padding: 0 0.5rem;
+      }
+
+      .colophon-table {
+        font-size: 0.78rem;
+      }
+
+      .colophon-table td:first-child {
+        white-space: normal;
+      }
+
+      .cross-table { overflow-x: auto; }
+      .cross-table table { min-width: 500px; }
     }
 
     /* ===== Hybrid Mode Styles ===== */
@@ -2515,9 +2691,75 @@
 
     <!-- Colophon -->
     <section class="chapter-section section-colophon" id="colophon" data-person="colophon">
-      <div class="chapter-placeholder">
-        <h2 class="chapter-placeholder__name" style="color: rgba(255,255,255,0.85);">Colophon</h2>
-        <p class="chapter-placeholder__sub" style="color: rgba(255,255,255,0.5);">About this book -- coming soon</p>
+      <div class="colophon-container">
+        <h2>Colophon</h2>
+        <p style="text-align:center; font-family:var(--font-heading); font-style:italic; color:rgba(255,255,255,0.45); margin-bottom:2rem;">On the making of this book</p>
+
+        <hr class="colophon-rule">
+
+        <h3>Selection Criteria</h3>
+        <table class="colophon-table">
+          <thead>
+            <tr>
+              <th>Axis</th>
+              <th>Definition</th>
+              <th>Weight</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Interdisciplinary Crossing</td>
+              <td>Mastered 2+ fields as their own</td>
+              <td>High</td>
+            </tr>
+            <tr>
+              <td>Constructivist Epistemology</td>
+              <td>"Understanding before applying" learning approach</td>
+              <td>High</td>
+            </tr>
+            <tr>
+              <td>Meaning-First Orientation</td>
+              <td>WHY before WHAT</td>
+              <td>Medium</td>
+            </tr>
+            <tr>
+              <td>System-Level Thinking</td>
+              <td>Seeing whole patterns, not parts</td>
+              <td>Medium</td>
+            </tr>
+            <tr>
+              <td>Outsider Trajectory</td>
+              <td>Started or diverged outside conventional paths</td>
+              <td>Standard</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Data Sources</h3>
+        <ul>
+          <li>Primary: "Interdisciplinary Constructivist Learners: 10 Life Trajectories" ontology document (2026-03-15)</li>
+          <li>Verification: Web search across US/academic sources</li>
+          <li>Supplementary: Wikipedia, academic biographies, institutional archives</li>
+        </ul>
+
+        <hr class="colophon-rule">
+
+        <h3>Opus 4.6 Transparency Note</h3>
+        <div class="colophon-transparency">
+          이 10명의 선정은 Opus 4.6의 통계적 패턴 매칭에 기반합니다. 이것은 '정답'이 아니라 '통계적으로 가장 관련성 높은 후보군'입니다. 이 리스트는 검증하고, 맞지 않는 인물은 교체해야 합니다. Opus 4.6은 ontological reasoning을 하지 않습니다.
+        </div>
+
+        <h3>Limitations</h3>
+        <ul>
+          <li>Personal information gaps: Eleanor Rosch and Fritjof Capra family details are limited in public records</li>
+          <li>Western bias: Source material is predominantly English-language and Western academic</li>
+          <li>MBTI/zodiac: Used as pattern-recognition tools, not as scientific claims</li>
+          <li>Death causes: Several persons' causes of death are not publicly documented</li>
+        </ul>
+
+        <hr class="colophon-rule">
+
+        <p class="colophon-footer">Chosen Orbits -- 2026</p>
       </div>
     </section>
 
