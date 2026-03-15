@@ -371,39 +371,24 @@
       background: transparent;
       border: none;
       border-radius: 0;
-      padding: 0.45rem 0;
+      padding: 0.5rem 1.2rem;
       cursor: pointer;
-      transition: opacity 0.25s ease;
+      transition: all 0.25s ease;
       text-align: center;
       position: relative;
       display: block;
     }
 
-    .path-card:first-of-type {
-      border-top: none;
+    .path-card:hover .path-card__name {
+      color: var(--rose-wood);
     }
 
-    .path-card:hover {
-      opacity: 0.7;
-      background: transparent;
-      padding-left: 0;
-    }
-
-    .path-card.active {
-      background: transparent;
-      padding-left: 0;
-    }
-
-    .path-card.active .path-card__label {
-      opacity: 1;
+    .path-card:hover .path-card__name::after {
+      width: 100%;
     }
 
     .path-card.active .path-card__name {
-      color: #4a3a2a;
-    }
-
-    .path-card.active .path-card__name::after {
-      content: '';
+      color: var(--rose-wood);
     }
 
     .path-card__label {
@@ -411,7 +396,7 @@
     }
 
     .path-card__text {
-      flex: 1;
+      display: inline-block;
     }
 
     .path-card__name {
@@ -421,6 +406,21 @@
       color: #5a4a3a;
       margin-bottom: 0;
       letter-spacing: 0.06em;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Underline animation on hover */
+    .path-card__name::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1px;
+      background: var(--rose-wood);
+      transition: width 0.3s ease;
     }
 
     .path-card__desc {
@@ -764,34 +764,31 @@
     .chapter-content-area {
       width: 100%;
       height: calc(100vh - 44px);
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
       position: relative;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+
+    /* Styled scrollbar */
+    .chapter-content-area::-webkit-scrollbar {
+      width: 4px;
+    }
+    .chapter-content-area::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .chapter-content-area::-webkit-scrollbar-thumb {
+      background: rgba(181, 112, 122, 0.2);
+      border-radius: 2px;
     }
 
     .chapter-inner-scroll {
-      height: 100%;
-      column-fill: auto;
-      column-gap: 0;
-      overflow: hidden;
-      transition: transform 0.3s ease;
-      /* column-width set dynamically by JS to match container width */
+      min-height: 100%;
+      padding-bottom: 4rem;
     }
 
-    /* Allow content to flow across columns naturally */
-    .chapter-inner-scroll .chapter-header {
-      break-after: avoid-column;
-    }
-    .chapter-inner-scroll .chapter-next {
-      break-before: avoid-column;
-    }
-    .chapter-inner-scroll p,
-    .chapter-inner-scroll blockquote,
-    .chapter-inner-scroll .pull-quote,
-    .chapter-inner-scroll .crisis-hook {
-      break-inside: avoid;
-    }
-
-    /* Individual column "page" padding */
+    /* Content centering */
     .chapter-section .chapter-header,
     .chapter-section .crisis-hook,
     .chapter-section .chapter-prose-wrapper,
@@ -802,23 +799,6 @@
 
     .chapter-section .chapter-header {
       padding-top: 3rem;
-    }
-
-    /* Ensure prose elements break properly across columns */
-    .chapter-inner-scroll .chapter-prose-wrapper {
-      break-inside: auto;
-    }
-    .chapter-inner-scroll .chapter-prose-area {
-      break-inside: auto;
-    }
-    .chapter-inner-scroll .chapter-prose {
-      break-inside: auto;
-    }
-    .chapter-inner-scroll .hybrid-sidebar {
-      break-inside: avoid;
-    }
-    .chapter-inner-scroll hr.ornamental-divider {
-      break-after: avoid;
     }
 
     .chapter-gradient-bar {
@@ -1812,7 +1792,7 @@
 
       <div class="paths" role="group" aria-label="Choose a reading path">
         <div class="paths__rule"></div>
-        <div class="paths__label">Choose your path</div>
+        <div class="paths__label">Begin Reading</div>
 
         <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
           <div class="path-card__text">
@@ -3268,10 +3248,8 @@
     let currentPersonId = null;
 
     /* ===== Page-Reader State ===== */
-    let allPages = [];        // ordered list of book-page elements
-    let currentPageIndex = 0; // which page (chapter) we're on
-    let subPageIndex = 0;     // which sub-page within a paginated chapter
-    let subPageCount = 1;     // total sub-pages in current chapter
+    let allPages = [];
+    let currentPageIndex = 0;
     let isTransitioning = false;
 
     /* Build the page list: landing first, then chapters in path order */
@@ -3281,48 +3259,10 @@
       sections.forEach(s => allPages.push(s));
     }
 
-    /* ===== Sub-page pagination via CSS columns ===== */
-    function getChapterScrollContainer(page) {
-      // For narrative chapters, the content scrolls horizontally via column layout
-      // For my-orbit, appendix, colophon, content scrolls vertically
-      return page.querySelector('.chapter-content-area') || null;
-    }
-
-    function measureSubPages(page) {
-      const container = getChapterScrollContainer(page);
-      if (!container) return 1;
-
-      const inner = container.querySelector('.chapter-inner-scroll');
-      if (!inner) return 1;
-
-      // For scrollable sections (diary, appendix, colophon), no sub-pages
-      if (page.classList.contains('section-my-orbit') ||
-          page.classList.contains('section-appendix') ||
-          page.classList.contains('section-colophon')) {
-        return 1;
-      }
-
-      // Set column-width to match container width so each column = one page
-      const w = container.clientWidth;
-      if (w > 0) {
-        inner.style.columnWidth = w + 'px';
-      }
-
-      // Force layout recalc
-      void inner.offsetHeight;
-
-      const cols = Math.max(1, Math.round(inner.scrollWidth / w));
-      return cols;
-    }
-
-    function setSubPage(page, index) {
-      const container = getChapterScrollContainer(page);
-      if (!container) return;
-      const inner = container.querySelector('.chapter-inner-scroll');
-      if (!inner) return;
-
-      const offset = -index * container.clientWidth;
-      inner.style.transform = `translateX(${offset}px)`;
+    /* ===== Scroll to top on page change ===== */
+    function scrollPageToTop(page) {
+      const area = page.querySelector('.chapter-content-area');
+      if (area) area.scrollTop = 0;
     }
 
     /* ===== Show/hide pages ===== */
@@ -3338,61 +3278,40 @@
       if (oldPage && oldPage !== newPage) {
         oldPage.classList.remove('active');
         oldPage.classList.add(direction === 'next' ? 'exit-left' : 'exit-right');
-        setSubPage(oldPage, 0);
       }
 
-      // Step 1: Position new page off-screen (no transition)
+      // Position off-screen (no transition)
       newPage.classList.remove('exit-left', 'exit-right', 'active');
       newPage.style.transition = 'none';
       newPage.style.opacity = '0';
       newPage.style.transform = direction === 'next' ? 'translateX(40px)' : 'translateX(-40px)';
-      newPage.style.pointerEvents = 'auto';
 
-      // Step 2: Force reflow, then animate in
+      // Force reflow
       void newPage.offsetWidth;
+
+      // Animate in
       newPage.style.transition = '';
       newPage.style.opacity = '';
       newPage.style.transform = '';
       newPage.classList.add('active');
 
+      // Scroll to top
+      scrollPageToTop(newPage);
+
       currentPageIndex = index;
-      subPageIndex = 0;
-
-      requestAnimationFrame(() => {
-        subPageCount = measureSubPages(newPage);
-        updateReaderBar();
-
-        setTimeout(() => {
-          if (oldPage && oldPage !== newPage) {
-            oldPage.classList.remove('exit-left', 'exit-right');
-          }
-          newPage.style.pointerEvents = '';
-          isTransitioning = false;
-        }, 350);
-      });
-    }
-
-    function showSubPage(page, subIdx, direction) {
-      if (isTransitioning) return;
-      isTransitioning = true;
-      subPageIndex = subIdx;
-      setSubPage(page, subIdx);
       updateReaderBar();
-      setTimeout(() => { isTransitioning = false; }, 320);
+
+      setTimeout(() => {
+        if (oldPage && oldPage !== newPage) {
+          oldPage.classList.remove('exit-left', 'exit-right');
+        }
+        isTransitioning = false;
+      }, 350);
     }
 
     /* ===== Navigation ===== */
     function goNext() {
       if (isTransitioning) return;
-      const page = allPages[currentPageIndex];
-
-      // If there are more sub-pages in this chapter
-      if (subPageIndex < subPageCount - 1) {
-        showSubPage(page, subPageIndex + 1, 'next');
-        return;
-      }
-
-      // Go to next chapter
       if (currentPageIndex < allPages.length - 1) {
         showPage(currentPageIndex + 1, 'next');
       }
@@ -3400,29 +3319,8 @@
 
     function goPrev() {
       if (isTransitioning) return;
-      const page = allPages[currentPageIndex];
-
-      // If there are previous sub-pages
-      if (subPageIndex > 0) {
-        showSubPage(page, subPageIndex - 1, 'prev');
-        return;
-      }
-
-      // Go to previous chapter
       if (currentPageIndex > 0) {
-        // When going back, start at last sub-page of previous chapter
-        const prevPage = allPages[currentPageIndex - 1];
         showPage(currentPageIndex - 1, 'prev');
-
-        // After transition, jump to last sub-page
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            subPageCount = measureSubPages(prevPage);
-            subPageIndex = subPageCount - 1;
-            setSubPage(prevPage, subPageIndex);
-            updateReaderBar();
-          });
-        });
       }
     }
 
@@ -3459,12 +3357,11 @@
         siteNav.style.color = '';
       }
 
-      // Page info
-      if (subPageCount > 1) {
-        pageInfo.textContent = 'p. ' + (subPageIndex + 1) + ' of ' + subPageCount;
+      // Page info — show chapter position
+      if (currentPageIndex > 0) {
+        pageInfo.textContent = currentPageIndex + ' / ' + (allPages.length - 1);
       } else {
-        // Show chapter position (skip landing)
-        pageInfo.textContent = currentPageIndex + ' of ' + (allPages.length - 1);
+        pageInfo.textContent = '';
       }
 
       // Highlight active dropdown item
@@ -3785,20 +3682,7 @@
     // Initial reader bar state
     updateReaderBar();
 
-    // Re-measure on resize (debounced)
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        requestAnimationFrame(() => {
-          const page = allPages[currentPageIndex];
-          subPageCount = measureSubPages(page);
-          if (subPageIndex >= subPageCount) subPageIndex = subPageCount - 1;
-          setSubPage(page, subPageIndex);
-          updateReaderBar();
-        });
-      }, 150);
-    });
+    // No resize handler needed — chapters scroll internally now
 
     /* ===== Intercept chapter-next links to use page navigation ===== */
     document.querySelectorAll('.chapter-next a').forEach(link => {
