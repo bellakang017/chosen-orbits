@@ -769,11 +769,10 @@
     .chapter-section {
       height: 100vh;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       position: relative;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
     }
 
     .chapter-section:has(.chapter-placeholder) {
@@ -781,33 +780,31 @@
     }
 
     /* Chapter content area for CSS column pagination */
-    .chapter-content-area {
-      width: 100%;
-      height: calc(100vh - 44px);
-      overflow-y: auto;
-      overflow-x: hidden;
-      position: relative;
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-    }
-
-    /* Styled scrollbar */
-    .chapter-content-area::-webkit-scrollbar {
+    /* Styled scrollbar for chapters */
+    .chapter-section::-webkit-scrollbar {
       width: 4px;
     }
-    .chapter-content-area::-webkit-scrollbar-track {
+    .chapter-section::-webkit-scrollbar-track {
       background: transparent;
     }
-    .chapter-content-area::-webkit-scrollbar-thumb {
+    .chapter-section::-webkit-scrollbar-thumb {
       background: rgba(181, 112, 122, 0.2);
       border-radius: 2px;
     }
 
-    .chapter-inner-scroll {
-      min-height: 100%;
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 0 2rem 4rem;
+    /* Chapter content centering */
+    .chapter-header,
+    .crisis-hook,
+    .chapter-prose-wrapper,
+    .chapter-prose,
+    .chapter-next,
+    .pull-quote,
+    hr.ornamental-divider {
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
     }
 
     .chapter-section .chapter-header {
@@ -859,8 +856,7 @@
       overflow-y: auto;
     }
 
-    .section-my-orbit .chapter-content-area {
-      overflow-y: auto;
+    .section-my-orbit {
       padding: 2rem 0 2rem;
     }
 
@@ -1117,8 +1113,7 @@
       overflow-y: auto;
     }
 
-    .section-appendix .chapter-content-area {
-      overflow-y: auto;
+    .section-appendix {
       padding: 3rem 2rem 3rem;
     }
 
@@ -1307,8 +1302,7 @@
       overflow-y: auto;
     }
 
-    .section-colophon .chapter-content-area {
-      overflow-y: auto;
+    .section-colophon {
       padding: 3rem 2rem 3rem;
     }
 
@@ -1639,10 +1633,6 @@
         height: 40px;
       }
 
-      .chapter-content-area {
-        height: calc(100vh - 40px);
-      }
-
       .click-zone--left,
       .click-zone--right {
         height: calc(100vh - 40px);
@@ -1652,12 +1642,14 @@
         flex-wrap: wrap;
       }
 
-      .chapter-section {
-        padding: 0;
-      }
-
-      .chapter-inner-scroll {
-        padding: 0 1.2rem 4rem;
+      .chapter-header,
+      .crisis-hook,
+      .chapter-prose-wrapper,
+      .chapter-prose,
+      .chapter-next,
+      .pull-quote {
+        padding-left: 1.2rem;
+        padding-right: 1.2rem;
       }
 
       .diary-container {
@@ -3288,8 +3280,7 @@
 
     /* ===== Scroll to top on page change ===== */
     function scrollPageToTop(page) {
-      const area = page.querySelector('.chapter-content-area');
-      if (area) area.scrollTop = 0;
+      page.scrollTop = 0;
     }
 
     /* ===== Show/hide pages ===== */
@@ -3418,8 +3409,7 @@
       const personId = page.dataset.person;
       if (!personId || personId === 'landing') return;
 
-      const area = page.querySelector('.chapter-content-area');
-      const scrollPos = area ? area.scrollTop : 0;
+      const scrollPos = page.scrollTop || 0;
       const bookmarks = getBookmarks();
 
       // Check if already bookmarked
@@ -3659,9 +3649,9 @@
       if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
         // Don't swipe if interacting with scrollable content
         if (e.target.closest('.diary-textarea') ||
-            e.target.closest('.section-appendix .chapter-content-area') ||
-            e.target.closest('.section-colophon .chapter-content-area') ||
-            e.target.closest('.section-my-orbit .chapter-content-area')) return;
+            e.target.closest('.section-appendix') ||
+            e.target.closest('.section-colophon') ||
+            e.target.closest('.section-my-orbit')) return;
 
         if (diffX > 0) {
           goNext(); // swipe left = next
@@ -3699,63 +3689,9 @@
       });
     });
 
-    /* ===== Wrap chapter content for column pagination ===== */
-    function wrapChapterContent() {
-      const narrativeChapters = chaptersContainer.querySelectorAll(
-        '.chapter-section:not(.section-my-orbit):not(.section-appendix):not(.section-colophon)'
-      );
-
-      narrativeChapters.forEach(section => {
-        // Don't double-wrap
-        if (section.querySelector('.chapter-content-area')) return;
-
-        const contentArea = document.createElement('div');
-        contentArea.className = 'chapter-content-area';
-
-        const innerScroll = document.createElement('div');
-        innerScroll.className = 'chapter-inner-scroll';
-
-        // Keep gradient bar outside column flow (it's position:absolute)
-        const gradBar = section.querySelector('.chapter-gradient-bar');
-
-        // Move all children into innerScroll (except gradient bar)
-        while (section.firstChild) {
-          if (section.firstChild === gradBar) {
-            // Temporarily detach, re-attach after
-            section.removeChild(gradBar);
-            continue;
-          }
-          innerScroll.appendChild(section.firstChild);
-        }
-
-        contentArea.appendChild(innerScroll);
-        section.appendChild(contentArea);
-
-        // Re-attach gradient bar directly to section (outside columns)
-        if (gradBar) {
-          section.appendChild(gradBar);
-        }
-      });
-
-      // For my-orbit, appendix, colophon: wrap in chapter-content-area but without column layout
-      ['section-my-orbit', 'section-appendix', 'section-colophon'].forEach(cls => {
-        const section = chaptersContainer.querySelector('.' + cls);
-        if (!section || section.querySelector('.chapter-content-area')) return;
-
-        const contentArea = document.createElement('div');
-        contentArea.className = 'chapter-content-area';
-
-        while (section.firstChild) {
-          contentArea.appendChild(section.firstChild);
-        }
-
-        section.appendChild(contentArea);
-      });
-    }
+    /* No JS wrapping needed — chapters scroll natively */
 
     /* ===== Initialize ===== */
-    // Wrap content for pagination
-    wrapChapterContent();
 
     // Restore saved path on load (reorder without navigating)
     if (PATHS[currentPath]) {
