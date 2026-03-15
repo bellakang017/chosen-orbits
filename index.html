@@ -751,6 +751,71 @@
         flex-wrap: wrap;
       }
     }
+
+    /* ===== Hybrid Mode Styles ===== */
+    /* Default: Novel mode - sidebar hidden */
+    .hybrid-sidebar { display: none; }
+
+    /* Hybrid mode */
+    body.hybrid-mode .chapter-prose-wrapper {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      gap: 2rem;
+    }
+    body.hybrid-mode .chapter-prose-area { flex: 7; }
+    body.hybrid-mode .hybrid-sidebar {
+      display: block;
+      flex: 3;
+      position: sticky;
+      top: 80px;
+      align-self: flex-start;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+
+    .data-card {
+      background: rgba(255,255,255,0.5);
+      border-left: 3px solid;
+      border-radius: 0 6px 6px 0;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.8rem;
+    }
+    .data-card-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7em;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.6;
+      margin-bottom: 0.2rem;
+    }
+    .data-card-value {
+      font-family: 'Gowun Batang', serif;
+      font-size: 0.85em;
+      line-height: 1.5;
+    }
+    .connection-hint {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.85em;
+      opacity: 0.7;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      margin-top: 0.5rem;
+    }
+
+    /* Mobile: sidebar becomes inline */
+    @media (max-width: 768px) {
+      body.hybrid-mode .chapter-prose-wrapper { flex-direction: column; }
+      body.hybrid-mode .hybrid-sidebar {
+        position: static;
+        max-height: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      body.hybrid-mode .data-card { flex: 1 1 45%; }
+    }
   </style>
 </head>
 <body>
@@ -829,6 +894,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">열한 살의 장 피아제는 공원에서 흰색 참새 한 마리를 보았다. 알비노 참새. 대부분의 아이들이라면 그저 신기하다고 말하고 지나쳤을 것이다. 그러나 피아제는 달랐다. 그는 그 새를 관찰하고, 기록하고, 짧은 논문을 써서 뇌샤텔 자연사 박물관의 학술지에 투고했다. <strong class="highlight">편집자는 그가 소년이라는 사실을 몰랐다.</strong> 논문은 게재되었고, 박물관장 폴 고데는 이 조숙한 아이를 자신의 연구실로 초대했다. 연체동물 분류학의 세계가 열렸다. 토요일마다 피아제는 달팽이 표본을 정리하며 세계의 질서를 배웠다.</p>
@@ -856,7 +924,33 @@
         <p><strong class="highlight">멈출 수 없는 관찰자.</strong> 혼돈 속에서 질서를 찾겠다는 소년의 약속이, 한 세기를 관통하는 학문이 되었다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-piaget-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">INTP, unstoppable observer</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-piaget-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Leo, 1896.08.09</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-piaget-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">Rejected mentor's conclusions but used mentor's tools</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-piaget-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Valentine Chatenay (1923, research partner, 3 children as subjects)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-piaget-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Adolescent religious-scientific crisis became lifelong epistemology</div>
+        </div>
+        <p class="connection-hint">Piaget's constructivism became the foundation Papert built upon.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-montessori">Next: Maria Montessori</a>
       </div>
     </section>
@@ -875,6 +969,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">마리아 몬테소리의 아버지 알레산드로는 군인 출신의 보수적인 관료였다. 딸이 의학을 공부하겠다고 했을 때, 그는 단호히 반대했다. 여자가 시체를 해부한다는 것은 체면의 문제가 아니라 질서의 문제였다. 그러나 어머니 레닐데 스토파니는 달랐다. 교육받은 여성이었고, 딸의 재능을 알아보는 눈이 있었다. <strong class="highlight">어머니는 아버지의 반대를 묵묵히 무력화시켰다.</strong> 문을 닫는 대신 옆문을 열어주었다. 마리아는 1896년, 이탈리아 역사상 최초의 여성 의학 박사가 되었다.</p>
@@ -900,7 +997,33 @@
         <p>1952년 5월 6일, 네덜란드 노르드바이크에서, 여든한 살의 몬테소리는 정원을 바라보며 말했다. <strong class="highlight">"Am I no longer of any use then?"</strong> 마지막 말이었다. 세상의 모든 아이를 위해 일하겠다고 결심한 여자의 마지막 걱정은, 더 이상 쓸모가 없어지는 것이었다. 오늘날 전 세계 22,000개 이상의 몬테소리 학교가 운영되고 있다. 한 아이를 포기한 대가로 만들어진, 수백만 아이들의 집.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-montessori-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">ENFJ, rule-maker not rule-follower</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-montessori-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Virgo, 1870.08.31</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-montessori-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">Expanded disabled-children tools to all children</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-montessori-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Giuseppe Montesano (unmarried, gave up son Mario)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-montessori-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Losing son became fuel for educating all children</div>
+        </div>
+        <p class="connection-hint">Montessori's "environment shapes the child" echoes Meadows' systems thinking.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-bateson">Next: Gregory Bateson</a>
       </div>
     </section>
@@ -919,6 +1042,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">베이트슨 가문은 영국 과학계의 왕조였다. 아버지 윌리엄 베이트슨은 세계적인 유전학자로, 유전학(genetics)이라는 단어 자체를 만들어낸 사람이었다. 그는 셋째 아들에게 유전학의 아버지 그레고르 멘델의 이름을 따서 그레고리라는 이름을 붙였다. <strong class="highlight">이름 자체가 기대였고, 이름 자체가 짐이었다.</strong> 세 아들 모두 과학자가 되어야 했다. 세 아들 모두 아버지의 유산을 이어야 했다.</p>
@@ -944,7 +1070,33 @@
         <p>세 번의 결혼, 두 세대의 비극, 어떤 분야에도 속하지 않겠다는 고집. 베이트슨의 삶은 편안하지 않았다. 그러나 그는 아버지 세대가 보지 못한 것을 보았다. <strong class="highlight">세상은 부분들의 합이 아니라, 관계들의 그물이다.</strong> 형 마틴의 자살은 한 개인의 비극이 아니라, 가족이라는 시스템의 붕괴였다. 이것을 이해하는 데 평생이 걸렸다. 1980년, 샌프란시스코에서, 그레고리 베이트슨은 일흔여섯의 나이로 세상을 떠났다. 딸 메리 캐서린 베이트슨은 아버지의 유산을 인류학으로, 또 다른 딸 노라 베이트슨은 영화로 이어갔다. 패턴은 끊이지 않는다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-bateson-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">INTP, pattern seeker who denied categories</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-bateson-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Taurus, 1904.05.09</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-bateson-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">Applied frameworks to entirely different contexts</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-bateson-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Margaret Mead (1936-50), Lois Cammack (1961-80)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-bateson-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Brothers' deaths led to anthropology</div>
+        </div>
+        <p class="connection-hint">Bateson's discovery of context resonates with Capra's systems thinking.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-papert">Next: Seymour Papert</a>
       </div>
     </section>
@@ -963,6 +1115,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">시모어 페퍼트는 1928년 2월 29일에 태어났다. 윤년. 네 해에 한 번만 돌아오는 생일. 이 사소한 달력의 변칙은 그의 인생 전체를 은유하는 듯하다. 그는 언제나 정해진 주기 바깥에서 살았다. 남아프리카 프리토리아에서 자란 유대인 소년은 일찍부터 아파르트헤이트의 구조적 폭력을 목격했다. <strong class="highlight">수학은 그에게 순수한 사고의 공간이었지만, 양심은 순수함에 머물기를 거부했다.</strong> 그는 반아파르트헤이트 운동에 뛰어들었다.</p>
@@ -989,7 +1144,33 @@
         <p>그러나 페퍼트의 유산은 살아 있다. 스크래치(Scratch) 프로그래밍 언어를 만든 미첼 레스닉은 그의 제자였다. 메이커 운동, 코딩 교육, 프로젝트 기반 학습. 이 모든 것의 뿌리에 페퍼트가 있다. 남아프리카에서 도망친 수학자가 심은 씨앗은, 그가 떠난 후에도 자라고 있다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-papert-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">ENTP, acting thinker</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-papert-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Pisces, 1928.02.29</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-papert-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">Transformed Piaget's theory into executable tools (Logo)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-papert-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Sherry Turkle (3rd marriage, tech+society), Suzanne Massie (4th, 24 years)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-papert-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Anti-apartheid exile became education-as-liberation</div>
+        </div>
+        <p class="connection-hint">Papert's constructionism is Piaget's constructivism made physical.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-simon">Next: Herbert A. Simon</a>
       </div>
     </section>
@@ -1008,6 +1189,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">허버트 사이먼의 저녁 식탁은 전쟁터였다. 밀워키의 중산층 가정에서 아버지 아서 사이먼은 독일에서 이민 온 전기공학자였고, 어머니 에드나 메르켈은 피아니스트였다. 저녁마다 가족은 식탁에 모여 토론했다. 정치, 경제, 과학, 예술. <strong class="highlight">어떤 주제도 금기가 아니었고, 어떤 주장도 근거 없이는 살아남지 못했다.</strong> 소년 허버트는 이 환경에서 논쟁의 기술과 증거의 중요성을 몸으로 배웠다.</p>
@@ -1034,7 +1218,33 @@
         <p>2001년 2월 9일, 피츠버그. 여든네 살의 허버트 사이먼은 세상을 떠났다. 그는 생전에 <strong class="highlight">"나는 문제를 쫓지, 분야를 쫓지 않는다"</strong>고 말했다. 정치학에서 시작하여 경영학, 경제학, 심리학, 컴퓨터 과학, 인공지능을 가로지른 여정. 하나의 질문이 그 모든 것을 관통했다. 인간은 어떻게 결정하는가. 밀워키의 저녁 식탁에서 시작된 그 질문이, 노벨상과 튜링상으로 귀결되기까지, 경계는 단 한 번도 그를 막지 못했다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-simon-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">INTJ, strategic systems designer</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-simon-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Gemini, 1916.06.15</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-simon-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">Network of mentors across disciplines, not one person</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-simon-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Dorothea Pye (1937, 63 years, most stable in this group)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-simon-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Attacking "rational human" met initial resistance</div>
+        </div>
+        <p class="connection-hint">Simon's bounded rationality and Rosch's prototype theory both challenged classical categorization.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-csikszentmihalyi">Next: Mihaly Csikszentmihalyi</a>
       </div>
     </section>
@@ -1053,6 +1263,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">미하이 칙센트미하이는 피우메에서 태어났다. 지금은 크로아티아의 리예카로 불리는 그 항구 도시에서, 헝가리 귀족 가문의 아들로. 아버지 알프레드는 헝가리 외교관이었고, 어머니는 교양 있는 부다페스트 상류층 여성이었다. 전쟁 전의 유럽, 그 마지막 황금기의 빛 속에서 소년은 자랐다. 라틴어를 배우고, 여러 언어를 익히며, 외교관의 아들답게 세계의 질서를 당연하게 여겼다. <strong class="highlight">그러나 질서는 환상이었다.</strong> 제2차 세계대전이 모든 것을 삼켰다.</p>
@@ -1081,7 +1294,33 @@
         <p>2021년 10월 20일, 클레어몬트에서 여든일곱 살의 칙센트미하이는 세상을 떠났다. 피우메의 외교관 저택에서 시작하여 전쟁의 폐허를 거쳐, 시카고의 연구실에서 인간 경험의 최적점을 발견한 여정이 끝났다. 그러나 그의 질문은 여전히 유효하다. 사람은 언제 행복한가. 답은 그가 찾은 그대로다. <strong class="highlight">가장 많이 가졌을 때가 아니라, 가장 깊이 몰입했을 때.</strong> 열 살 난민 소년이 폐허에서 발견한 진실이, 현대 심리학의 이정표가 되었다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-csikszentmihalyi-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">INFJ, observing optimist</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-csikszentmihalyi-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Libra, 1934.09.29</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-csikszentmihalyi-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">No single mentor; Chicago psychology tradition</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-csikszentmihalyi-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Isabella Selega (1961, 60 years)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-csikszentmihalyi-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">War trauma became the question "when are people happy?"</div>
+        </div>
+        <p class="connection-hint">Csikszentmihalyi's Flow is the experiential side of Fuller's "doing more with less."</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-meadows">Next: Donella Meadows</a>
       </div>
     </section>
@@ -1100,6 +1339,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">도넬라 메도즈는 일리노이주 엘진에서 태어났다. 중서부의 평범한 도시, 평범한 가정. 그러나 평범하지 않았던 것이 하나 있다. 소녀는 세상을 조각이 아니라 전체로 보았다. 마당의 풀이 자라는 것, 비가 오면 개울이 불어나는 것, 겨울이 지나면 다시 봄이 오는 것. <strong class="highlight">모든 것이 연결되어 있다는 감각이 그녀에게는 본능이었다.</strong> 나중에 그것은 시스템 사고라는 이름을 얻게 되지만, 소녀 시절의 도넬라에게 그것은 그저 세상을 보는 방식이었다.</p>
@@ -1127,7 +1369,33 @@
         <p>2001년 2월 20일, 세균성 수막염이 도넬라 메도즈를 덮쳤다. 갑작스럽고 잔인한 죽음이었다. 쉰아홉 살. 이 책에 등장하는 열 명 중 가장 짧은 생애. 사후에 출간된 <em>Thinking in Systems</em>는 시스템 사고의 입문서로서 전 세계적 베스트셀러가 되었다. 살아 있을 때보다 죽은 후에 더 많은 사람이 그녀를 읽었다. <strong class="highlight">세상이 가장 필요로 했던 사람에게, 세상은 가장 적은 시간을 주었다.</strong> 그러나 시스템 사고의 본질대로라면, 한 사람의 부재는 시스템의 끝이 아니다. 그녀가 심은 씨앗은 여전히 자라고 있다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-meadows-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">INFP turned ENFJ, scientist-activist-writer</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-meadows-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Pisces, 1941.03.13</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-meadows-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">Jay Forrester (MIT systems dynamics founder)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-meadows-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Dennis Meadows (co-author, divorced but continued collaboration)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-meadows-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Attacked as doomist, shifted from theory to practice</div>
+        </div>
+        <p class="connection-hint">Meadows' leverage points thinking extends Bateson's ecology of mind.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-fuller">Next: R. Buckminster Fuller</a>
       </div>
     </section>
@@ -1146,6 +1414,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">벅민스터 풀러는 뉴잉글랜드의 오래된 가문에서 태어났다. 매사추세츠주 밀턴. 대고모는 초월주의자 마거릿 풀러였고, 가문은 하버드와 깊은 인연을 갖고 있었다. 소년 버키는 심하게 근시였고, 안경을 쓰기 전까지 세상은 흐릿한 형태들의 집합이었다. <strong class="highlight">윤곽 없이 세상을 보았던 그 경험이, 나중에 그를 형태와 구조에 집착하게 만든 원인이었는지도 모른다.</strong> 선명한 세계를 처음 보았을 때의 경이. 그것은 평생 사라지지 않았다.</p>
@@ -1173,7 +1444,33 @@
         <p>1983년 7월 1일, 로스앤젤레스. 앤이 혼수상태로 병원에 입원해 있었다. 풀러는 병문안을 갔다가 심장마비로 쓰러졌다. 여든일곱 살이었다. <strong class="highlight">그가 죽은 지 36시간 후, 앤도 세상을 떠났다.</strong> 66년을 함께한 두 사람은 36시간의 간격으로 함께 떠났다. 미시간 호숫가에서 죽음을 선택하려 했던 남자는, 반세기 후 사랑하는 사람 곁에서 생을 마감했다. 우주의 실험은 끝났지만, 그 실험의 기록은 남아 있다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-fuller-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">ENTP, visionary who pushed ideas to the end</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-fuller-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Cancer, 1895.07.12</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-fuller-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">No formal mentors (autodidact)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-fuller-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Anne Hewlett (1917, 66 years, died 36 hours apart)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-fuller-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Suicide consideration became "my life belongs to the universe"</div>
+        </div>
+        <p class="connection-hint">Fuller's "Spaceship Earth" is the global version of Montessori's prepared environment.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-capra">Next: Fritjof Capra</a>
       </div>
     </section>
@@ -1192,6 +1489,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">프리초프 카프라는 빈에서 태어났다. 오스트리아의 수도, 프로이트와 비트겐슈타인과 쇤베르크의 도시. 아버지는 법률가이자 철학자였고, 어머니는 시인이었다. 저녁 식탁에서 아버지는 칸트를 이야기했고, 어머니는 릴케를 읽었다. <strong class="highlight">과학과 예술, 분석과 직관, 이 두 세계 사이에서 자란 소년은 나중에 물리학과 동양 철학 사이에서 살게 된다.</strong> 그의 인생 전체가 경계 위의 삶이었다.</p>
@@ -1218,7 +1518,33 @@
         <p>여든일곱 살이 된 지금도 카프라는 여전히 글을 쓰고 강연을 한다. 빈의 법률가 아버지와 시인 어머니 사이에서 시작된 이중성은, 반세기가 넘는 세월 동안 그의 작업 전체를 관통했다. 물리학과 신비주의, 서양과 동양, 분석과 종합, 과학과 지혜. <strong class="highlight">카프라는 어느 한쪽을 선택하지 않았다. 대신 두 세계가 만나는 지점 자체를 자신의 영토로 만들었다.</strong> 물리학자들이 그를 부를 이름과 신비주의자들이 그를 부를 이름은 여전히 다르다. 그러나 그가 열어놓은 문 앞에 서면, 그 구별은 의미를 잃는다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-capra-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">INFJ, bridge builder between worlds</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-capra-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Aquarius, 1939.02.01</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-capra-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">Geoffrey Chew's Bootstrap theory (everything connected)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-capra-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Elizabeth Hawk (1985, stable)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-capra-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Rejected by both physics and spirituality</div>
+        </div>
+        <p class="connection-hint">Capra's systems view synthesizes what Bateson saw in patterns and Meadows proved in data.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#chapter-rosch">Next: Eleanor Rosch</a>
       </div>
     </section>
@@ -1237,6 +1563,9 @@
       </div>
 
       <hr class="ornamental-divider">
+      <div class="chapter-prose-wrapper">
+        <div class="chapter-prose-area">
+
 
       <div class="chapter-prose">
         <p class="has-dropcap">엘리너 로쉬는 뉴욕에서 태어났다. 어머니는 러시아에서 건너온 이민자였고, 아버지는 영어 교사였다. 두 문화 사이, 두 언어 사이에서 자란 소녀는 일찍이 깨달았다. 같은 것을 가리키는 말이 언어마다 다르다는 것을. 러시아어의 '파란색'은 영어의 'blue'와 정확히 같지 않다. <strong class="highlight">언어가 다르면 세계도 다른가? 아니면 언어 아래에 보편적인 무언가가 있는가?</strong> 이 질문은 아직 학문의 언어를 갖지 못한 채, 소녀의 마음속에 머물렀다.</p>
@@ -1264,7 +1593,33 @@
         <p>여든일곱 살이 된 지금, 로쉬는 여전히 UC 버클리의 교수이다. 심리학과 불교학을 동시에 가르치는 유일한 교수. 뉴욕의 이중 언어 가정에서 시작하여, 비트겐슈타인의 흐릿한 경계를 거쳐, 파푸아뉴기니의 다니족 마을에서 원형을 발견하고, 마침내 티벳 불교의 명상 방석 위에 도달한 여정. <strong class="highlight">세상을 나누는 방식이 세상 자체에 새겨져 있지 않다는 것을 증명한 여성이, 나눔 자체를 넘어서는 인식의 가능성을 탐구하고 있다.</strong> 범주를 연구한 사람이 범주 너머를 바라보는 것. 이것이 엘리너 로쉬의 궤도이며, 이 책의 마지막 장이 열 명의 사상가 중 그녀에게 주어진 이유이다.</p>
       </div>
 
-      <div class="chapter-next">
+              </div>
+      <aside class="hybrid-sidebar">
+        <div class="data-card" style="border-left-color: var(--grad-rosch-start)">
+          <div class="data-card-label">Temperament</div>
+          <div class="data-card-value">INFP, quiet revolutionary</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-rosch-start)">
+          <div class="data-card-label">Zodiac</div>
+          <div class="data-card-value">Cancer, 1938.07.09</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-rosch-start)">
+          <div class="data-card-label">Mentor Pattern</div>
+          <div class="data-card-value">Wittgenstein (philosophical) turned into psychological experiments</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-rosch-start)">
+          <div class="data-card-label">Partner</div>
+          <div class="data-card-value">Karl Heider (field research partner, divorced)</div>
+        </div>
+        <div class="data-card" style="border-left-color: var(--grad-rosch-start)">
+          <div class="data-card-label">Crisis to Transformation</div>
+          <div class="data-card-value">Category research limits led to Buddhism</div>
+        </div>
+        <p class="connection-hint">Rosch's prototype theory challenged the same classical logic that Simon's bounded rationality undermined.</p>
+      </aside>
+      </div>
+
+<div class="chapter-next">
         <a href="#my-orbit">Next: My Orbit</a>
       </div>
     </section>
@@ -1391,7 +1746,7 @@
     const dropdownMenu = document.getElementById('dropdown-menu');
 
     let currentPath = localStorage.getItem('chosen-orbits-path') || 'thematic';
-    let readingMode = 'novel'; // "novel" or "hybrid"
+    let readingMode = localStorage.getItem('chosen-orbits-mode') || 'novel';
     let currentPersonId = null;
 
     /* ===== Path Selection Logic ===== */
@@ -1460,10 +1815,20 @@
     });
 
     /* ===== Reading Mode Toggle ===== */
+    function applyReadingMode(mode) {
+      readingMode = mode;
+      if (mode === 'hybrid') {
+        document.body.classList.add('hybrid-mode');
+        modeToggle.textContent = 'Hybrid';
+      } else {
+        document.body.classList.remove('hybrid-mode');
+        modeToggle.textContent = 'Novel';
+      }
+      localStorage.setItem('chosen-orbits-mode', mode);
+    }
+
     modeToggle.addEventListener('click', () => {
-      readingMode = readingMode === 'novel' ? 'hybrid' : 'novel';
-      modeToggle.textContent = readingMode === 'novel' ? 'Novel' : 'Hybrid';
-      document.body.dataset.readingMode = readingMode;
+      applyReadingMode(readingMode === 'novel' ? 'hybrid' : 'novel');
     });
 
     /* ===== Dropdown ===== */
@@ -1621,6 +1986,11 @@
     // Restore saved path on load (reorder without scrolling)
     if (PATHS[currentPath]) {
       selectPath(currentPath, false);
+    }
+
+    // Restore saved reading mode on load
+    if (readingMode === 'hybrid') {
+      applyReadingMode('hybrid');
     }
   </script>
 
