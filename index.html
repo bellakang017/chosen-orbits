@@ -221,13 +221,13 @@
     .landing__frame {
       position: relative;
       z-index: 2;
-      width: min(380px, 72vw);
-      height: min(540px, 82vh);
+      width: min(520px, 80vw);
+      height: min(720px, 88vh);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 3rem 2.5rem;
+      padding: 4rem 3.5rem;
       background:
         linear-gradient(175deg, #F5F0E8 0%, #EDE7DC 40%, #E8E0D3 100%);
       border-radius: 2px 8px 8px 2px;
@@ -297,11 +297,11 @@
 
     .landing__title {
       font-family: var(--font-heading);
-      font-size: clamp(2rem, 6vw, 2.6rem);
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
       font-weight: 600;
       color: #2a2520;
       letter-spacing: 0.12em;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.8rem;
       line-height: 1.15;
       text-transform: uppercase;
     }
@@ -328,7 +328,7 @@
       font-family: var(--font-heading);
       font-style: italic;
       font-weight: 400;
-      font-size: clamp(0.82rem, 1.6vw, 0.95rem);
+      font-size: clamp(0.92rem, 1.8vw, 1.1rem);
       color: #6b5a4a;
       max-width: 22em;
       margin: 0 auto;
@@ -417,7 +417,7 @@
     .path-card__name {
       font-family: var(--font-heading);
       font-weight: 500;
-      font-size: 0.88rem;
+      font-size: 1.05rem;
       color: #5a4a3a;
       margin-bottom: 0;
       letter-spacing: 0.06em;
@@ -492,13 +492,13 @@
 
     @media (max-width: 768px) {
       .landing__frame {
-        width: min(320px, 85vw);
-        height: min(480px, 78vh);
-        padding: 2.5rem 2rem;
+        width: min(420px, 88vw);
+        height: min(620px, 85vh);
+        padding: 3rem 2rem;
       }
 
       .landing__title {
-        font-size: clamp(1.6rem, 7vw, 2.2rem);
+        font-size: clamp(2rem, 8vw, 2.8rem);
       }
     }
 
@@ -3338,31 +3338,26 @@
       if (oldPage && oldPage !== newPage) {
         oldPage.classList.remove('active');
         oldPage.classList.add(direction === 'next' ? 'exit-left' : 'exit-right');
-        // Reset sub-page scroll
         setSubPage(oldPage, 0);
       }
 
-      // Prepare new page entry direction
-      newPage.classList.remove('exit-left', 'exit-right');
-      if (direction === 'next') {
-        newPage.style.transform = 'translateX(40px)';
-      } else {
-        newPage.style.transform = 'translateX(-40px)';
-      }
+      // Step 1: Position new page off-screen (no transition)
+      newPage.classList.remove('exit-left', 'exit-right', 'active');
+      newPage.style.transition = 'none';
       newPage.style.opacity = '0';
+      newPage.style.transform = direction === 'next' ? 'translateX(40px)' : 'translateX(-40px)';
+      newPage.style.pointerEvents = 'auto';
 
-      // Force reflow
+      // Step 2: Force reflow, then animate in
       void newPage.offsetWidth;
-
-      // Activate
-      newPage.style.transform = '';
+      newPage.style.transition = '';
       newPage.style.opacity = '';
+      newPage.style.transform = '';
       newPage.classList.add('active');
 
       currentPageIndex = index;
       subPageIndex = 0;
 
-      // Measure sub-pages after page is visible
       requestAnimationFrame(() => {
         subPageCount = measureSubPages(newPage);
         updateReaderBar();
@@ -3371,8 +3366,9 @@
           if (oldPage && oldPage !== newPage) {
             oldPage.classList.remove('exit-left', 'exit-right');
           }
+          newPage.style.pointerEvents = '';
           isTransitioning = false;
-        }, 320);
+        }, 350);
       });
     }
 
