@@ -624,6 +624,21 @@
       flex-shrink: 0;
     }
 
+    .site-nav__bookmark-btn {
+      font-size: 1.1rem;
+      padding: 0.2rem 0.4rem;
+      color: var(--rose-wood);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      line-height: 1;
+    }
+
+    .site-nav__bookmark-btn:hover {
+      transform: scale(1.2);
+    }
+
     .site-nav__mode-toggle {
       font-family: var(--font-heading);
       font-size: 0.82rem;
@@ -790,16 +805,9 @@
 
     .chapter-inner-scroll {
       min-height: 100%;
-      padding-bottom: 4rem;
-    }
-
-    /* Content centering */
-    .chapter-section .chapter-header,
-    .chapter-section .crisis-hook,
-    .chapter-section .chapter-prose-wrapper,
-    .chapter-section .chapter-next {
-      padding-left: max(2rem, calc((100vw - 600px) / 2));
-      padding-right: max(2rem, calc((100vw - 600px) / 2));
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
     }
 
     .chapter-section .chapter-header {
@@ -1502,7 +1510,7 @@
       max-width: 600px;
       width: 100%;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0;
       margin-bottom: 3rem;
     }
 
@@ -1630,16 +1638,8 @@
         padding: 0;
       }
 
-      .chapter-prose {
-        padding: 0 1rem;
-      }
-
-      .chapter-section .chapter-header,
-      .chapter-section .crisis-hook,
-      .chapter-section .chapter-prose-wrapper,
-      .chapter-section .chapter-next {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+      .chapter-inner-scroll {
+        padding: 0 1.2rem 4rem;
       }
 
       .diary-container {
@@ -1750,6 +1750,7 @@
     <span class="site-nav__person-name" id="nav-person-name">Chosen Orbits</span>
     <span class="reader-page-info" id="page-info"></span>
     <div class="site-nav__controls">
+      <button class="site-nav__bookmark-btn" id="bookmark-btn" aria-label="Bookmark this chapter" title="Add bookmark" style="display:none">&#9734;</button>
       <button class="site-nav__mode-toggle" id="mode-toggle" aria-label="Toggle reading mode">Novel</button>
       <div class="site-nav__dropdown-wrapper">
         <button class="site-nav__dropdown-btn" id="dropdown-btn" aria-expanded="false" aria-haspopup="true">Ch.</button>
@@ -3373,6 +3374,74 @@
       });
 
       currentPersonId = personId;
+
+      // Save current position for reload
+      if (personId && personId !== 'landing') {
+        localStorage.setItem('chosen-orbits-position', personId);
+      } else {
+        localStorage.removeItem('chosen-orbits-position');
+      }
+
+      // Update bookmark button
+      updateBookmarkBtn(personId);
+    }
+
+    /* ===== Bookmark System ===== */
+    function getBookmarks() {
+      try { return JSON.parse(localStorage.getItem('chosen-orbits-bookmarks') || '[]'); }
+      catch { return []; }
+    }
+
+    function saveBookmark() {
+      const page = allPages[currentPageIndex];
+      const personId = page.dataset.person;
+      if (!personId || personId === 'landing') return;
+
+      const area = page.querySelector('.chapter-content-area');
+      const scrollPos = area ? area.scrollTop : 0;
+      const bookmarks = getBookmarks();
+
+      // Check if already bookmarked
+      const existing = bookmarks.findIndex(b => b.person === personId);
+      if (existing >= 0) {
+        bookmarks[existing].scroll = scrollPos;
+        bookmarks[existing].date = new Date().toLocaleDateString('ko-KR');
+      } else {
+        bookmarks.push({
+          person: personId,
+          name: PERSON_NAMES[personId] || personId,
+          scroll: scrollPos,
+          date: new Date().toLocaleDateString('ko-KR')
+        });
+      }
+
+      localStorage.setItem('chosen-orbits-bookmarks', JSON.stringify(bookmarks));
+      updateBookmarkBtn(personId);
+      buildDropdownItems(); // Refresh dropdown to show bookmarks
+    }
+
+    function removeBookmark(personId) {
+      let bookmarks = getBookmarks();
+      bookmarks = bookmarks.filter(b => b.person !== personId);
+      localStorage.setItem('chosen-orbits-bookmarks', JSON.stringify(bookmarks));
+      updateBookmarkBtn(personId);
+      buildDropdownItems();
+    }
+
+    function isBookmarked(personId) {
+      return getBookmarks().some(b => b.person === personId);
+    }
+
+    function updateBookmarkBtn(personId) {
+      const btn = document.getElementById('bookmark-btn');
+      if (!btn) return;
+      if (!personId || personId === 'landing') {
+        btn.style.display = 'none';
+        return;
+      }
+      btn.style.display = '';
+      btn.textContent = isBookmarked(personId) ? '\u2605' : '\u2606';
+      btn.title = isBookmarked(personId) ? 'Remove bookmark' : 'Add bookmark';
     }
 
     /* ===== Path Selection Logic ===== */
@@ -3475,7 +3544,8 @@
         const btn = document.createElement('button');
         btn.className = 'site-nav__dropdown-item';
         btn.setAttribute('role', 'menuitem');
-        btn.textContent = (i + 1) + '. ' + (PERSON_NAMES[personId] || personId);
+        const star = isBookmarked(personId) ? ' \u2605' : '';
+        btn.textContent = (i + 1) + '. ' + (PERSON_NAMES[personId] || personId) + star;
         btn.addEventListener('click', () => {
           // Find the page index for this person
           const pageIdx = allPages.findIndex(p => p.dataset.person === personId);
@@ -3584,6 +3654,18 @@
     btnPrev.addEventListener('click', goPrev);
     btnNext.addEventListener('click', goNext);
 
+    // Bookmark button
+    const bookmarkBtn = document.getElementById('bookmark-btn');
+    bookmarkBtn.addEventListener('click', () => {
+      const page = allPages[currentPageIndex];
+      const personId = page.dataset.person;
+      if (isBookmarked(personId)) {
+        removeBookmark(personId);
+      } else {
+        saveBookmark();
+      }
+    });
+
     /* ===== Appendix Tabs ===== */
     document.querySelectorAll('.appendix-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -3667,14 +3749,23 @@
     // Build initial page list
     buildPageList();
 
-    // Show landing as first page
+    // Restore last position or show landing
+    const savedPosition = localStorage.getItem('chosen-orbits-position');
+    let restoredIndex = 0;
+
+    if (savedPosition) {
+      const idx = allPages.findIndex(p => p.dataset.person === savedPosition);
+      if (idx >= 0) restoredIndex = idx;
+    }
+
     allPages.forEach((p, i) => {
-      if (i === 0) {
+      if (i === restoredIndex) {
         p.classList.add('active');
       } else {
         p.classList.remove('active');
       }
     });
+    currentPageIndex = restoredIndex;
 
     // Initial reader bar state
     updateReaderBar();
