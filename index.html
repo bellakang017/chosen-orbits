@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chosen Orbits</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== Reset ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100vh;
+      line-height: 1.6;
+      font-family: 'Gowun Batang', serif;
+      font-weight: 400;
+      color: #3a3a3a;
+    }
+
+    img, svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    ul, ol {
+      list-style: none;
+    }
+
+    /* ===== CSS Custom Properties ===== */
+    :root {
+      /* -- Accent -- */
+      --rose-wood: #B5707A;
+      --petal-pink: #E8B4B8;
+
+      /* -- Landing -- */
+      --morning-dew: #F2F6F4;
+
+      /* -- Per-person backgrounds -- */
+      --bg-piaget: #EFF5F0;
+      --bg-montessori: #F0EFF2;
+      --bg-bateson: #EDF2F4;
+      --bg-papert: #EEF6F3;
+      --bg-simon: #EFF1F5;
+      --bg-csikszentmihalyi: #F4F3EE;
+      --bg-meadows: #EBF4EE;
+      --bg-fuller: #EDEEF2;
+      --bg-capra: #EDF4F6;
+      --bg-rosch: #F2EFF5;
+
+      /* -- Per-person text -- */
+      --text-piaget: #2e3e33;
+      --text-montessori: #3a3540;
+      --text-bateson: #2c3840;
+      --text-papert: #2a403c;
+      --text-simon: #2e3340;
+      --text-csikszentmihalyi: #3a3830;
+      --text-meadows: #2a3d2e;
+      --text-fuller: #33333e;
+      --text-capra: #2a3a3e;
+      --text-rosch: #38303e;
+
+      /* -- Per-person gradient start -- */
+      --grad-piaget-start: #8AAE92;
+      --grad-piaget-end: #B4CDC7;
+      --grad-montessori-start: #B8A4AE;
+      --grad-montessori-end: #D0C3CA;
+      --grad-bateson-start: #6B8FA3;
+      --grad-bateson-end: #AEC1C5;
+      --grad-papert-start: #5BAFA6;
+      --grad-papert-end: #93D4C9;
+      --grad-simon-start: #7D8BA8;
+      --grad-simon-end: #A8B4C8;
+      --grad-csikszentmihalyi-start: #C8B68E;
+      --grad-csikszentmihalyi-end: #DDD0B5;
+      --grad-meadows-start: #6EA87A;
+      --grad-meadows-end: #A3CFA9;
+      --grad-fuller-start: #7E7F96;
+      --grad-fuller-end: #AEB0C2;
+      --grad-capra-start: #5A9BAD;
+      --grad-capra-end: #94C5D0;
+      --grad-rosch-start: #9B89AD;
+      --grad-rosch-end: #C4B5D2;
+
+      /* -- Ch.11 Diary -- */
+      --diary-paper: #FDF8F0;
+      --diary-ink: #5a4a3a;
+      --diary-ruled: rgba(180, 160, 140, 0.12);
+      --diary-margin: #D4B5A0;
+      --diary-prompt: #B5707A;
+
+      /* -- Typography scale -- */
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Gowun Batang', serif;
+      --font-handwritten: 'Caveat', cursive;
+    }
+
+    /* ===== Typography ===== */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    h1 { font-size: clamp(2.4rem, 5vw, 4rem); }
+    h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); }
+    h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); }
+
+    p, li, blockquote {
+      font-family: var(--font-body);
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      line-height: 1.85;
+    }
+
+    /* ===== Landing Section ===== */
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--morning-dew);
+      padding: 3rem 1.5rem 4rem;
+      position: relative;
+    }
+
+    .landing__header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .landing__title {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 700;
+      color: #2a2a2a;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.6rem;
+    }
+
+    .landing__subtitle {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      color: var(--rose-wood);
+      opacity: 0.85;
+      max-width: 32em;
+      margin: 0 auto;
+    }
+
+    /* -- Path Cards -- */
+    .paths {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 56rem;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .path-card {
+      flex: 1 1 15rem;
+      max-width: 18rem;
+      background: #fff;
+      border: 1px solid rgba(181, 112, 122, 0.18);
+      border-radius: 8px;
+      padding: 2rem 1.6rem 1.8rem;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      text-align: left;
+      position: relative;
+    }
+
+    .path-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(181, 112, 122, 0.1);
+      border-color: var(--petal-pink);
+    }
+
+    .path-card.active {
+      border-color: var(--rose-wood);
+      box-shadow: 0 4px 20px rgba(181, 112, 122, 0.18);
+    }
+
+    .path-card.active::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose-wood), var(--petal-pink));
+      border-radius: 8px 8px 0 0;
+    }
+
+    .path-card__label {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--rose-wood);
+      margin-bottom: 0.5rem;
+    }
+
+    .path-card__name {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #2a2a2a;
+      margin-bottom: 0.6rem;
+    }
+
+    .path-card__desc {
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    .path-card__preview {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--rose-wood);
+      opacity: 0.7;
+    }
+
+    /* -- Scroll Indicator -- */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      opacity: 0.4;
+      animation: scrollPulse 2.4s ease-in-out infinite;
+    }
+
+    .scroll-indicator__chevron {
+      width: 18px;
+      height: 18px;
+      border-right: 2px solid var(--rose-wood);
+      border-bottom: 2px solid var(--rose-wood);
+      transform: rotate(45deg);
+    }
+
+    .scroll-indicator__chevron:nth-child(2) {
+      opacity: 0.5;
+      margin-top: -8px;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.25; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 0.55; transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* -- Chapter container (for future chapters) -- */
+    #chapters {
+      width: 100%;
+    }
+
+    .chapter-section {
+      min-height: 100vh;
+      padding: 4rem 2rem;
+    }
+
+    /* -- Responsive -- */
+    @media (max-width: 640px) {
+      .paths {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .path-card {
+        max-width: 100%;
+      }
+
+      .landing {
+        padding: 2rem 1rem 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Landing ===== -->
+  <section class="landing" id="landing">
+    <header class="landing__header">
+      <h1 class="landing__title">Chosen Orbits</h1>
+      <p class="landing__subtitle">On Ten Lives the Cosmos Composed Before My Own</p>
+    </header>
+
+    <div class="paths" role="group" aria-label="Choose a reading path">
+
+      <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
+        <div class="path-card__label">Path A</div>
+        <h2 class="path-card__name">Chronological</h2>
+        <p class="path-card__desc">Follow the timeline. See how one mind influenced the next.</p>
+        <p class="path-card__preview">Begins with Maria Montessori, 1870</p>
+      </div>
+
+      <div class="path-card" data-path="proximity" tabindex="0" role="button" aria-pressed="false">
+        <div class="path-card__label">Path B</div>
+        <h2 class="path-card__name">Proximity</h2>
+        <p class="path-card__desc">Start with the life closest to yours.</p>
+        <p class="path-card__preview">Begins with Seymour Papert</p>
+      </div>
+
+      <div class="path-card" data-path="thematic" tabindex="0" role="button" aria-pressed="false">
+        <div class="path-card__label">Path C</div>
+        <h2 class="path-card__name">Thematic Pairs</h2>
+        <p class="path-card__desc">Two lives side by side. See the pattern.</p>
+        <p class="path-card__preview">Begins with Piaget &amp; Papert</p>
+      </div>
+
+    </div>
+
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-indicator__chevron"></div>
+      <div class="scroll-indicator__chevron"></div>
+    </div>
+  </section>
+
+  <!-- ===== Chapters Container ===== -->
+  <div id="chapters">
+    <!-- Chapter sections will be added here. Each has data-person="personId" -->
+  </div>
+
+  <!-- ===== Scripts ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+  <script>
+    /* ===== Reading Path Definitions ===== */
+    const PATHS = {
+      chronological: [
+        'montessori',  // 1870
+        'piaget',      // 1896
+        'bateson',     // 1904
+        'fuller',      // 1895
+        'simon',       // 1916
+        'csikszentmihalyi', // 1934
+        'meadows',     // 1941
+        'papert',      // 1928
+        'capra',       // 1939
+        'rosch'        // 1938
+      ],
+      proximity: [
+        'papert',
+        'csikszentmihalyi',
+        'capra',
+        'rosch',
+        'meadows',
+        'simon',
+        'bateson',
+        'piaget',
+        'montessori',
+        'fuller'
+      ],
+      thematic: [
+        'piaget',
+        'papert',
+        'montessori',
+        'csikszentmihalyi',
+        'bateson',
+        'capra',
+        'meadows',
+        'fuller',
+        'simon',
+        'rosch'
+      ]
+    };
+
+    /* ===== Path Selection Logic ===== */
+    const chaptersContainer = document.getElementById('chapters');
+    const pathCards = document.querySelectorAll('.path-card');
+
+    function selectPath(pathKey) {
+      // Validate
+      if (!PATHS[pathKey]) return;
+
+      // Store choice
+      localStorage.setItem('chosen-orbits-path', pathKey);
+
+      // Update active state on cards
+      pathCards.forEach(card => {
+        const isActive = card.dataset.path === pathKey;
+        card.classList.toggle('active', isActive);
+        card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+
+      // Reorder chapter sections in the DOM
+      const order = PATHS[pathKey];
+      order.forEach(personId => {
+        const section = chaptersContainer.querySelector(`[data-person="${personId}"]`);
+        if (section) {
+          chaptersContainer.appendChild(section);
+        }
+      });
+
+      // Smooth-scroll past landing to first chapter
+      const firstChapter = chaptersContainer.querySelector('.chapter-section');
+      if (firstChapter) {
+        firstChapter.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // If no chapters yet, scroll just past the landing
+        window.scrollTo({
+          top: window.innerHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    // Attach click handlers
+    pathCards.forEach(card => {
+      card.addEventListener('click', () => selectPath(card.dataset.path));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectPath(card.dataset.path);
+        }
+      });
+    });
+
+    // Restore previous path choice on load (highlight only, don't scroll)
+    const savedPath = localStorage.getItem('chosen-orbits-path');
+    if (savedPath && PATHS[savedPath]) {
+      pathCards.forEach(card => {
+        const isActive = card.dataset.path === savedPath;
+        card.classList.toggle('active', isActive);
+        card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
+  </script>
+
+</body>
+</html>
