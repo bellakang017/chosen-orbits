@@ -18,13 +18,13 @@
     }
 
     html {
-      scroll-behavior: smooth;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     body {
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       line-height: 1.6;
       font-family: 'Gowun Batang', serif;
       font-weight: 400;
@@ -137,153 +137,369 @@
       line-height: 1.85;
     }
 
-    /* ===== Landing Section ===== */
+    /* ===== Page-Reader Layout ===== */
+    .book-page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateX(40px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 1;
+    }
+
+    .book-page.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .book-page.exit-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      pointer-events: none;
+    }
+
+    .book-page.exit-right {
+      opacity: 0;
+      transform: translateX(40px);
+      pointer-events: none;
+    }
+
+    /* Page edge shadow (right side, like a real book) */
+    .book-page.active::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 20px;
+      height: 100%;
+      background: linear-gradient(to left, rgba(0,0,0,0.04), transparent);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* ===== Landing — Book Cover ===== */
     .landing {
-      min-height: 100vh;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #3a322c;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Cloth texture overlay */
+    .landing::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Warm vignette */
+    .landing::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 65% at 50% 45%, transparent 0%, rgba(30, 25, 20, 0.5) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* The book object itself */
+    .landing__frame {
+      position: relative;
+      z-index: 2;
+      width: min(380px, 72vw);
+      height: min(540px, 82vh);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background-color: var(--morning-dew);
-      padding: 3rem 1.5rem 4rem;
-      position: relative;
+      padding: 3rem 2.5rem;
+      background:
+        linear-gradient(175deg, #F5F0E8 0%, #EDE7DC 40%, #E8E0D3 100%);
+      border-radius: 2px 8px 8px 2px;
+      box-shadow:
+        -4px 0 0 #d4cbbe,
+        -6px 0 0 #c8bfb0,
+        -7px 1px 0 rgba(0,0,0,0.08),
+        4px 4px 16px rgba(0, 0, 0, 0.35),
+        8px 8px 32px rgba(0, 0, 0, 0.2),
+        inset 3px 0 12px rgba(0, 0, 0, 0.04),
+        inset -1px 0 4px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Spine edge highlight */
+    .landing__frame::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 20px;
+      background: linear-gradient(90deg, rgba(0,0,0,0.06) 0%, transparent 100%);
+      border-radius: 2px 0 0 2px;
+      pointer-events: none;
+    }
+
+    /* Gold foil border inset */
+    .landing__frame::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 28px;
+      right: 16px;
+      bottom: 20px;
+      border: 1px solid rgba(181, 140, 100, 0.25);
+      pointer-events: none;
+    }
+
+    .landing__corners-bottom {
+      display: none;
+    }
+
+    /* Orbit SVG — more visible as cover art */
+    .landing__orbits {
+      position: absolute;
+      top: 50%;
+      left: 52%;
+      transform: translate(-50%, -48%);
+      width: 320px;
+      height: 320px;
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .landing__header {
       text-align: center;
-      margin-bottom: 3.5rem;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 0;
+    }
+
+    /* No rule above title */
+    .landing__header::before {
+      display: none;
     }
 
     .landing__title {
       font-family: var(--font-heading);
-      font-size: clamp(3rem, 7vw, 5rem);
-      font-weight: 700;
-      color: #2a2a2a;
-      letter-spacing: 0.02em;
+      font-size: clamp(2rem, 6vw, 2.6rem);
+      font-weight: 600;
+      color: #2a2520;
+      letter-spacing: 0.12em;
       margin-bottom: 0.6rem;
+      line-height: 1.15;
+      text-transform: uppercase;
+    }
+
+    .landing__title em {
+      display: block;
+      font-style: normal;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+    }
+
+    .landing__ornament {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      color: #B5907A;
+      opacity: 0.6;
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.8em;
+      text-align: center;
     }
 
     .landing__subtitle {
       font-family: var(--font-heading);
       font-style: italic;
       font-weight: 400;
-      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
-      color: var(--rose-wood);
-      opacity: 0.85;
-      max-width: 32em;
+      font-size: clamp(0.82rem, 1.6vw, 0.95rem);
+      color: #6b5a4a;
+      max-width: 22em;
       margin: 0 auto;
+      line-height: 1.55;
+      letter-spacing: 0.01em;
     }
 
-    /* -- Path Cards -- */
+    /* Path selection — compact, cover-bottom style */
     .paths {
       display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 56rem;
+      flex-direction: column;
+      gap: 0;
       width: 100%;
-      margin-bottom: 2rem;
+      max-width: 260px;
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      padding-top: 2rem;
+    }
+
+    .paths__label {
+      font-family: var(--font-heading);
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: #8a7a6a;
+      opacity: 0.7;
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .paths__rule {
+      width: 32px;
+      height: 1px;
+      background: rgba(181, 140, 100, 0.35);
+      margin: 0 auto 1rem;
     }
 
     .path-card {
-      flex: 1 1 15rem;
-      max-width: 18rem;
-      background: #fff;
-      border: 1px solid rgba(181, 112, 122, 0.18);
-      border-radius: 8px;
-      padding: 2rem 1.6rem 1.8rem;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0.45rem 0;
       cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-      text-align: left;
+      transition: opacity 0.25s ease;
+      text-align: center;
       position: relative;
+      display: block;
+    }
+
+    .path-card:first-of-type {
+      border-top: none;
     }
 
     .path-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 24px rgba(181, 112, 122, 0.1);
-      border-color: var(--petal-pink);
+      opacity: 0.7;
+      background: transparent;
+      padding-left: 0;
     }
 
     .path-card.active {
-      border-color: var(--rose-wood);
-      box-shadow: 0 4px 20px rgba(181, 112, 122, 0.18);
+      background: transparent;
+      padding-left: 0;
     }
 
-    .path-card.active::after {
+    .path-card.active .path-card__label {
+      opacity: 1;
+    }
+
+    .path-card.active .path-card__name {
+      color: #4a3a2a;
+    }
+
+    .path-card.active .path-card__name::after {
       content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--rose-wood), var(--petal-pink));
-      border-radius: 8px 8px 0 0;
     }
 
     .path-card__label {
-      font-family: var(--font-heading);
-      font-weight: 600;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--rose-wood);
-      margin-bottom: 0.5rem;
+      display: none;
+    }
+
+    .path-card__text {
+      flex: 1;
     }
 
     .path-card__name {
       font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 1.4rem;
-      color: #2a2a2a;
-      margin-bottom: 0.6rem;
+      font-weight: 500;
+      font-size: 0.88rem;
+      color: #5a4a3a;
+      margin-bottom: 0;
+      letter-spacing: 0.06em;
     }
 
     .path-card__desc {
-      font-family: var(--font-body);
-      font-size: 0.92rem;
-      line-height: 1.65;
-      color: #555;
-      margin-bottom: 1rem;
+      display: none;
     }
 
     .path-card__preview {
+      display: none;
+    }
+
+    /* Bottom of cover */
+    .landing__footer-ornament {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+      padding-top: 1.5rem;
+      text-align: center;
+    }
+
+    .landing__footer-ornament::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: rgba(181, 140, 100, 0.3);
+      margin: 0 auto;
+    }
+
+    .landing__year {
       font-family: var(--font-heading);
-      font-style: italic;
-      font-size: 0.88rem;
-      color: var(--rose-wood);
-      opacity: 0.7;
-    }
-
-    /* -- Scroll Indicator -- */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
-      opacity: 0.4;
-      animation: scrollPulse 2.4s ease-in-out infinite;
-    }
-
-    .scroll-indicator__chevron {
-      width: 18px;
-      height: 18px;
-      border-right: 2px solid var(--rose-wood);
-      border-bottom: 2px solid var(--rose-wood);
-      transform: rotate(45deg);
-    }
-
-    .scroll-indicator__chevron:nth-child(2) {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: #8a7a6a;
       opacity: 0.5;
-      margin-top: -8px;
+      margin-top: 0.6rem;
     }
 
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.25; transform: translateX(-50%) translateY(0); }
-      50% { opacity: 0.55; transform: translateX(-50%) translateY(6px); }
+    /* Hidden in page mode */
+    .scroll-indicator {
+      display: none;
+    }
+
+    /* Landing entrance animations */
+    @keyframes coverFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes textFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .landing__frame {
+      animation: coverFadeIn 1.4s ease-out both;
+    }
+
+    .landing__header {
+      animation: textFadeIn 1s ease-out 0.5s both;
+    }
+
+    .paths {
+      animation: textFadeIn 1s ease-out 0.8s both;
+    }
+
+    .landing__footer-ornament {
+      animation: textFadeIn 1s ease-out 1s both;
+    }
+
+    @media (max-width: 768px) {
+      .landing__frame {
+        width: min(320px, 85vw);
+        height: min(480px, 78vh);
+        padding: 2.5rem 2rem;
+      }
+
+      .landing__title {
+        font-size: clamp(1.6rem, 7vw, 2.2rem);
+      }
     }
 
     /* -- Chapter container (for future chapters) -- */
@@ -303,10 +519,10 @@
     .person-capra { background-color: var(--bg-capra); color: var(--text-capra); }
     .person-rosch { background-color: var(--bg-rosch); color: var(--text-rosch); }
 
-    /* ===== Navigation Bar ===== */
+    /* ===== Bottom Reader Bar ===== */
     .site-nav {
       position: fixed;
-      top: 0;
+      bottom: 0;
       left: 0;
       right: 0;
       z-index: 1000;
@@ -314,28 +530,86 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 1.5rem;
-      height: 52px;
-      background-color: rgba(242, 246, 244, 0.82);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      transition: transform 0.3s ease, background-color 0.4s ease;
+      height: 44px;
+      background-color: rgba(247, 243, 238, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      transition: background-color 0.4s ease;
       font-family: var(--font-heading);
     }
 
     .site-nav--hidden {
-      transform: translateY(-100%);
+      transform: translateY(100%);
+      pointer-events: none;
     }
 
     .site-nav__person-name {
-      font-weight: 600;
-      font-size: 1.05rem;
+      font-weight: 500;
+      font-size: 0.85rem;
       letter-spacing: 0.02em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       min-width: 0;
-      flex-shrink: 1;
+      flex: 1;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    /* Reader bar: prev/next arrows */
+    .reader-nav-btn {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: inherit;
+      opacity: 0.5;
+      padding: 0.3rem 0.6rem;
+      transition: opacity 0.2s ease;
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .reader-nav-btn:hover {
+      opacity: 0.9;
+    }
+
+    .reader-page-info {
+      font-family: var(--font-heading);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      opacity: 0.4;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    /* Click zones */
+    .click-zone {
+      position: fixed;
+      top: 0;
+      z-index: 500;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .click-zone--left {
+      left: 0;
+      width: 25%;
+      height: calc(100vh - 44px);
+    }
+
+    .click-zone--right {
+      right: 0;
+      width: 25%;
+      height: calc(100vh - 44px);
+    }
+
+    /* Hide click zones on landing */
+    .click-zones-hidden .click-zone {
+      display: none;
     }
 
     .site-nav__controls {
@@ -391,15 +665,17 @@
     .site-nav__dropdown-menu {
       display: none;
       position: absolute;
-      top: calc(100% + 6px);
+      bottom: calc(100% + 6px);
       right: 0;
       min-width: 220px;
+      max-height: 60vh;
+      overflow-y: auto;
       background: rgba(255,255,255,0.95);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(0,0,0,0.1);
       border-radius: 6px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.1);
       padding: 0.4rem 0;
       z-index: 1001;
     }
@@ -469,18 +745,80 @@
       margin: 0.3rem 0;
     }
 
-    /* ===== Chapter Sections ===== */
+    /* ===== Chapter Sections (now pages) ===== */
     .chapter-section {
-      min-height: 100vh;
-      padding: 4rem 2rem;
+      height: 100vh;
+      padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
+      overflow: hidden;
     }
 
     .chapter-section:has(.chapter-placeholder) {
       justify-content: center;
+    }
+
+    /* Chapter content area for CSS column pagination */
+    .chapter-content-area {
+      width: 100%;
+      height: calc(100vh - 44px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .chapter-inner-scroll {
+      height: 100%;
+      column-fill: auto;
+      column-gap: 0;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      /* column-width set dynamically by JS to match container width */
+    }
+
+    /* Allow content to flow across columns naturally */
+    .chapter-inner-scroll .chapter-header {
+      break-after: avoid-column;
+    }
+    .chapter-inner-scroll .chapter-next {
+      break-before: avoid-column;
+    }
+    .chapter-inner-scroll p,
+    .chapter-inner-scroll blockquote,
+    .chapter-inner-scroll .pull-quote,
+    .chapter-inner-scroll .crisis-hook {
+      break-inside: avoid;
+    }
+
+    /* Individual column "page" padding */
+    .chapter-section .chapter-header,
+    .chapter-section .crisis-hook,
+    .chapter-section .chapter-prose-wrapper,
+    .chapter-section .chapter-next {
+      padding-left: max(2rem, calc((100vw - 600px) / 2));
+      padding-right: max(2rem, calc((100vw - 600px) / 2));
+    }
+
+    .chapter-section .chapter-header {
+      padding-top: 3rem;
+    }
+
+    /* Ensure prose elements break properly across columns */
+    .chapter-inner-scroll .chapter-prose-wrapper {
+      break-inside: auto;
+    }
+    .chapter-inner-scroll .chapter-prose-area {
+      break-inside: auto;
+    }
+    .chapter-inner-scroll .chapter-prose {
+      break-inside: auto;
+    }
+    .chapter-inner-scroll .hybrid-sidebar {
+      break-inside: avoid;
+    }
+    .chapter-inner-scroll hr.ornamental-divider {
+      break-after: avoid;
     }
 
     .chapter-gradient-bar {
@@ -525,6 +863,12 @@
     .section-my-orbit {
       background-color: var(--diary-paper);
       color: var(--diary-ink);
+      overflow-y: auto;
+    }
+
+    .section-my-orbit .chapter-content-area {
+      overflow-y: auto;
+      padding: 2rem 0 2rem;
     }
 
     .diary-container {
@@ -777,6 +1121,12 @@
     .section-appendix {
       background-color: #F4F5F7;
       color: #3a3a3a;
+      overflow-y: auto;
+    }
+
+    .section-appendix .chapter-content-area {
+      overflow-y: auto;
+      padding: 3rem 2rem 3rem;
     }
 
     .appendix-tabs {
@@ -960,8 +1310,13 @@
     .section-colophon {
       background-color: #2a2a2a;
       color: rgba(255,255,255,0.7);
-      min-height: auto;
-      padding: 5rem 2rem 4rem;
+      padding: 0;
+      overflow-y: auto;
+    }
+
+    .section-colophon .chapter-content-area {
+      overflow-y: auto;
+      padding: 3rem 2rem 3rem;
     }
 
     .colophon-container {
@@ -1084,7 +1439,7 @@
     /* ===== Chapter Narrative Styles ===== */
     .chapter-header {
       text-align: center;
-      padding-top: 4rem;
+      padding-top: 3rem;
       margin-bottom: 2rem;
     }
 
@@ -1269,7 +1624,17 @@
       }
 
       .site-nav {
-        padding: 0 0.8rem;
+        padding: 0 0.6rem;
+        height: 40px;
+      }
+
+      .chapter-content-area {
+        height: calc(100vh - 40px);
+      }
+
+      .click-zone--left,
+      .click-zone--right {
+        height: calc(100vh - 40px);
       }
 
       .appendix-tabs {
@@ -1277,11 +1642,19 @@
       }
 
       .chapter-section {
-        padding: 3rem 1rem;
+        padding: 0;
       }
 
       .chapter-prose {
         padding: 0 1rem;
+      }
+
+      .chapter-section .chapter-header,
+      .chapter-section .crisis-hook,
+      .chapter-section .chapter-prose-wrapper,
+      .chapter-section .chapter-next {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
       }
 
       .diary-container {
@@ -1330,10 +1703,9 @@
     body.hybrid-mode .hybrid-sidebar {
       display: block;
       flex: 3;
-      position: sticky;
-      top: 80px;
+      position: relative;
       align-self: flex-start;
-      max-height: calc(100vh - 100px);
+      max-height: none;
       overflow-y: auto;
     }
 
@@ -1383,13 +1755,19 @@
 </head>
 <body>
 
-  <!-- ===== Navigation Bar ===== -->
+  <!-- ===== Click Zones ===== -->
+  <div class="click-zone click-zone--left" id="click-left" aria-hidden="true"></div>
+  <div class="click-zone click-zone--right" id="click-right" aria-hidden="true"></div>
+
+  <!-- ===== Bottom Reader Bar ===== -->
   <nav class="site-nav site-nav--hidden" id="site-nav" aria-label="Chapter navigation">
+    <button class="reader-nav-btn" id="btn-prev" aria-label="Previous page">&larr;</button>
     <span class="site-nav__person-name" id="nav-person-name">Chosen Orbits</span>
+    <span class="reader-page-info" id="page-info"></span>
     <div class="site-nav__controls">
       <button class="site-nav__mode-toggle" id="mode-toggle" aria-label="Toggle reading mode">Novel</button>
       <div class="site-nav__dropdown-wrapper">
-        <button class="site-nav__dropdown-btn" id="dropdown-btn" aria-expanded="false" aria-haspopup="true">Chapters</button>
+        <button class="site-nav__dropdown-btn" id="dropdown-btn" aria-expanded="false" aria-haspopup="true">Ch.</button>
         <ul class="site-nav__dropdown-menu" id="dropdown-menu" role="menu">
           <li class="site-nav__path-switcher" aria-label="Switch reading path">
             <button class="site-nav__path-btn" data-path="chronological">Chrono</button>
@@ -1400,36 +1778,64 @@
         </ul>
       </div>
     </div>
+    <button class="reader-nav-btn" id="btn-next" aria-label="Next page">&rarr;</button>
   </nav>
 
   <!-- ===== Landing ===== -->
-  <section class="landing" id="landing">
-    <header class="landing__header">
-      <h1 class="landing__title">Chosen Orbits</h1>
-      <p class="landing__subtitle">On Ten Lives the Cosmos Composed Before My Own</p>
-    </header>
+  <section class="landing book-page active" id="landing" data-person="landing">
+    <div class="landing__frame">
+      <div class="landing__corners-bottom"></div>
 
-    <div class="paths" role="group" aria-label="Choose a reading path">
+      <!-- Orbit decoration -->
+      <svg class="landing__orbits" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="250" cy="250" rx="220" ry="110" stroke="#a08a70" stroke-width="0.6" transform="rotate(-20 250 250)"/>
+        <ellipse cx="250" cy="250" rx="170" ry="80" stroke="#a08a70" stroke-width="0.5" transform="rotate(30 250 250)"/>
+        <ellipse cx="250" cy="250" rx="130" ry="55" stroke="#a08a70" stroke-width="0.4" transform="rotate(-50 250 250)"/>
+        <circle cx="250" cy="250" r="2.5" fill="#a08a70" opacity="0.5"/>
+        <circle cx="470" cy="250" r="2" fill="#a08a70" opacity="0.4" transform="rotate(-20 250 250)"/>
+        <circle cx="30" cy="250" r="2" fill="#a08a70" opacity="0.4" transform="rotate(-20 250 250)"/>
+        <circle cx="420" cy="250" r="1.8" fill="#a08a70" opacity="0.35" transform="rotate(30 250 250)"/>
+        <circle cx="80" cy="250" r="1.8" fill="#a08a70" opacity="0.35" transform="rotate(30 250 250)"/>
+        <circle cx="380" cy="250" r="1.5" fill="#a08a70" opacity="0.3" transform="rotate(-50 250 250)"/>
+        <circle cx="120" cy="250" r="1.5" fill="#a08a70" opacity="0.3" transform="rotate(-50 250 250)"/>
+        <circle cx="340" cy="185" r="1.2" fill="#a08a70" opacity="0.25" transform="rotate(-20 250 250)"/>
+        <circle cx="160" cy="315" r="1.2" fill="#a08a70" opacity="0.25" transform="rotate(30 250 250)"/>
+        <circle cx="350" cy="210" r="1" fill="#a08a70" opacity="0.2" transform="rotate(-50 250 250)"/>
+        <circle cx="150" cy="290" r="1" fill="#a08a70" opacity="0.2" transform="rotate(30 250 250)"/>
+      </svg>
 
-      <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
-        <div class="path-card__label">Path A</div>
-        <h2 class="path-card__name">Chronological</h2>
-        <p class="path-card__desc">Follow the timeline. See how one mind influenced the next.</p>
-        <p class="path-card__preview">Begins with Maria Montessori, 1870</p>
+      <header class="landing__header">
+        <h1 class="landing__title"><em>Chosen</em> Orbits</h1>
+        <span class="landing__ornament">&middot;&ensp;&middot;&ensp;&middot;</span>
+        <p class="landing__subtitle">On Ten Lives the Cosmos<br>Composed Before My Own</p>
+      </header>
+
+      <div class="paths" role="group" aria-label="Choose a reading path">
+        <div class="paths__rule"></div>
+        <div class="paths__label">Choose your path</div>
+
+        <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
+          <div class="path-card__text">
+            <h2 class="path-card__name">Chronological</h2>
+          </div>
+        </div>
+
+        <div class="path-card" data-path="proximity" tabindex="0" role="button" aria-pressed="false">
+          <div class="path-card__text">
+            <h2 class="path-card__name">Proximity</h2>
+          </div>
+        </div>
+
+        <div class="path-card" data-path="thematic" tabindex="0" role="button" aria-pressed="false">
+          <div class="path-card__text">
+            <h2 class="path-card__name">Thematic Pairs</h2>
+          </div>
+        </div>
+
       </div>
 
-      <div class="path-card" data-path="proximity" tabindex="0" role="button" aria-pressed="false">
-        <div class="path-card__label">Path B</div>
-        <h2 class="path-card__name">Proximity</h2>
-        <p class="path-card__desc">Start with the life closest to yours.</p>
-        <p class="path-card__preview">Begins with Seymour Papert</p>
-      </div>
-
-      <div class="path-card" data-path="thematic" tabindex="0" role="button" aria-pressed="false">
-        <div class="path-card__label">Path C</div>
-        <h2 class="path-card__name">Thematic Pairs</h2>
-        <p class="path-card__desc">Two lives side by side. See the pattern.</p>
-        <p class="path-card__preview">Begins with Piaget &amp; Papert</p>
+      <div class="landing__footer-ornament">
+        <p class="landing__year">MMXXVI</p>
       </div>
 
     </div>
@@ -1441,9 +1847,9 @@
   </section>
 
   <!-- ===== Chapters Container ===== -->
-  <div id="chapters">
+  <div id="chapters" style="position:relative;">
 
-    <section class="chapter-section person-piaget" data-person="piaget" data-number="01" id="chapter-piaget">
+    <section class="chapter-section book-page person-piaget" data-person="piaget" data-number="01" id="chapter-piaget">
       <div class="chapter-gradient-bar grad-piaget"></div>
 
       <div class="chapter-header">
@@ -1518,7 +1924,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-montessori" data-person="montessori" data-number="02" id="chapter-montessori">
+    <section class="chapter-section book-page person-montessori" data-person="montessori" data-number="02" id="chapter-montessori">
       <div class="chapter-gradient-bar grad-montessori"></div>
 
       <div class="chapter-header">
@@ -1591,7 +1997,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-bateson" data-person="bateson" data-number="03" id="chapter-bateson">
+    <section class="chapter-section book-page person-bateson" data-person="bateson" data-number="03" id="chapter-bateson">
       <div class="chapter-gradient-bar grad-bateson"></div>
 
       <div class="chapter-header">
@@ -1664,7 +2070,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-papert" data-person="papert" data-number="04" id="chapter-papert">
+    <section class="chapter-section book-page person-papert" data-person="papert" data-number="04" id="chapter-papert">
       <div class="chapter-gradient-bar grad-papert"></div>
 
       <div class="chapter-header">
@@ -1738,7 +2144,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-simon" data-person="simon" data-number="05" id="chapter-simon">
+    <section class="chapter-section book-page person-simon" data-person="simon" data-number="05" id="chapter-simon">
       <div class="chapter-gradient-bar grad-simon"></div>
 
       <div class="chapter-header">
@@ -1812,7 +2218,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-csikszentmihalyi" data-person="csikszentmihalyi" data-number="06" id="chapter-csikszentmihalyi">
+    <section class="chapter-section book-page person-csikszentmihalyi" data-person="csikszentmihalyi" data-number="06" id="chapter-csikszentmihalyi">
       <div class="chapter-gradient-bar grad-csikszentmihalyi"></div>
 
       <div class="chapter-header">
@@ -1888,7 +2294,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-meadows" data-person="meadows" data-number="07" id="chapter-meadows">
+    <section class="chapter-section book-page person-meadows" data-person="meadows" data-number="07" id="chapter-meadows">
       <div class="chapter-gradient-bar grad-meadows"></div>
 
       <div class="chapter-header">
@@ -1963,7 +2369,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-fuller" data-person="fuller" data-number="08" id="chapter-fuller">
+    <section class="chapter-section book-page person-fuller" data-person="fuller" data-number="08" id="chapter-fuller">
       <div class="chapter-gradient-bar grad-fuller"></div>
 
       <div class="chapter-header">
@@ -2038,7 +2444,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-capra" data-person="capra" data-number="09" id="chapter-capra">
+    <section class="chapter-section book-page person-capra" data-person="capra" data-number="09" id="chapter-capra">
       <div class="chapter-gradient-bar grad-capra"></div>
 
       <div class="chapter-header">
@@ -2112,7 +2518,7 @@
       </div>
     </section>
 
-    <section class="chapter-section person-rosch" data-person="rosch" data-number="10" id="chapter-rosch">
+    <section class="chapter-section book-page person-rosch" data-person="rosch" data-number="10" id="chapter-rosch">
       <div class="chapter-gradient-bar grad-rosch"></div>
 
       <div class="chapter-header">
@@ -2188,7 +2594,7 @@
     </section>
 
     <!-- Chapter 11: My Orbit -->
-    <section class="chapter-section section-my-orbit" id="my-orbit" data-person="my-orbit">
+    <section class="chapter-section book-page section-my-orbit" id="my-orbit" data-person="my-orbit">
       <div class="diary-container">
 
         <!-- Cover -->
@@ -2284,7 +2690,7 @@
     </section>
 
     <!-- Appendix -->
-    <section class="chapter-section section-appendix" id="appendix" data-person="appendix">
+    <section class="chapter-section book-page section-appendix" id="appendix" data-person="appendix">
       <div class="chapter-placeholder" style="width:100%; max-width:56rem;">
         <h2 class="chapter-placeholder__name">Appendix</h2>
         <div class="appendix-tabs">
@@ -2690,7 +3096,7 @@
     </section>
 
     <!-- Colophon -->
-    <section class="chapter-section section-colophon" id="colophon" data-person="colophon">
+    <section class="chapter-section book-page section-colophon" id="colophon" data-person="colophon">
       <div class="colophon-container">
         <h2>Colophon</h2>
         <p style="text-align:center; font-family:var(--font-heading); font-style:italic; color:rgba(255,255,255,0.45); margin-bottom:2rem;">On the making of this book</p>
@@ -2766,9 +3172,6 @@
   </div>
 
   <!-- ===== Scripts ===== -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-
   <script>
     /* ===== Person Display Names ===== */
     const PERSON_NAMES = {
@@ -2784,24 +3187,26 @@
       rosch: 'Eleanor Rosch',
       'my-orbit': 'My Orbit',
       appendix: 'Appendix',
-      colophon: 'Colophon'
+      colophon: 'Colophon',
+      landing: 'Chosen Orbits'
     };
 
     /* ===== Per-person nav background colors (with alpha) ===== */
     const PERSON_NAV_BG = {
-      piaget: 'rgba(239,245,240,0.82)',
-      montessori: 'rgba(240,239,242,0.82)',
-      bateson: 'rgba(237,242,244,0.82)',
-      papert: 'rgba(238,246,243,0.82)',
-      simon: 'rgba(239,241,245,0.82)',
-      csikszentmihalyi: 'rgba(244,243,238,0.82)',
-      meadows: 'rgba(235,244,238,0.82)',
-      fuller: 'rgba(237,238,242,0.82)',
-      capra: 'rgba(237,244,246,0.82)',
-      rosch: 'rgba(242,239,245,0.82)',
-      'my-orbit': 'rgba(253,248,240,0.82)',
-      appendix: 'rgba(244,245,247,0.82)',
-      colophon: 'rgba(42,42,42,0.92)'
+      piaget: 'rgba(239,245,240,0.92)',
+      montessori: 'rgba(240,239,242,0.92)',
+      bateson: 'rgba(237,242,244,0.92)',
+      papert: 'rgba(238,246,243,0.92)',
+      simon: 'rgba(239,241,245,0.92)',
+      csikszentmihalyi: 'rgba(244,243,238,0.92)',
+      meadows: 'rgba(235,244,238,0.92)',
+      fuller: 'rgba(237,238,242,0.92)',
+      capra: 'rgba(237,244,246,0.92)',
+      rosch: 'rgba(242,239,245,0.92)',
+      'my-orbit': 'rgba(253,248,240,0.92)',
+      appendix: 'rgba(244,245,247,0.92)',
+      colophon: 'rgba(42,42,42,0.95)',
+      landing: 'rgba(247,243,238,0.92)'
     };
 
     /* ===== Reading Path Definitions ===== */
@@ -2852,13 +3257,236 @@
     const modeToggle = document.getElementById('mode-toggle');
     const dropdownBtn = document.getElementById('dropdown-btn');
     const dropdownMenu = document.getElementById('dropdown-menu');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const pageInfo = document.getElementById('page-info');
+    const clickLeft = document.getElementById('click-left');
+    const clickRight = document.getElementById('click-right');
 
     let currentPath = localStorage.getItem('chosen-orbits-path') || 'thematic';
     let readingMode = localStorage.getItem('chosen-orbits-mode') || 'novel';
     let currentPersonId = null;
 
+    /* ===== Page-Reader State ===== */
+    let allPages = [];        // ordered list of book-page elements
+    let currentPageIndex = 0; // which page (chapter) we're on
+    let subPageIndex = 0;     // which sub-page within a paginated chapter
+    let subPageCount = 1;     // total sub-pages in current chapter
+    let isTransitioning = false;
+
+    /* Build the page list: landing first, then chapters in path order */
+    function buildPageList() {
+      allPages = [document.getElementById('landing')];
+      const sections = chaptersContainer.querySelectorAll('.chapter-section');
+      sections.forEach(s => allPages.push(s));
+    }
+
+    /* ===== Sub-page pagination via CSS columns ===== */
+    function getChapterScrollContainer(page) {
+      // For narrative chapters, the content scrolls horizontally via column layout
+      // For my-orbit, appendix, colophon, content scrolls vertically
+      return page.querySelector('.chapter-content-area') || null;
+    }
+
+    function measureSubPages(page) {
+      const container = getChapterScrollContainer(page);
+      if (!container) return 1;
+
+      const inner = container.querySelector('.chapter-inner-scroll');
+      if (!inner) return 1;
+
+      // For scrollable sections (diary, appendix, colophon), no sub-pages
+      if (page.classList.contains('section-my-orbit') ||
+          page.classList.contains('section-appendix') ||
+          page.classList.contains('section-colophon')) {
+        return 1;
+      }
+
+      // Set column-width to match container width so each column = one page
+      const w = container.clientWidth;
+      if (w > 0) {
+        inner.style.columnWidth = w + 'px';
+      }
+
+      // Force layout recalc
+      void inner.offsetHeight;
+
+      const cols = Math.max(1, Math.round(inner.scrollWidth / w));
+      return cols;
+    }
+
+    function setSubPage(page, index) {
+      const container = getChapterScrollContainer(page);
+      if (!container) return;
+      const inner = container.querySelector('.chapter-inner-scroll');
+      if (!inner) return;
+
+      const offset = -index * container.clientWidth;
+      inner.style.transform = `translateX(${offset}px)`;
+    }
+
+    /* ===== Show/hide pages ===== */
+    function showPage(index, direction) {
+      if (isTransitioning) return;
+      if (index < 0 || index >= allPages.length) return;
+
+      isTransitioning = true;
+      const oldPage = allPages[currentPageIndex];
+      const newPage = allPages[index];
+
+      // Deactivate old page
+      if (oldPage && oldPage !== newPage) {
+        oldPage.classList.remove('active');
+        oldPage.classList.add(direction === 'next' ? 'exit-left' : 'exit-right');
+        // Reset sub-page scroll
+        setSubPage(oldPage, 0);
+      }
+
+      // Prepare new page entry direction
+      newPage.classList.remove('exit-left', 'exit-right');
+      if (direction === 'next') {
+        newPage.style.transform = 'translateX(40px)';
+      } else {
+        newPage.style.transform = 'translateX(-40px)';
+      }
+      newPage.style.opacity = '0';
+
+      // Force reflow
+      void newPage.offsetWidth;
+
+      // Activate
+      newPage.style.transform = '';
+      newPage.style.opacity = '';
+      newPage.classList.add('active');
+
+      currentPageIndex = index;
+      subPageIndex = 0;
+
+      // Measure sub-pages after page is visible
+      requestAnimationFrame(() => {
+        subPageCount = measureSubPages(newPage);
+        updateReaderBar();
+
+        setTimeout(() => {
+          if (oldPage && oldPage !== newPage) {
+            oldPage.classList.remove('exit-left', 'exit-right');
+          }
+          isTransitioning = false;
+        }, 320);
+      });
+    }
+
+    function showSubPage(page, subIdx, direction) {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      subPageIndex = subIdx;
+      setSubPage(page, subIdx);
+      updateReaderBar();
+      setTimeout(() => { isTransitioning = false; }, 320);
+    }
+
+    /* ===== Navigation ===== */
+    function goNext() {
+      if (isTransitioning) return;
+      const page = allPages[currentPageIndex];
+
+      // If there are more sub-pages in this chapter
+      if (subPageIndex < subPageCount - 1) {
+        showSubPage(page, subPageIndex + 1, 'next');
+        return;
+      }
+
+      // Go to next chapter
+      if (currentPageIndex < allPages.length - 1) {
+        showPage(currentPageIndex + 1, 'next');
+      }
+    }
+
+    function goPrev() {
+      if (isTransitioning) return;
+      const page = allPages[currentPageIndex];
+
+      // If there are previous sub-pages
+      if (subPageIndex > 0) {
+        showSubPage(page, subPageIndex - 1, 'prev');
+        return;
+      }
+
+      // Go to previous chapter
+      if (currentPageIndex > 0) {
+        // When going back, start at last sub-page of previous chapter
+        const prevPage = allPages[currentPageIndex - 1];
+        showPage(currentPageIndex - 1, 'prev');
+
+        // After transition, jump to last sub-page
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            subPageCount = measureSubPages(prevPage);
+            subPageIndex = subPageCount - 1;
+            setSubPage(prevPage, subPageIndex);
+            updateReaderBar();
+          });
+        });
+      }
+    }
+
+    function goToPage(index) {
+      if (index === currentPageIndex) return;
+      const dir = index > currentPageIndex ? 'next' : 'prev';
+      showPage(index, dir);
+    }
+
+    /* ===== Update Reader Bar ===== */
+    function updateReaderBar() {
+      const page = allPages[currentPageIndex];
+      const personId = page.dataset.person || 'landing';
+
+      // Show/hide nav bar
+      if (personId === 'landing') {
+        siteNav.classList.add('site-nav--hidden');
+        document.body.classList.add('click-zones-hidden');
+      } else {
+        siteNav.classList.remove('site-nav--hidden');
+        document.body.classList.remove('click-zones-hidden');
+      }
+
+      // Update name
+      navPersonName.textContent = PERSON_NAMES[personId] || personId;
+
+      // Update bg color
+      siteNav.style.backgroundColor = PERSON_NAV_BG[personId] || 'rgba(247,243,238,0.92)';
+
+      // Update text color for colophon
+      if (personId === 'colophon') {
+        siteNav.style.color = 'rgba(255,255,255,0.85)';
+      } else {
+        siteNav.style.color = '';
+      }
+
+      // Page info
+      if (subPageCount > 1) {
+        pageInfo.textContent = 'p. ' + (subPageIndex + 1) + ' of ' + subPageCount;
+      } else {
+        // Show chapter position (skip landing)
+        pageInfo.textContent = currentPageIndex + ' of ' + (allPages.length - 1);
+      }
+
+      // Highlight active dropdown item
+      dropdownMenu.querySelectorAll('.site-nav__dropdown-item').forEach(item => {
+        item.classList.remove('site-nav__dropdown-item--active');
+      });
+      const displayName = PERSON_NAMES[personId];
+      dropdownMenu.querySelectorAll('.site-nav__dropdown-item').forEach(item => {
+        if (item.textContent.includes(displayName)) {
+          item.classList.add('site-nav__dropdown-item--active');
+        }
+      });
+
+      currentPersonId = personId;
+    }
+
     /* ===== Path Selection Logic ===== */
-    function selectPath(pathKey, shouldScroll) {
+    function selectPath(pathKey, shouldNavigate) {
       if (!PATHS[pathKey]) return;
       currentPath = pathKey;
       localStorage.setItem('chosen-orbits-path', pathKey);
@@ -2888,24 +3516,13 @@
         if (el) chaptersContainer.appendChild(el);
       });
 
-      // Rebuild dropdown chapter list
+      // Rebuild page list and dropdown
+      buildPageList();
       buildDropdownItems();
 
-      // Re-observe sections for intersection
-      observeSections();
-
-      // Refresh ScrollTrigger positions after DOM reorder
-      if (typeof ScrollTrigger !== 'undefined') {
-        ScrollTrigger.refresh();
-      }
-
-      if (shouldScroll !== false) {
-        const firstChapter = chaptersContainer.querySelector('.chapter-section');
-        if (firstChapter) {
-          firstChapter.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-        }
+      if (shouldNavigate !== false) {
+        // Navigate to first chapter (index 1, since 0 is landing)
+        showPage(1, 'next');
       }
     }
 
@@ -2938,6 +3555,17 @@
         modeToggle.textContent = 'Novel';
       }
       localStorage.setItem('chosen-orbits-mode', mode);
+
+      // Re-measure sub-pages after mode change
+      requestAnimationFrame(() => {
+        const page = allPages[currentPageIndex];
+        subPageCount = measureSubPages(page);
+        if (subPageIndex >= subPageCount) {
+          subPageIndex = subPageCount - 1;
+          setSubPage(page, subPageIndex);
+        }
+        updateReaderBar();
+      });
     }
 
     modeToggle.addEventListener('click', () => {
@@ -2959,8 +3587,9 @@
         btn.setAttribute('role', 'menuitem');
         btn.textContent = (i + 1) + '. ' + (PERSON_NAMES[personId] || personId);
         btn.addEventListener('click', () => {
-          const target = document.getElementById('chapter-' + personId);
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
+          // Find the page index for this person
+          const pageIdx = allPages.findIndex(p => p.dataset.person === personId);
+          if (pageIdx >= 0) goToPage(pageIdx);
           closeDropdown();
         });
         li.appendChild(btn);
@@ -2985,8 +3614,8 @@
         btn.setAttribute('role', 'menuitem');
         btn.textContent = item.label;
         btn.addEventListener('click', () => {
-          const target = document.getElementById(item.id);
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
+          const pageIdx = allPages.findIndex(p => p.dataset.person === item.id || p.id === item.id);
+          if (pageIdx >= 0) goToPage(pageIdx);
           closeDropdown();
         });
         li.appendChild(btn);
@@ -3011,77 +3640,59 @@
       }
     });
 
-    /* ===== Scroll Direction Detection (show/hide nav) ===== */
-    let lastScrollY = window.scrollY;
-    let scrollTicking = false;
+    /* ===== Click Zones ===== */
+    clickLeft.addEventListener('click', goPrev);
+    clickRight.addEventListener('click', goNext);
 
-    function onScroll() {
-      if (scrollTicking) return;
-      scrollTicking = true;
-      requestAnimationFrame(() => {
-        const currentY = window.scrollY;
-        const landingHeight = document.getElementById('landing').offsetHeight;
+    /* ===== Keyboard Navigation ===== */
+    document.addEventListener('keydown', (e) => {
+      // Don't intercept if user is typing in textarea
+      if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
 
-        // Only show nav once past landing
-        if (currentY < landingHeight * 0.7) {
-          siteNav.classList.add('site-nav--hidden');
-        } else if (currentY < lastScrollY) {
-          // Scrolling up -- show
-          siteNav.classList.remove('site-nav--hidden');
-        } else if (currentY > lastScrollY + 5) {
-          // Scrolling down -- hide
-          siteNav.classList.add('site-nav--hidden');
-          closeDropdown();
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        goNext();
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        goPrev();
+      }
+    });
+
+    /* ===== Touch / Swipe Navigation ===== */
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const touchEndY = e.changedTouches[0].screenY;
+      const diffX = touchStartX - touchEndX;
+      const diffY = Math.abs(touchStartY - touchEndY);
+
+      // Only trigger if horizontal swipe > 50px and more horizontal than vertical
+      if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
+        // Don't swipe if interacting with scrollable content
+        if (e.target.closest('.diary-textarea') ||
+            e.target.closest('.section-appendix .chapter-content-area') ||
+            e.target.closest('.section-colophon .chapter-content-area') ||
+            e.target.closest('.section-my-orbit .chapter-content-area')) return;
+
+        if (diffX > 0) {
+          goNext(); // swipe left = next
+        } else {
+          goPrev(); // swipe right = prev
         }
+      }
+    }, { passive: true });
 
-        lastScrollY = currentY;
-        scrollTicking = false;
-      });
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    /* ===== IntersectionObserver for Active Chapter ===== */
-    let sectionObserver = null;
-
-    function observeSections() {
-      if (sectionObserver) sectionObserver.disconnect();
-
-      sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const personId = entry.target.dataset.person;
-            if (personId && personId !== currentPersonId) {
-              currentPersonId = personId;
-              navPersonName.textContent = PERSON_NAMES[personId] || personId;
-              siteNav.style.backgroundColor = PERSON_NAV_BG[personId] || 'rgba(242,246,244,0.82)';
-
-              // Update nav text color for colophon (dark bg)
-              if (personId === 'colophon') {
-                siteNav.style.color = 'rgba(255,255,255,0.85)';
-              } else {
-                siteNav.style.color = '';
-              }
-
-              // Highlight active dropdown item
-              dropdownMenu.querySelectorAll('.site-nav__dropdown-item').forEach(item => {
-                item.classList.remove('site-nav__dropdown-item--active');
-              });
-              const displayName = PERSON_NAMES[personId];
-              dropdownMenu.querySelectorAll('.site-nav__dropdown-item').forEach(item => {
-                if (item.textContent.includes(displayName)) {
-                  item.classList.add('site-nav__dropdown-item--active');
-                }
-              });
-            }
-          }
-        });
-      }, { threshold: 0.3 });
-
-      chaptersContainer.querySelectorAll('.chapter-section').forEach(section => {
-        sectionObserver.observe(section);
-      });
-    }
+    /* ===== Button Navigation ===== */
+    btnPrev.addEventListener('click', goPrev);
+    btnNext.addEventListener('click', goNext);
 
     /* ===== Appendix Tabs ===== */
     document.querySelectorAll('.appendix-tab-btn').forEach(btn => {
@@ -3095,8 +3706,65 @@
       });
     });
 
+    /* ===== Wrap chapter content for column pagination ===== */
+    function wrapChapterContent() {
+      const narrativeChapters = chaptersContainer.querySelectorAll(
+        '.chapter-section:not(.section-my-orbit):not(.section-appendix):not(.section-colophon)'
+      );
+
+      narrativeChapters.forEach(section => {
+        // Don't double-wrap
+        if (section.querySelector('.chapter-content-area')) return;
+
+        const contentArea = document.createElement('div');
+        contentArea.className = 'chapter-content-area';
+
+        const innerScroll = document.createElement('div');
+        innerScroll.className = 'chapter-inner-scroll';
+
+        // Keep gradient bar outside column flow (it's position:absolute)
+        const gradBar = section.querySelector('.chapter-gradient-bar');
+
+        // Move all children into innerScroll (except gradient bar)
+        while (section.firstChild) {
+          if (section.firstChild === gradBar) {
+            // Temporarily detach, re-attach after
+            section.removeChild(gradBar);
+            continue;
+          }
+          innerScroll.appendChild(section.firstChild);
+        }
+
+        contentArea.appendChild(innerScroll);
+        section.appendChild(contentArea);
+
+        // Re-attach gradient bar directly to section (outside columns)
+        if (gradBar) {
+          section.appendChild(gradBar);
+        }
+      });
+
+      // For my-orbit, appendix, colophon: wrap in chapter-content-area but without column layout
+      ['section-my-orbit', 'section-appendix', 'section-colophon'].forEach(cls => {
+        const section = chaptersContainer.querySelector('.' + cls);
+        if (!section || section.querySelector('.chapter-content-area')) return;
+
+        const contentArea = document.createElement('div');
+        contentArea.className = 'chapter-content-area';
+
+        while (section.firstChild) {
+          contentArea.appendChild(section.firstChild);
+        }
+
+        section.appendChild(contentArea);
+      });
+    }
+
     /* ===== Initialize ===== */
-    // Restore saved path on load (reorder without scrolling)
+    // Wrap content for pagination
+    wrapChapterContent();
+
+    // Restore saved path on load (reorder without navigating)
     if (PATHS[currentPath]) {
       selectPath(currentPath, false);
     }
@@ -3105,6 +3773,44 @@
     if (readingMode === 'hybrid') {
       applyReadingMode('hybrid');
     }
+
+    // Build initial page list
+    buildPageList();
+
+    // Show landing as first page
+    allPages.forEach((p, i) => {
+      if (i === 0) {
+        p.classList.add('active');
+      } else {
+        p.classList.remove('active');
+      }
+    });
+
+    // Initial reader bar state
+    updateReaderBar();
+
+    // Re-measure on resize (debounced)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        requestAnimationFrame(() => {
+          const page = allPages[currentPageIndex];
+          subPageCount = measureSubPages(page);
+          if (subPageIndex >= subPageCount) subPageIndex = subPageCount - 1;
+          setSubPage(page, subPageIndex);
+          updateReaderBar();
+        });
+      }, 150);
+    });
+
+    /* ===== Intercept chapter-next links to use page navigation ===== */
+    document.querySelectorAll('.chapter-next a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        goNext();
+      });
+    });
 
     /* ===== Chapter 11: Diary localStorage + Clipboard ===== */
     const diary = document.getElementById('diary-textarea');
@@ -3123,41 +3829,6 @@
         copyBtn.textContent = 'Copied';
         setTimeout(() => { copyBtn.textContent = 'Copy to Obsidian'; }, 2000);
       });
-    }
-
-    /* ===== GSAP Scroll-Triggered Fade-In Animations ===== */
-    gsap.registerPlugin(ScrollTrigger);
-
-    function initScrollAnimations() {
-      // Only animate narrative chapters (exclude my-orbit, appendix, colophon)
-      const narrativeScope = '.chapter-section:not(.section-my-orbit):not(.section-appendix):not(.section-colophon)';
-      const selectors = [
-        narrativeScope + ' .chapter-header',
-        narrativeScope + ' .crisis-hook',
-        narrativeScope + ' .chapter-prose p',
-        narrativeScope + ' .pull-quote'
-      ].join(', ');
-
-      const animTargets = document.querySelectorAll(selectors);
-
-      animTargets.forEach(el => {
-        gsap.from(el, {
-          opacity: 0,
-          y: 20,
-          duration: 0.8,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            once: true
-          }
-        });
-      });
-    }
-
-    // Only run animations if user has not requested reduced motion
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      initScrollAnimations();
     }
   </script>
 
