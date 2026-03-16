@@ -501,7 +501,7 @@
     }
 
     .site-nav--hidden {
-      transform: translateY(100%);
+      transform: translateY(-100%);
       pointer-events: none;
     }
 
@@ -3479,14 +3479,8 @@
     // Start observing sections for nav updates
     observeSections();
 
-    // Restore last position
-    const savedPosition = localStorage.getItem('chosen-orbits-position');
-    if (savedPosition) {
-      const target = document.getElementById('chapter-' + savedPosition) || document.getElementById(savedPosition);
-      if (target) {
-        setTimeout(() => target.scrollIntoView(), 100);
-      }
-    }
+    // Always start at top (landing page)
+    window.scrollTo(0, 0);
 
     /* ===== Chapter 11: Diary localStorage + Clipboard ===== */
     const diary = document.getElementById('diary-textarea');
