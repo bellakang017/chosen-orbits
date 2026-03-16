@@ -24,8 +24,8 @@
     }
 
     body {
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      overflow-y: auto;
       line-height: 1.6;
       font-family: 'Gowun Batang', serif;
       font-weight: 400;
@@ -139,50 +139,10 @@
     }
 
     /* ===== Page-Reader Layout ===== */
+    /* Chapters flow naturally as scroll sections */
     .book-page {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      opacity: 0;
-      transform: translateX(40px);
-      pointer-events: none;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      z-index: 1;
-    }
-
-    .book-page.active {
-      opacity: 1;
-      transform: translateX(0);
-      pointer-events: auto;
-      z-index: 2;
-    }
-
-    .book-page.exit-left {
-      opacity: 0;
-      transform: translateX(-40px);
-      pointer-events: none;
-    }
-
-    .book-page.exit-right {
-      opacity: 0;
-      transform: translateX(40px);
-      pointer-events: none;
-    }
-
-    /* Page edge shadow (right side, like a real book) */
-    .book-page.active::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 20px;
-      height: 100%;
-      background: linear-gradient(to left, rgba(0,0,0,0.04), transparent);
-      pointer-events: none;
-      z-index: 100;
+      min-height: 100vh;
     }
 
     /* ===== Landing — Book Cover ===== */
@@ -505,11 +465,7 @@
 
     /* -- Chapter container (for future chapters) -- */
     #chapters {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
-      height: 100vh;
     }
 
     /* ===== Per-person color classes ===== */
@@ -527,7 +483,7 @@
     /* ===== Bottom Reader Bar ===== */
     .site-nav {
       position: fixed;
-      bottom: 0;
+      top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
@@ -536,11 +492,11 @@
       justify-content: space-between;
       padding: 0 1.5rem;
       height: 44px;
-      background-color: rgba(247, 243, 238, 0.92);
+      background-color: rgba(247, 243, 238, 0.95);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(0,0,0,0.06);
-      transition: background-color 0.4s ease;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      transition: transform 0.3s ease, background-color 0.4s ease;
       font-family: var(--font-heading);
     }
 
@@ -592,30 +548,7 @@
     }
 
     /* Click zones */
-    .click-zone {
-      position: fixed;
-      top: 0;
-      z-index: 500;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .click-zone--left {
-      left: 0;
-      width: 25%;
-      height: calc(100vh - 44px);
-    }
-
-    .click-zone--right {
-      right: 0;
-      width: 25%;
-      height: calc(100vh - 44px);
-    }
-
-    /* Hide click zones on landing */
-    .click-zones-hidden .click-zone {
-      display: none;
-    }
+    .click-zone { display: none; }
 
     .site-nav__controls {
       display: flex;
@@ -766,10 +699,7 @@
     }
 
     /* ===== Chapter Sections (now pages) ===== */
-    .chapter-section.book-page {
-      overflow-y: auto !important;
-      overflow-x: hidden !important;
-      -webkit-overflow-scrolling: touch;
+    .chapter-section {
       padding-bottom: 60px;
     }
 
@@ -3264,135 +3194,57 @@
     let readingMode = localStorage.getItem('chosen-orbits-mode') || 'novel';
     let currentPersonId = null;
 
-    /* ===== Page-Reader State ===== */
-    let allPages = [];
-    let currentPageIndex = 0;
-    let isTransitioning = false;
+    /* ===== Scroll-Based Section Tracking ===== */
+    let sectionObserver = null;
 
-    /* Build the page list: landing first, then chapters in path order */
-    function buildPageList() {
-      allPages = [document.getElementById('landing')];
-      const sections = chaptersContainer.querySelectorAll('.chapter-section');
-      sections.forEach(s => allPages.push(s));
+    function observeSections() {
+      if (sectionObserver) sectionObserver.disconnect();
+
+      sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const personId = entry.target.dataset.person;
+            if (personId && personId !== currentPersonId) {
+              currentPersonId = personId;
+              updateNavBar(personId);
+            }
+          }
+        });
+      }, { threshold: 0.3 });
+
+      // Observe landing
+      sectionObserver.observe(document.getElementById('landing'));
+      // Observe all chapters
+      chaptersContainer.querySelectorAll('.chapter-section').forEach(s => sectionObserver.observe(s));
     }
 
-    /* ===== Scroll to top on page change ===== */
-    function scrollPageToTop(page) {
-      page.scrollTop = 0;
-    }
-
-    /* ===== Show/hide pages ===== */
-    function showPage(index, direction) {
-      if (isTransitioning) return;
-      if (index < 0 || index >= allPages.length) return;
-
-      isTransitioning = true;
-      const oldPage = allPages[currentPageIndex];
-      const newPage = allPages[index];
-
-      console.log('showPage', index, direction, 'newPage:', newPage.id || newPage.dataset.person);
-
-      // Deactivate old page
-      if (oldPage && oldPage !== newPage) {
-        oldPage.classList.remove('active');
-        oldPage.classList.add(direction === 'next' ? 'exit-left' : 'exit-right');
-      }
-
-      // Skip animation — just show immediately
-      newPage.classList.remove('exit-left', 'exit-right');
-      newPage.style.cssText = '';
-      newPage.classList.add('active');
-
-      // Scroll to top
-      scrollPageToTop(newPage);
-
-      currentPageIndex = index;
-      updateReaderBar();
-
-      setTimeout(() => {
-        if (oldPage && oldPage !== newPage) {
-          oldPage.classList.remove('exit-left', 'exit-right');
-        }
-        isTransitioning = false;
-      }, 100);
-    }
-
-    /* ===== Navigation ===== */
-    function goNext() {
-      if (isTransitioning) return;
-      if (currentPageIndex < allPages.length - 1) {
-        showPage(currentPageIndex + 1, 'next');
-      }
-    }
-
-    function goPrev() {
-      if (isTransitioning) return;
-      if (currentPageIndex > 0) {
-        showPage(currentPageIndex - 1, 'prev');
-      }
-    }
-
-    function goToPage(index) {
-      if (index === currentPageIndex) return;
-      const dir = index > currentPageIndex ? 'next' : 'prev';
-      showPage(index, dir);
-    }
-
-    /* ===== Update Reader Bar ===== */
-    function updateReaderBar() {
-      const page = allPages[currentPageIndex];
-      const personId = page.dataset.person || 'landing';
-
-      // Show/hide nav bar
+    function updateNavBar(personId) {
+      // Show/hide nav
       if (personId === 'landing') {
         siteNav.classList.add('site-nav--hidden');
-        document.body.classList.add('click-zones-hidden');
       } else {
         siteNav.classList.remove('site-nav--hidden');
-        document.body.classList.remove('click-zones-hidden');
       }
 
       // Update name
       navPersonName.textContent = PERSON_NAMES[personId] || personId;
 
       // Update bg color
-      siteNav.style.backgroundColor = PERSON_NAV_BG[personId] || 'rgba(247,243,238,0.92)';
+      siteNav.style.backgroundColor = PERSON_NAV_BG[personId] || 'rgba(247,243,238,0.95)';
 
-      // Update text color for colophon
+      // Colophon dark text
       if (personId === 'colophon') {
         siteNav.style.color = 'rgba(255,255,255,0.85)';
       } else {
         siteNav.style.color = '';
       }
 
-      // Page info — show chapter position
-      if (currentPageIndex > 0) {
-        pageInfo.textContent = currentPageIndex + ' / ' + (allPages.length - 1);
-      } else {
-        pageInfo.textContent = '';
-      }
-
-      // Highlight active dropdown item
-      dropdownMenu.querySelectorAll('.site-nav__dropdown-item').forEach(item => {
-        item.classList.remove('site-nav__dropdown-item--active');
-      });
-      const displayName = PERSON_NAMES[personId];
-      dropdownMenu.querySelectorAll('.site-nav__dropdown-item').forEach(item => {
-        if (item.textContent.includes(displayName)) {
-          item.classList.add('site-nav__dropdown-item--active');
-        }
-      });
-
-      currentPersonId = personId;
-
-      // Save current position for reload
+      // Save position
       if (personId && personId !== 'landing') {
         localStorage.setItem('chosen-orbits-position', personId);
-      } else {
-        localStorage.removeItem('chosen-orbits-position');
       }
 
-      // Update bookmark button
+      // Update bookmark
       updateBookmarkBtn(personId);
     }
 
@@ -3402,32 +3254,7 @@
       catch { return []; }
     }
 
-    function saveBookmark() {
-      const page = allPages[currentPageIndex];
-      const personId = page.dataset.person;
-      if (!personId || personId === 'landing') return;
-
-      const scrollPos = page.scrollTop || 0;
-      const bookmarks = getBookmarks();
-
-      // Check if already bookmarked
-      const existing = bookmarks.findIndex(b => b.person === personId);
-      if (existing >= 0) {
-        bookmarks[existing].scroll = scrollPos;
-        bookmarks[existing].date = new Date().toLocaleDateString('ko-KR');
-      } else {
-        bookmarks.push({
-          person: personId,
-          name: PERSON_NAMES[personId] || personId,
-          scroll: scrollPos,
-          date: new Date().toLocaleDateString('ko-KR')
-        });
-      }
-
-      localStorage.setItem('chosen-orbits-bookmarks', JSON.stringify(bookmarks));
-      updateBookmarkBtn(personId);
-      buildDropdownItems(); // Refresh dropdown to show bookmarks
-    }
+    /* saveBookmark handled inline in click handler */
 
     function removeBookmark(personId) {
       let bookmarks = getBookmarks();
@@ -3484,13 +3311,13 @@
         if (el) chaptersContainer.appendChild(el);
       });
 
-      // Rebuild page list and dropdown
-      buildPageList();
+      // Rebuild dropdown and re-observe
       buildDropdownItems();
+      observeSections();
 
       if (shouldNavigate !== false) {
-        // Navigate to first chapter (index 1, since 0 is landing)
-        showPage(1, 'next');
+        const firstChapter = chaptersContainer.querySelector('.chapter-section');
+        if (firstChapter) firstChapter.scrollIntoView({ behavior: 'smooth' });
       }
     }
 
@@ -3523,17 +3350,6 @@
         modeToggle.textContent = 'Novel';
       }
       localStorage.setItem('chosen-orbits-mode', mode);
-
-      // Re-measure sub-pages after mode change
-      requestAnimationFrame(() => {
-        const page = allPages[currentPageIndex];
-        subPageCount = measureSubPages(page);
-        if (subPageIndex >= subPageCount) {
-          subPageIndex = subPageCount - 1;
-          setSubPage(page, subPageIndex);
-        }
-        updateReaderBar();
-      });
     }
 
     modeToggle.addEventListener('click', () => {
@@ -3556,9 +3372,8 @@
         const star = isBookmarked(personId) ? ' \u2605' : '';
         btn.textContent = (i + 1) + '. ' + (PERSON_NAMES[personId] || personId) + star;
         btn.addEventListener('click', () => {
-          // Find the page index for this person
-          const pageIdx = allPages.findIndex(p => p.dataset.person === personId);
-          if (pageIdx >= 0) goToPage(pageIdx);
+          const target = document.getElementById('chapter-' + personId);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
           closeDropdown();
         });
         li.appendChild(btn);
@@ -3583,8 +3398,8 @@
         btn.setAttribute('role', 'menuitem');
         btn.textContent = item.label;
         btn.addEventListener('click', () => {
-          const pageIdx = allPages.findIndex(p => p.dataset.person === item.id || p.id === item.id);
-          if (pageIdx >= 0) goToPage(pageIdx);
+          const target = document.getElementById(item.id);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
           closeDropdown();
         });
         li.appendChild(btn);
@@ -3609,69 +3424,29 @@
       }
     });
 
-    /* ===== Click Zones ===== */
-    clickLeft.addEventListener('click', goPrev);
-    clickRight.addEventListener('click', goNext);
-
-    /* ===== Keyboard Navigation ===== */
-    document.addEventListener('keydown', (e) => {
-      // Don't intercept if user is typing in textarea
-      if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
-
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        goNext();
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        goPrev();
-      }
-    });
-
-    /* ===== Touch / Swipe Navigation ===== */
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-
-    document.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-      touchStartY = e.changedTouches[0].screenY;
-    }, { passive: true });
-
-    document.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const touchEndY = e.changedTouches[0].screenY;
-      const diffX = touchStartX - touchEndX;
-      const diffY = Math.abs(touchStartY - touchEndY);
-
-      // Only trigger if horizontal swipe > 50px and more horizontal than vertical
-      if (Math.abs(diffX) > 50 && Math.abs(diffX) > diffY) {
-        // Don't swipe if interacting with scrollable content
-        if (e.target.closest('.diary-textarea') ||
-            e.target.closest('.section-appendix') ||
-            e.target.closest('.section-colophon') ||
-            e.target.closest('.section-my-orbit')) return;
-
-        if (diffX > 0) {
-          goNext(); // swipe left = next
-        } else {
-          goPrev(); // swipe right = prev
-        }
-      }
-    }, { passive: true });
-
-    /* ===== Button Navigation ===== */
-    btnPrev.addEventListener('click', goPrev);
-    btnNext.addEventListener('click', goNext);
-
     // Bookmark button
     const bookmarkBtn = document.getElementById('bookmark-btn');
     bookmarkBtn.addEventListener('click', () => {
-      const page = allPages[currentPageIndex];
-      const personId = page.dataset.person;
-      if (isBookmarked(personId)) {
-        removeBookmark(personId);
+      if (!currentPersonId || currentPersonId === 'landing') return;
+      if (isBookmarked(currentPersonId)) {
+        removeBookmark(currentPersonId);
       } else {
-        saveBookmark();
+        // Save bookmark for current section
+        const bookmarks = getBookmarks();
+        const existing = bookmarks.findIndex(b => b.person === currentPersonId);
+        if (existing >= 0) {
+          bookmarks[existing].date = new Date().toLocaleDateString('ko-KR');
+        } else {
+          bookmarks.push({
+            person: currentPersonId,
+            name: PERSON_NAMES[currentPersonId] || currentPersonId,
+            scroll: window.scrollY,
+            date: new Date().toLocaleDateString('ko-KR')
+          });
+        }
+        localStorage.setItem('chosen-orbits-bookmarks', JSON.stringify(bookmarks));
+        updateBookmarkBtn(currentPersonId);
+        buildDropdownItems();
       }
     });
 
@@ -3691,49 +3466,27 @@
 
     /* ===== Initialize ===== */
 
-    // Restore saved path on load (reorder without navigating)
+    // Restore saved path on load (reorder without scrolling)
     if (PATHS[currentPath]) {
       selectPath(currentPath, false);
     }
 
-    // Restore saved reading mode on load
+    // Restore saved reading mode
     if (readingMode === 'hybrid') {
       applyReadingMode('hybrid');
     }
 
-    // Build initial page list
-    buildPageList();
+    // Start observing sections for nav updates
+    observeSections();
 
-    // Restore last position or show landing
+    // Restore last position
     const savedPosition = localStorage.getItem('chosen-orbits-position');
-    let restoredIndex = 0;
-
     if (savedPosition) {
-      const idx = allPages.findIndex(p => p.dataset.person === savedPosition);
-      if (idx >= 0) restoredIndex = idx;
-    }
-
-    allPages.forEach((p, i) => {
-      if (i === restoredIndex) {
-        p.classList.add('active');
-      } else {
-        p.classList.remove('active');
+      const target = document.getElementById('chapter-' + savedPosition) || document.getElementById(savedPosition);
+      if (target) {
+        setTimeout(() => target.scrollIntoView(), 100);
       }
-    });
-    currentPageIndex = restoredIndex;
-
-    // Initial reader bar state
-    updateReaderBar();
-
-    // No resize handler needed — chapters scroll internally now
-
-    /* ===== Intercept chapter-next links to use page navigation ===== */
-    document.querySelectorAll('.chapter-next a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        goNext();
-      });
-    });
+    }
 
     /* ===== Chapter 11: Diary localStorage + Clipboard ===== */
     const diary = document.getElementById('diary-textarea');
