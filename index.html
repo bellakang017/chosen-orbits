@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chosen Orbits</title>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Gowun+Batang:wght@400;700&family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     /* ===== Reset ===== */
@@ -19,13 +18,13 @@
     }
 
     html {
+      scroll-behavior: smooth;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     body {
       min-height: 100vh;
-      overflow-y: auto;
       line-height: 1.6;
       font-family: 'Gowun Batang', serif;
       font-weight: 400;
@@ -138,329 +137,199 @@
       line-height: 1.85;
     }
 
-    /* ===== Page-Reader Layout ===== */
-    /* Chapters flow naturally as scroll sections */
-    .book-page {
-      width: 100%;
-      min-height: 100vh;
-    }
-
-    /* ===== Landing — Book Cover ===== */
+    /* ===== Landing Section ===== */
     .landing {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #3a322c;
-      padding: 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Cloth texture overlay */
-    .landing::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Warm vignette */
-    .landing::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 65% at 50% 45%, transparent 0%, rgba(30, 25, 20, 0.5) 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* The book object itself */
-    .landing__frame {
-      position: relative;
-      z-index: 2;
-      width: min(520px, 80vw);
-      height: min(720px, 88vh);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 4rem 3.5rem;
-      background:
-        linear-gradient(175deg, #F5F0E8 0%, #EDE7DC 40%, #E8E0D3 100%);
-      border-radius: 2px 8px 8px 2px;
-      box-shadow:
-        -4px 0 0 #d4cbbe,
-        -6px 0 0 #c8bfb0,
-        -7px 1px 0 rgba(0,0,0,0.08),
-        4px 4px 16px rgba(0, 0, 0, 0.35),
-        8px 8px 32px rgba(0, 0, 0, 0.2),
-        inset 3px 0 12px rgba(0, 0, 0, 0.04),
-        inset -1px 0 4px rgba(0, 0, 0, 0.02);
-    }
-
-    /* Spine edge highlight */
-    .landing__frame::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 20px;
-      background: linear-gradient(90deg, rgba(0,0,0,0.06) 0%, transparent 100%);
-      border-radius: 2px 0 0 2px;
-      pointer-events: none;
-    }
-
-    /* Gold foil border inset */
-    .landing__frame::after {
-      content: '';
-      position: absolute;
-      top: 20px;
-      left: 28px;
-      right: 16px;
-      bottom: 20px;
-      border: 1px solid rgba(181, 140, 100, 0.25);
-      pointer-events: none;
-    }
-
-    .landing__corners-bottom {
-      display: none;
-    }
-
-    /* Orbit SVG — more visible as cover art */
-    .landing__orbits {
-      position: absolute;
-      top: 50%;
-      left: 52%;
-      transform: translate(-50%, -48%);
-      width: 320px;
-      height: 320px;
-      opacity: 0.07;
-      pointer-events: none;
-      z-index: 0;
+      background-color: var(--morning-dew);
+      padding: 3rem 1.5rem 4rem;
+      position: relative;
     }
 
     .landing__header {
       text-align: center;
-      position: relative;
-      z-index: 1;
-      margin-bottom: 0;
-    }
-
-    /* No rule above title */
-    .landing__header::before {
-      display: none;
+      margin-bottom: 3.5rem;
     }
 
     .landing__title {
       font-family: var(--font-heading);
-      font-size: clamp(2.4rem, 6vw, 3.4rem);
-      font-weight: 600;
-      color: #2a2520;
-      letter-spacing: 0.12em;
-      margin-bottom: 0.8rem;
-      line-height: 1.15;
-      text-transform: uppercase;
-    }
-
-    .landing__title em {
-      display: block;
-      font-style: normal;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-    }
-
-    .landing__ornament {
-      display: block;
-      font-family: var(--font-heading);
-      font-size: 0.7rem;
-      color: #B5907A;
-      opacity: 0.6;
-      margin-bottom: 0.8rem;
-      letter-spacing: 0.8em;
-      text-align: center;
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 700;
+      color: #2a2a2a;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.6rem;
     }
 
     .landing__subtitle {
       font-family: var(--font-heading);
       font-style: italic;
       font-weight: 400;
-      font-size: clamp(0.92rem, 1.8vw, 1.1rem);
-      color: #6b5a4a;
-      max-width: 22em;
+      font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+      color: var(--rose-wood);
+      opacity: 0.85;
+      max-width: 32em;
       margin: 0 auto;
-      line-height: 1.55;
-      letter-spacing: 0.01em;
     }
 
-    /* Path selection — compact, cover-bottom style */
-    .paths {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      width: 100%;
-      max-width: 260px;
-      position: relative;
-      z-index: 1;
-      margin-top: auto;
+    .landing__author {
+      font-family: var(--font-heading);
+      font-weight: 500;
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      color: #2a2a2a;
+      opacity: 0.5;
+      margin-top: 1.2rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* -- Before Reading Intro -- */
+    .landing__intro {
+      max-width: 32em;
+      margin: 2.5rem auto 2rem;
+      text-align: left;
+      border-top: 1px solid rgba(181, 112, 122, 0.2);
       padding-top: 2rem;
     }
-
-    .paths__label {
+    .landing__intro-heading {
       font-family: var(--font-heading);
-      font-size: 0.58rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      letter-spacing: 0.3em;
-      color: #8a7a6a;
-      opacity: 0.7;
+      opacity: 0.4;
+      margin-bottom: 1.2rem;
       text-align: center;
-      margin-bottom: 0.8rem;
+    }
+    .landing__intro p {
+      font-family: var(--font-body);
+      font-size: clamp(0.9rem, 1.6vw, 1rem);
+      line-height: 1.85;
+      color: #3a3a3a;
+      margin-bottom: 1rem;
+    }
+    .landing__intro p:last-child {
+      margin-bottom: 0;
+    }
+    .landing__intro .intro-update {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(181, 112, 122, 0.12);
+      font-size: clamp(0.82rem, 1.4vw, 0.9rem);
+      opacity: 0.7;
     }
 
-    .paths__rule {
-      width: 32px;
-      height: 1px;
-      background: rgba(181, 140, 100, 0.35);
-      margin: 0 auto 1rem;
+    /* -- Path Cards -- */
+    .paths {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 56rem;
+      width: 100%;
+      margin-bottom: 2rem;
     }
 
     .path-card {
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      padding: 0.5rem 1.2rem;
+      flex: 1 1 15rem;
+      max-width: 18rem;
+      background: #fff;
+      border: 1px solid rgba(181, 112, 122, 0.18);
+      border-radius: 8px;
+      padding: 2rem 1.6rem 1.8rem;
       cursor: pointer;
-      transition: all 0.25s ease;
-      text-align: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      text-align: left;
       position: relative;
-      display: block;
     }
 
-    .path-card:hover .path-card__name {
-      color: var(--rose-wood);
+    .path-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(181, 112, 122, 0.1);
+      border-color: var(--petal-pink);
     }
 
-    .path-card:hover .path-card__name::after {
-      width: 100%;
+    .path-card.active {
+      border-color: var(--rose-wood);
+      box-shadow: 0 4px 20px rgba(181, 112, 122, 0.18);
     }
 
-    .path-card.active .path-card__name {
-      color: var(--rose-wood);
+    .path-card.active::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose-wood), var(--petal-pink));
+      border-radius: 8px 8px 0 0;
     }
 
     .path-card__label {
-      display: none;
-    }
-
-    .path-card__text {
-      display: inline-block;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--rose-wood);
+      margin-bottom: 0.5rem;
     }
 
     .path-card__name {
       font-family: var(--font-heading);
-      font-weight: 500;
-      font-size: 1.05rem;
-      color: #5a4a3a;
-      margin-bottom: 0;
-      letter-spacing: 0.06em;
-      position: relative;
-      display: inline-block;
-    }
-
-    /* Underline animation on hover */
-    .path-card__name::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 1px;
-      background: var(--rose-wood);
-      transition: width 0.3s ease;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #2a2a2a;
+      margin-bottom: 0.6rem;
     }
 
     .path-card__desc {
-      display: none;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: #555;
+      margin-bottom: 1rem;
     }
 
     .path-card__preview {
-      display: none;
-    }
-
-    /* Bottom of cover */
-    .landing__footer-ornament {
-      position: relative;
-      z-index: 1;
-      margin-top: auto;
-      padding-top: 1.5rem;
-      text-align: center;
-    }
-
-    .landing__footer-ornament::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: rgba(181, 140, 100, 0.3);
-      margin: 0 auto;
-    }
-
-    .landing__year {
       font-family: var(--font-heading);
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      color: #8a7a6a;
-      opacity: 0.5;
-      margin-top: 0.6rem;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--rose-wood);
+      opacity: 0.7;
     }
 
-    /* Hidden in page mode */
+    /* -- Scroll Indicator -- */
     .scroll-indicator {
-      display: none;
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      opacity: 0.4;
+      animation: scrollPulse 2.4s ease-in-out infinite;
     }
 
-    /* Landing entrance animations */
-    @keyframes coverFadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
+    .scroll-indicator__chevron {
+      width: 18px;
+      height: 18px;
+      border-right: 2px solid var(--rose-wood);
+      border-bottom: 2px solid var(--rose-wood);
+      transform: rotate(45deg);
     }
 
-    @keyframes textFadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .scroll-indicator__chevron:nth-child(2) {
+      opacity: 0.5;
+      margin-top: -8px;
     }
 
-    .landing__frame {
-      animation: coverFadeIn 1.4s ease-out both;
-    }
-
-    .landing__header {
-      animation: textFadeIn 1s ease-out 0.5s both;
-    }
-
-    .paths {
-      animation: textFadeIn 1s ease-out 0.8s both;
-    }
-
-    .landing__footer-ornament {
-      animation: textFadeIn 1s ease-out 1s both;
-    }
-
-    @media (max-width: 768px) {
-      .landing__frame {
-        width: min(420px, 88vw);
-        height: min(620px, 85vh);
-        padding: 3rem 2rem;
-      }
-
-      .landing__title {
-        font-size: clamp(2rem, 8vw, 2.8rem);
-      }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.25; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 0.55; transform: translateX(-50%) translateY(6px); }
     }
 
     /* -- Chapter container (for future chapters) -- */
@@ -480,7 +349,7 @@
     .person-capra { background-color: var(--bg-capra); color: var(--text-capra); }
     .person-rosch { background-color: var(--bg-rosch); color: var(--text-rosch); }
 
-    /* ===== Bottom Reader Bar ===== */
+    /* ===== Navigation Bar ===== */
     .site-nav {
       position: fixed;
       top: 0;
@@ -491,10 +360,10 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 1.5rem;
-      height: 44px;
-      background-color: rgba(247, 243, 238, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      height: 52px;
+      background-color: rgba(242, 246, 244, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(0,0,0,0.06);
       transition: transform 0.3s ease, background-color 0.4s ease;
       font-family: var(--font-heading);
@@ -502,74 +371,24 @@
 
     .site-nav--hidden {
       transform: translateY(-100%);
-      pointer-events: none;
     }
 
     .site-nav__person-name {
-      font-weight: 500;
-      font-size: 0.85rem;
+      font-weight: 600;
+      font-size: 1.05rem;
       letter-spacing: 0.02em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       min-width: 0;
-      flex: 1;
-      text-align: center;
-      opacity: 0.7;
+      flex-shrink: 1;
     }
-
-    /* Reader bar: prev/next arrows */
-    .reader-nav-btn {
-      font-family: var(--font-heading);
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: inherit;
-      opacity: 0.5;
-      padding: 0.3rem 0.6rem;
-      transition: opacity 0.2s ease;
-      flex-shrink: 0;
-      background: none;
-      border: none;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .reader-nav-btn:hover {
-      opacity: 0.9;
-    }
-
-    .reader-page-info {
-      font-family: var(--font-heading);
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      opacity: 0.4;
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-
-    /* Click zones */
-    .click-zone { display: none; }
 
     .site-nav__controls {
       display: flex;
       align-items: center;
       gap: 0.8rem;
       flex-shrink: 0;
-    }
-
-    .site-nav__bookmark-btn {
-      font-size: 1.1rem;
-      padding: 0.2rem 0.4rem;
-      color: var(--rose-wood);
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      line-height: 1;
-    }
-
-    .site-nav__bookmark-btn:hover {
-      transform: scale(1.2);
     }
 
     .site-nav__mode-toggle {
@@ -618,17 +437,15 @@
     .site-nav__dropdown-menu {
       display: none;
       position: absolute;
-      bottom: calc(100% + 6px);
+      top: calc(100% + 6px);
       right: 0;
       min-width: 220px;
-      max-height: 60vh;
-      overflow-y: auto;
       background: rgba(255,255,255,0.95);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(0,0,0,0.1);
       border-radius: 6px;
-      box-shadow: 0 -8px 32px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
       padding: 0.4rem 0;
       z-index: 1001;
     }
@@ -698,45 +515,18 @@
       margin: 0.3rem 0;
     }
 
-    /* ===== Chapter Sections (now pages) ===== */
+    /* ===== Chapter Sections ===== */
     .chapter-section {
-      padding-bottom: 60px;
+      min-height: 100vh;
+      padding: 4rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
     }
 
     .chapter-section:has(.chapter-placeholder) {
       justify-content: center;
-    }
-
-    /* Chapter content area for CSS column pagination */
-    /* Styled scrollbar for chapters */
-    .chapter-section::-webkit-scrollbar {
-      width: 4px;
-    }
-    .chapter-section::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .chapter-section::-webkit-scrollbar-thumb {
-      background: rgba(181, 112, 122, 0.2);
-      border-radius: 2px;
-    }
-
-    /* Chapter content centering */
-    .chapter-header,
-    .crisis-hook,
-    .chapter-prose-wrapper,
-    .chapter-prose,
-    .chapter-next,
-    .pull-quote,
-    hr.ornamental-divider {
-      max-width: 640px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
-
-    .chapter-section .chapter-header {
-      padding-top: 3rem;
     }
 
     .chapter-gradient-bar {
@@ -781,11 +571,6 @@
     .section-my-orbit {
       background-color: var(--diary-paper);
       color: var(--diary-ink);
-      overflow-y: auto;
-    }
-
-    .section-my-orbit {
-      padding: 2rem 0 2rem;
     }
 
     .diary-container {
@@ -1038,11 +823,6 @@
     .section-appendix {
       background-color: #F4F5F7;
       color: #3a3a3a;
-      overflow-y: auto;
-    }
-
-    .section-appendix {
-      padding: 3rem 2rem 3rem;
     }
 
     .appendix-tabs {
@@ -1226,12 +1006,8 @@
     .section-colophon {
       background-color: #2a2a2a;
       color: rgba(255,255,255,0.7);
-      padding: 0;
-      overflow-y: auto;
-    }
-
-    .section-colophon {
-      padding: 3rem 2rem 3rem;
+      min-height: auto;
+      padding: 5rem 2rem 4rem;
     }
 
     .colophon-container {
@@ -1354,7 +1130,7 @@
     /* ===== Chapter Narrative Styles ===== */
     .chapter-header {
       text-align: center;
-      padding-top: 3rem;
+      padding-top: 4rem;
       margin-bottom: 2rem;
     }
 
@@ -1432,7 +1208,7 @@
       max-width: 600px;
       width: 100%;
       margin: 0 auto;
-      padding: 0;
+      padding: 0 2rem;
       margin-bottom: 3rem;
     }
 
@@ -1500,24 +1276,6 @@
       padding: 2rem;
     }
 
-    .deep-dive-link {
-      display: inline-block;
-      margin-right: 1.5rem;
-      font-family: var(--font-heading);
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--rose-wood);
-      opacity: 0.7;
-      transition: opacity 0.2s ease;
-    }
-
-    .deep-dive-link:hover {
-      opacity: 1;
-    }
-
     .chapter-next a {
       font-family: var(--font-heading);
       font-style: italic;
@@ -1528,6 +1286,25 @@
 
     .chapter-next a:hover {
       text-decoration: underline;
+    }
+
+    .deep-chapter-link {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.6rem 1.4rem;
+      border: 1px solid var(--rose-wood);
+      border-radius: 4px;
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--rose-wood);
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+
+    .deep-chapter-link:hover {
+      background: var(--rose-wood);
+      color: #fff;
     }
 
     .person-piaget .chapter-next a { color: var(--grad-piaget-start); }
@@ -1557,27 +1334,19 @@
       }
 
       .site-nav {
-        padding: 0 0.6rem;
-        height: 40px;
-      }
-
-      .click-zone--left,
-      .click-zone--right {
-        height: calc(100vh - 40px);
+        padding: 0 0.8rem;
       }
 
       .appendix-tabs {
         flex-wrap: wrap;
       }
 
-      .chapter-header,
-      .crisis-hook,
-      .chapter-prose-wrapper,
-      .chapter-prose,
-      .chapter-next,
-      .pull-quote {
-        padding-left: 1.2rem;
-        padding-right: 1.2rem;
+      .chapter-section {
+        padding: 3rem 1rem;
+      }
+
+      .chapter-prose {
+        padding: 0 1rem;
       }
 
       .diary-container {
@@ -1626,9 +1395,10 @@
     body.hybrid-mode .hybrid-sidebar {
       display: block;
       flex: 3;
-      position: relative;
+      position: sticky;
+      top: 80px;
       align-self: flex-start;
-      max-height: none;
+      max-height: calc(100vh - 100px);
       overflow-y: auto;
     }
 
@@ -1674,24 +1444,404 @@
       }
       body.hybrid-mode .data-card { flex: 1 1 45%; }
     }
+
+    /* ========================================
+       READER ENHANCEMENTS
+       Added on top of existing styles
+       ======================================== */
+
+    /* Smooth transitions for theme switching */
+    body { transition: background-color 0.3s, color 0.3s; }
+
+    /* ===== Theme Overrides ===== */
+    body[data-theme="sepia"] {
+      --rose-wood: #A0685A;
+      background-color: #F5EDE0;
+      color: #4A3F35;
+    }
+    body[data-theme="cream"] {
+      background-color: #FDF8F0;
+      color: #3A3530;
+    }
+    body[data-theme="dark"] {
+      --rose-wood: #D4909A;
+      background-color: #1E2A27;
+      color: #D4DAD8;
+    }
+
+    /* Override per-person backgrounds in non-default themes */
+    body[data-theme="sepia"] .chapter-section[class*="person-"],
+    body[data-theme="sepia"] .landing {
+      background-color: #F5EDE0;
+      color: #4A3F35;
+    }
+    body[data-theme="cream"] .chapter-section[class*="person-"],
+    body[data-theme="cream"] .landing {
+      background-color: #FDF8F0;
+      color: #3A3530;
+    }
+    body[data-theme="dark"] .chapter-section[class*="person-"],
+    body[data-theme="dark"] .landing {
+      background-color: #1E2A27;
+      color: #D4DAD8;
+    }
+
+    /* Nav bar theme overrides */
+    body[data-theme="sepia"] .site-nav {
+      background-color: rgba(245,237,224,0.92);
+    }
+    body[data-theme="cream"] .site-nav {
+      background-color: rgba(253,248,240,0.92);
+    }
+    body[data-theme="dark"] .site-nav {
+      background-color: rgba(30,42,39,0.92);
+      border-bottom-color: rgba(255,255,255,0.06);
+      color: #D4DAD8;
+    }
+    body[data-theme="dark"] .site-nav__dropdown-menu {
+      background: rgba(30,42,39,0.95);
+      border-color: rgba(255,255,255,0.1);
+    }
+    body[data-theme="dark"] .site-nav__mode-toggle,
+    body[data-theme="dark"] .site-nav__dropdown-btn {
+      border-color: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+    }
+    body[data-theme="dark"] .chapter-gradient-bar { opacity: 0.3; }
+    body[data-theme="dark"] strong.highlight { color: var(--rose-wood); }
+
+    /* ===== Font Overrides ===== */
+    body[data-font="noto-serif"] .chapter-prose p,
+    body[data-font="noto-serif"] .pull-quote p.pull-quote--korean,
+    body[data-font="noto-serif"] .chapter-fields {
+      font-family: 'Noto Serif KR', serif;
+    }
+    body[data-font="sans"] .chapter-prose p,
+    body[data-font="sans"] .pull-quote p.pull-quote--korean,
+    body[data-font="sans"] .chapter-fields {
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    /* ===== Size Overrides ===== */
+    body[data-size="1"] .chapter-prose p { font-size: 0.875em; }
+    body[data-size="2"] .chapter-prose p { font-size: 0.9375em; }
+    /* 3 = default 1em */
+    body[data-size="4"] .chapter-prose p { font-size: 1.125em; }
+    body[data-size="5"] .chapter-prose p { font-size: 1.25em; }
+
+    /* ===== Line Spacing Overrides ===== */
+    body[data-spacing="1"] .chapter-prose p { line-height: 1.6; }
+    /* 2 = default 1.9 */
+    body[data-spacing="3"] .chapter-prose p { line-height: 2.2; }
+
+    /* ===== Margin Overrides ===== */
+    body[data-lr="1"] .chapter-prose { max-width: 700px; }
+    /* 2 = default 600px */
+    body[data-lr="3"] .chapter-prose { max-width: 500px; }
+    body[data-tb="1"] .chapter-prose p { margin-bottom: 0.8rem; }
+    /* 2 = default 1.4rem */
+    body[data-tb="3"] .chapter-prose p { margin-bottom: 2rem; }
+
+    /* ===== Progress Bar ===== */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--rose-wood);
+      z-index: 1002;
+      transition: width 0.1s;
+      pointer-events: none;
+    }
+
+    /* ===== Paragraph Numbers ===== */
+    .chapter-prose { overflow: visible; }
+    .chapter-prose p {
+      position: relative;
+      transition: font-size 0.2s, line-height 0.2s, margin-bottom 0.2s;
+    }
+    .chapter-prose p::before {
+      content: attr(data-para-num);
+      position: absolute;
+      left: -2rem;
+      top: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8em;
+      color: var(--rose-wood);
+      opacity: 0.35;
+      pointer-events: none;
+      user-select: none;
+      transition: opacity 0.2s;
+    }
+    .chapter-prose p:hover::before { opacity: 0.7; }
+
+    /* ===== Copy Button ===== */
+    .copy-float-btn {
+      position: fixed;
+      z-index: 999;
+      padding: 4px 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85em;
+      font-weight: 600;
+      color: #fff;
+      background: var(--rose-wood);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: background 0.2s;
+    }
+    .copy-float-btn:hover { filter: brightness(0.85); }
+    .copy-float-btn.copied { background: #5BAFA6; }
+    .copy-float-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+    /* ===== Settings Trigger ===== */
+    .settings-trigger {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15em;
+      font-weight: 600;
+      color: #3a3a3a;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      line-height: 1;
+      touch-action: manipulation;
+    }
+    .settings-trigger:hover {
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(0,0,0,0.2);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+    body[data-theme="dark"] .settings-trigger {
+      color: #D4DAD8;
+      background: rgba(50,65,60,0.85);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    /* ===== Settings Panel ===== */
+    .settings-overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0,0,0,0.15);
+      z-index: 900;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .settings-overlay.closed { display: none; }
+
+    .settings-panel {
+      width: 100%;
+      max-width: 420px;
+      background: var(--morning-dew);
+      border-top: 1px solid rgba(128,128,128,0.2);
+      padding: 1.5rem 2rem 2rem;
+    }
+    body[data-theme="sepia"] .settings-panel { background: #F5EDE0; }
+    body[data-theme="cream"] .settings-panel { background: #FDF8F0; }
+    body[data-theme="dark"] .settings-panel { background: #1E2A27; }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+    }
+    .setting-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85em;
+      font-weight: 500;
+      opacity: 0.6;
+      min-width: 5em;
+    }
+    .setting-options {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .setting-btn {
+      font-size: 0.85em;
+      padding: 3px 10px;
+      border: none;
+      background: none;
+      color: inherit;
+      opacity: 0.35;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: opacity 0.15s;
+    }
+    .setting-btn:hover { opacity: 0.6; }
+    .setting-btn.active {
+      opacity: 1;
+      background: rgba(128,128,128,0.1);
+    }
+
+    .size-btn {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1em;
+      font-weight: 600;
+      padding: 2px 10px;
+      border: none;
+      background: none;
+      color: inherit;
+      opacity: 0.5;
+      cursor: pointer;
+    }
+    .size-btn:hover { opacity: 0.8; }
+    .size-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8em;
+      opacity: 0.4;
+      min-width: 1.5em;
+      text-align: center;
+    }
+
+    /* Background swatches */
+    .bg-options { gap: 0.75rem; }
+    .bg-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(128,128,128,0.25);
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .bg-swatch:hover { border-color: rgba(128,128,128,0.5); }
+    .bg-swatch.active { border: 2px solid currentColor; }
+    .bg-swatch[data-theme="default"] { background: #F2F6F4; }
+    .bg-swatch[data-theme="sepia"] { background: #F5EDE0; }
+    .bg-swatch[data-theme="cream"] { background: #FDF8F0; }
+    .bg-swatch[data-theme="dark"] { background: #1E2A27; }
+
+    /* ===== Pull quote copy (mobile) ===== */
+    .pull-quote { position: relative; }
+    .pull-quote-copy-btn { display: none; }
+
+    /* ===== Screen reader only ===== */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ===== Reader Responsive ===== */
+    @media (max-width: 740px) {
+      .chapter-prose p::before {
+        position: static;
+        float: right;
+        margin-left: 0.5rem;
+        line-height: 1.9;
+      }
+      .copy-float-btn { display: none !important; }
+      .pull-quote-copy-btn {
+        display: block;
+        position: absolute;
+        top: -10px;
+        right: 0;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 0.8em;
+        color: var(--rose-wood);
+        background: inherit;
+        border: 1px solid rgba(128,128,128,0.2);
+        border-radius: 3px;
+        padding: 2px 10px;
+        cursor: pointer;
+      }
+      .settings-trigger { bottom: 1.5rem; right: 1.5rem; width: 44px; height: 44px; font-size: 1em; }
+    }
+
+    @media (max-width: 480px) {
+      .settings-trigger { bottom: 1rem; right: 1rem; width: 40px; height: 40px; font-size: 0.95em; }
+    }
+
   </style>
 </head>
 <body>
+<script>try{var _rs=JSON.parse(localStorage.getItem('co-reader-settings'));if(_rs){var b=document.body;if(_rs.theme)b.dataset.theme=_rs.theme;if(_rs.font)b.dataset.font=_rs.font;if(_rs.size)b.dataset.size=_rs.size;if(_rs.spacing)b.dataset.spacing=_rs.spacing;if(_rs.lr)b.dataset.lr=_rs.lr;if(_rs.tb)b.dataset.tb=_rs.tb;}}catch(e){}</script>
 
-  <!-- ===== Click Zones ===== -->
-  <div class="click-zone click-zone--left" id="click-left" aria-hidden="true"></div>
-  <div class="click-zone click-zone--right" id="click-right" aria-hidden="true"></div>
+  <div class="progress-bar" aria-hidden="true"></div>
+  <div role="status" aria-live="polite" class="sr-only" id="sr-announce"></div>
 
-  <!-- ===== Bottom Reader Bar ===== -->
+  <button class="settings-trigger" aria-label="읽기 설정">Aa</button>
+
+  <div class="settings-overlay closed">
+    <div class="settings-panel">
+      <div class="setting-row">
+        <span class="setting-label">글꼴</span>
+        <div class="setting-options">
+          <button class="setting-btn font-btn active" data-font="batang" style="font-family:'Gowun Batang'">바탕</button>
+          <button class="setting-btn font-btn" data-font="noto-serif" style="font-family:'Noto Serif KR'">명조</button>
+          <button class="setting-btn font-btn" data-font="sans" style="font-family:'Noto Sans KR'">고딕</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">크기</span>
+        <div class="setting-options">
+          <button class="size-btn" data-dir="-1">A−</button>
+          <span class="size-display">3</span>
+          <button class="size-btn" data-dir="1">A+</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">줄 간격</span>
+        <div class="setting-options">
+          <button class="setting-btn spacing-btn" data-val="1">좁게</button>
+          <button class="setting-btn spacing-btn active" data-val="2">보통</button>
+          <button class="setting-btn spacing-btn" data-val="3">넓게</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">좌우 여백</span>
+        <div class="setting-options">
+          <button class="setting-btn lr-btn" data-val="1">좁게</button>
+          <button class="setting-btn lr-btn active" data-val="2">보통</button>
+          <button class="setting-btn lr-btn" data-val="3">넓게</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">상하 여백</span>
+        <div class="setting-options">
+          <button class="setting-btn tb-btn" data-val="1">좁게</button>
+          <button class="setting-btn tb-btn active" data-val="2">보통</button>
+          <button class="setting-btn tb-btn" data-val="3">넓게</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">배경</span>
+        <div class="setting-options bg-options">
+          <button class="bg-swatch active" data-theme="default" aria-label="기본"></button>
+          <button class="bg-swatch" data-theme="sepia" aria-label="세피아"></button>
+          <button class="bg-swatch" data-theme="cream" aria-label="크림"></button>
+          <button class="bg-swatch" data-theme="dark" aria-label="다크"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Navigation Bar ===== -->
   <nav class="site-nav site-nav--hidden" id="site-nav" aria-label="Chapter navigation">
-    <button class="reader-nav-btn" id="btn-prev" aria-label="Previous page">&larr;</button>
     <span class="site-nav__person-name" id="nav-person-name">Chosen Orbits</span>
-    <span class="reader-page-info" id="page-info"></span>
     <div class="site-nav__controls">
-      <button class="site-nav__bookmark-btn" id="bookmark-btn" aria-label="Bookmark this chapter" title="Add bookmark" style="display:none">&#9734;</button>
       <button class="site-nav__mode-toggle" id="mode-toggle" aria-label="Toggle reading mode">Novel</button>
       <div class="site-nav__dropdown-wrapper">
-        <button class="site-nav__dropdown-btn" id="dropdown-btn" aria-expanded="false" aria-haspopup="true">Ch.</button>
+        <button class="site-nav__dropdown-btn" id="dropdown-btn" aria-expanded="false" aria-haspopup="true">Chapters</button>
         <ul class="site-nav__dropdown-menu" id="dropdown-menu" role="menu">
           <li class="site-nav__path-switcher" aria-label="Switch reading path">
             <button class="site-nav__path-btn" data-path="chronological">Chrono</button>
@@ -1702,64 +1852,46 @@
         </ul>
       </div>
     </div>
-    <button class="reader-nav-btn" id="btn-next" aria-label="Next page">&rarr;</button>
   </nav>
 
   <!-- ===== Landing ===== -->
-  <section class="landing book-page active" id="landing" data-person="landing">
-    <div class="landing__frame">
-      <div class="landing__corners-bottom"></div>
+  <section class="landing" id="landing">
+    <header class="landing__header">
+      <h1 class="landing__title">Chosen Orbits</h1>
+      <p class="landing__subtitle">On Ten Lives the Cosmos Composed Before My Own</p>
+      <p class="landing__author">written by Bella Kang</p>
+    </header>
 
-      <!-- Orbit decoration -->
-      <svg class="landing__orbits" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="250" cy="250" rx="220" ry="110" stroke="#a08a70" stroke-width="0.6" transform="rotate(-20 250 250)"/>
-        <ellipse cx="250" cy="250" rx="170" ry="80" stroke="#a08a70" stroke-width="0.5" transform="rotate(30 250 250)"/>
-        <ellipse cx="250" cy="250" rx="130" ry="55" stroke="#a08a70" stroke-width="0.4" transform="rotate(-50 250 250)"/>
-        <circle cx="250" cy="250" r="2.5" fill="#a08a70" opacity="0.5"/>
-        <circle cx="470" cy="250" r="2" fill="#a08a70" opacity="0.4" transform="rotate(-20 250 250)"/>
-        <circle cx="30" cy="250" r="2" fill="#a08a70" opacity="0.4" transform="rotate(-20 250 250)"/>
-        <circle cx="420" cy="250" r="1.8" fill="#a08a70" opacity="0.35" transform="rotate(30 250 250)"/>
-        <circle cx="80" cy="250" r="1.8" fill="#a08a70" opacity="0.35" transform="rotate(30 250 250)"/>
-        <circle cx="380" cy="250" r="1.5" fill="#a08a70" opacity="0.3" transform="rotate(-50 250 250)"/>
-        <circle cx="120" cy="250" r="1.5" fill="#a08a70" opacity="0.3" transform="rotate(-50 250 250)"/>
-        <circle cx="340" cy="185" r="1.2" fill="#a08a70" opacity="0.25" transform="rotate(-20 250 250)"/>
-        <circle cx="160" cy="315" r="1.2" fill="#a08a70" opacity="0.25" transform="rotate(30 250 250)"/>
-        <circle cx="350" cy="210" r="1" fill="#a08a70" opacity="0.2" transform="rotate(-50 250 250)"/>
-        <circle cx="150" cy="290" r="1" fill="#a08a70" opacity="0.2" transform="rotate(30 250 250)"/>
-      </svg>
+    <div class="landing__intro">
+      <p class="landing__intro-heading">읽기 전에</p>
+      <p>이 책은 경계를 넘은 열 명의 사람들에 대한 이야기입니다.</p>
+      <p>생물학에서 인식론으로, 의학에서 교육으로, 수학에서 컴퓨터 과학으로. 한 분야에 머물지 않고 자기만의 궤도를 그린 사람들입니다. 석사를 마무리하며 물었습니다. 내가 배우고 싶은 사람은 누구인가. 답을 주는 사람이 아니라, 질문하는 방식을 바꿔준 사람. 전문가가 아니라, 분야와 분야 사이에서 새로운 것을 만들어낸 사람.</p>
+      <p>다섯 가지 기준으로 골랐습니다. 둘 이상의 분야를 자기 것으로 만든 사람. 적용하기 전에 이해하는 사람. 무엇보다 왜를 먼저 묻는 사람. 부분이 아니라 전체를 보는 사람. 정해진 길 바깥에서 시작한 사람.</p>
+      <p>각 챕터는 한 사람의 위기와 전환을 따라갑니다. 아래에서 세 가지 읽기 경로 중 하나를 고를 수 있습니다. 마지막 챕터는 비어 있습니다. 당신의 궤도를 위해.</p>
+      <p class="intro-update">이 책은 완성되지 않았습니다. 챕터가 깊어지고, 새로운 인물이 추가되고, 읽는 경험 자체가 바뀔 수 있습니다. 자라는 책입니다.</p>
+    </div>
 
-      <header class="landing__header">
-        <h1 class="landing__title"><em>Chosen</em> Orbits</h1>
-        <span class="landing__ornament">&middot;&ensp;&middot;&ensp;&middot;</span>
-        <p class="landing__subtitle">On Ten Lives the Cosmos<br>Composed Before My Own</p>
-      </header>
+    <div class="paths" role="group" aria-label="Choose a reading path">
 
-      <div class="paths" role="group" aria-label="Choose a reading path">
-        <div class="paths__rule"></div>
-        <div class="paths__label">Begin Reading</div>
-
-        <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
-          <div class="path-card__text">
-            <h2 class="path-card__name">Chronological</h2>
-          </div>
-        </div>
-
-        <div class="path-card" data-path="proximity" tabindex="0" role="button" aria-pressed="false">
-          <div class="path-card__text">
-            <h2 class="path-card__name">Proximity</h2>
-          </div>
-        </div>
-
-        <div class="path-card" data-path="thematic" tabindex="0" role="button" aria-pressed="false">
-          <div class="path-card__text">
-            <h2 class="path-card__name">Thematic Pairs</h2>
-          </div>
-        </div>
-
+      <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
+        <div class="path-card__label">Path A</div>
+        <h2 class="path-card__name">Chronological</h2>
+        <p class="path-card__desc">Follow the timeline. See how one mind influenced the next.</p>
+        <p class="path-card__preview">Begins with Maria Montessori, 1870</p>
       </div>
 
-      <div class="landing__footer-ornament">
-        <p class="landing__year">MMXXVI</p>
+      <div class="path-card" data-path="proximity" tabindex="0" role="button" aria-pressed="false">
+        <div class="path-card__label">Path B</div>
+        <h2 class="path-card__name">Proximity</h2>
+        <p class="path-card__desc">Start with the life closest to yours.</p>
+        <p class="path-card__preview">Begins with Seymour Papert</p>
+      </div>
+
+      <div class="path-card" data-path="thematic" tabindex="0" role="button" aria-pressed="false">
+        <div class="path-card__label">Path C</div>
+        <h2 class="path-card__name">Thematic Pairs</h2>
+        <p class="path-card__desc">Two lives side by side. See the pattern.</p>
+        <p class="path-card__preview">Begins with Piaget &amp; Papert</p>
       </div>
 
     </div>
@@ -1773,7 +1905,7 @@
   <!-- ===== Chapters Container ===== -->
   <div id="chapters">
 
-    <section class="chapter-section book-page person-piaget" data-person="piaget" data-number="01" id="chapter-piaget">
+    <section class="chapter-section person-piaget" data-person="piaget" data-number="01" id="chapter-piaget">
       <div class="chapter-gradient-bar grad-piaget"></div>
 
       <div class="chapter-header">
@@ -1843,13 +1975,15 @@
       </aside>
       </div>
 
+<div style="text-align: center; margin: 2rem auto; max-width: 600px;">
+        <a href="deep-chapters.html#piaget" class="deep-chapter-link">Deep Chapter 읽기 →</a>
+      </div>
 <div class="chapter-next">
-        <a href="deep-chapters.html#piaget" target="_blank" class="deep-dive-link">Deep Dive</a>
         <a href="#chapter-montessori">Next: Maria Montessori</a>
       </div>
     </section>
 
-    <section class="chapter-section book-page person-montessori" data-person="montessori" data-number="02" id="chapter-montessori">
+    <section class="chapter-section person-montessori" data-person="montessori" data-number="02" id="chapter-montessori">
       <div class="chapter-gradient-bar grad-montessori"></div>
 
       <div class="chapter-header">
@@ -1922,7 +2056,7 @@
       </div>
     </section>
 
-    <section class="chapter-section book-page person-bateson" data-person="bateson" data-number="03" id="chapter-bateson">
+    <section class="chapter-section person-bateson" data-person="bateson" data-number="03" id="chapter-bateson">
       <div class="chapter-gradient-bar grad-bateson"></div>
 
       <div class="chapter-header">
@@ -1995,7 +2129,7 @@
       </div>
     </section>
 
-    <section class="chapter-section book-page person-papert" data-person="papert" data-number="04" id="chapter-papert">
+    <section class="chapter-section person-papert" data-person="papert" data-number="04" id="chapter-papert">
       <div class="chapter-gradient-bar grad-papert"></div>
 
       <div class="chapter-header">
@@ -2064,13 +2198,15 @@
       </aside>
       </div>
 
+<div style="text-align: center; margin: 2rem auto; max-width: 600px;">
+        <a href="deep-chapters.html#papert" class="deep-chapter-link">Deep Chapter 읽기 →</a>
+      </div>
 <div class="chapter-next">
-        <a href="deep-chapters.html#papert" target="_blank" class="deep-dive-link">Deep Dive</a>
         <a href="#chapter-simon">Next: Herbert A. Simon</a>
       </div>
     </section>
 
-    <section class="chapter-section book-page person-simon" data-person="simon" data-number="05" id="chapter-simon">
+    <section class="chapter-section person-simon" data-person="simon" data-number="05" id="chapter-simon">
       <div class="chapter-gradient-bar grad-simon"></div>
 
       <div class="chapter-header">
@@ -2144,7 +2280,7 @@
       </div>
     </section>
 
-    <section class="chapter-section book-page person-csikszentmihalyi" data-person="csikszentmihalyi" data-number="06" id="chapter-csikszentmihalyi">
+    <section class="chapter-section person-csikszentmihalyi" data-person="csikszentmihalyi" data-number="06" id="chapter-csikszentmihalyi">
       <div class="chapter-gradient-bar grad-csikszentmihalyi"></div>
 
       <div class="chapter-header">
@@ -2220,7 +2356,7 @@
       </div>
     </section>
 
-    <section class="chapter-section book-page person-meadows" data-person="meadows" data-number="07" id="chapter-meadows">
+    <section class="chapter-section person-meadows" data-person="meadows" data-number="07" id="chapter-meadows">
       <div class="chapter-gradient-bar grad-meadows"></div>
 
       <div class="chapter-header">
@@ -2295,7 +2431,7 @@
       </div>
     </section>
 
-    <section class="chapter-section book-page person-fuller" data-person="fuller" data-number="08" id="chapter-fuller">
+    <section class="chapter-section person-fuller" data-person="fuller" data-number="08" id="chapter-fuller">
       <div class="chapter-gradient-bar grad-fuller"></div>
 
       <div class="chapter-header">
@@ -2370,7 +2506,7 @@
       </div>
     </section>
 
-    <section class="chapter-section book-page person-capra" data-person="capra" data-number="09" id="chapter-capra">
+    <section class="chapter-section person-capra" data-person="capra" data-number="09" id="chapter-capra">
       <div class="chapter-gradient-bar grad-capra"></div>
 
       <div class="chapter-header">
@@ -2444,7 +2580,7 @@
       </div>
     </section>
 
-    <section class="chapter-section book-page person-rosch" data-person="rosch" data-number="10" id="chapter-rosch">
+    <section class="chapter-section person-rosch" data-person="rosch" data-number="10" id="chapter-rosch">
       <div class="chapter-gradient-bar grad-rosch"></div>
 
       <div class="chapter-header">
@@ -2514,14 +2650,16 @@
       </aside>
       </div>
 
+<div style="text-align: center; margin: 2rem auto; max-width: 600px;">
+        <a href="deep-chapters.html#rosch" class="deep-chapter-link">Deep Chapter 읽기 →</a>
+      </div>
 <div class="chapter-next">
-        <a href="deep-chapters.html#rosch" target="_blank" class="deep-dive-link">Deep Dive</a>
         <a href="#my-orbit">Next: My Orbit</a>
       </div>
     </section>
 
     <!-- Chapter 11: My Orbit -->
-    <section class="chapter-section book-page section-my-orbit" id="my-orbit" data-person="my-orbit">
+    <section class="chapter-section section-my-orbit" id="my-orbit" data-person="my-orbit">
       <div class="diary-container">
 
         <!-- Cover -->
@@ -2617,7 +2755,7 @@
     </section>
 
     <!-- Appendix -->
-    <section class="chapter-section book-page section-appendix" id="appendix" data-person="appendix">
+    <section class="chapter-section section-appendix" id="appendix" data-person="appendix">
       <div class="chapter-placeholder" style="width:100%; max-width:56rem;">
         <h2 class="chapter-placeholder__name">Appendix</h2>
         <div class="appendix-tabs">
@@ -3023,7 +3161,7 @@
     </section>
 
     <!-- Colophon -->
-    <section class="chapter-section book-page section-colophon" id="colophon" data-person="colophon">
+    <section class="chapter-section section-colophon" id="colophon" data-person="colophon">
       <div class="colophon-container">
         <h2>Colophon</h2>
         <p style="text-align:center; font-family:var(--font-heading); font-style:italic; color:rgba(255,255,255,0.45); margin-bottom:2rem;">On the making of this book</p>
@@ -3099,6 +3237,9 @@
   </div>
 
   <!-- ===== Scripts ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
   <script>
     /* ===== Person Display Names ===== */
     const PERSON_NAMES = {
@@ -3114,26 +3255,24 @@
       rosch: 'Eleanor Rosch',
       'my-orbit': 'My Orbit',
       appendix: 'Appendix',
-      colophon: 'Colophon',
-      landing: 'Chosen Orbits'
+      colophon: 'Colophon'
     };
 
     /* ===== Per-person nav background colors (with alpha) ===== */
     const PERSON_NAV_BG = {
-      piaget: 'rgba(239,245,240,0.92)',
-      montessori: 'rgba(240,239,242,0.92)',
-      bateson: 'rgba(237,242,244,0.92)',
-      papert: 'rgba(238,246,243,0.92)',
-      simon: 'rgba(239,241,245,0.92)',
-      csikszentmihalyi: 'rgba(244,243,238,0.92)',
-      meadows: 'rgba(235,244,238,0.92)',
-      fuller: 'rgba(237,238,242,0.92)',
-      capra: 'rgba(237,244,246,0.92)',
-      rosch: 'rgba(242,239,245,0.92)',
-      'my-orbit': 'rgba(253,248,240,0.92)',
-      appendix: 'rgba(244,245,247,0.92)',
-      colophon: 'rgba(42,42,42,0.95)',
-      landing: 'rgba(247,243,238,0.92)'
+      piaget: 'rgba(239,245,240,0.82)',
+      montessori: 'rgba(240,239,242,0.82)',
+      bateson: 'rgba(237,242,244,0.82)',
+      papert: 'rgba(238,246,243,0.82)',
+      simon: 'rgba(239,241,245,0.82)',
+      csikszentmihalyi: 'rgba(244,243,238,0.82)',
+      meadows: 'rgba(235,244,238,0.82)',
+      fuller: 'rgba(237,238,242,0.82)',
+      capra: 'rgba(237,244,246,0.82)',
+      rosch: 'rgba(242,239,245,0.82)',
+      'my-orbit': 'rgba(253,248,240,0.82)',
+      appendix: 'rgba(244,245,247,0.82)',
+      colophon: 'rgba(42,42,42,0.92)'
     };
 
     /* ===== Reading Path Definitions ===== */
@@ -3184,104 +3323,13 @@
     const modeToggle = document.getElementById('mode-toggle');
     const dropdownBtn = document.getElementById('dropdown-btn');
     const dropdownMenu = document.getElementById('dropdown-menu');
-    const btnPrev = document.getElementById('btn-prev');
-    const btnNext = document.getElementById('btn-next');
-    const pageInfo = document.getElementById('page-info');
-    const clickLeft = document.getElementById('click-left');
-    const clickRight = document.getElementById('click-right');
 
     let currentPath = localStorage.getItem('chosen-orbits-path') || 'thematic';
     let readingMode = localStorage.getItem('chosen-orbits-mode') || 'novel';
     let currentPersonId = null;
 
-    /* ===== Scroll-Based Section Tracking ===== */
-    let sectionObserver = null;
-
-    function observeSections() {
-      if (sectionObserver) sectionObserver.disconnect();
-
-      sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const personId = entry.target.dataset.person;
-            if (personId && personId !== currentPersonId) {
-              currentPersonId = personId;
-              updateNavBar(personId);
-            }
-          }
-        });
-      }, { threshold: 0.3 });
-
-      // Observe landing
-      sectionObserver.observe(document.getElementById('landing'));
-      // Observe all chapters
-      chaptersContainer.querySelectorAll('.chapter-section').forEach(s => sectionObserver.observe(s));
-    }
-
-    function updateNavBar(personId) {
-      // Show/hide nav
-      if (personId === 'landing') {
-        siteNav.classList.add('site-nav--hidden');
-      } else {
-        siteNav.classList.remove('site-nav--hidden');
-      }
-
-      // Update name
-      navPersonName.textContent = PERSON_NAMES[personId] || personId;
-
-      // Update bg color
-      siteNav.style.backgroundColor = PERSON_NAV_BG[personId] || 'rgba(247,243,238,0.95)';
-
-      // Colophon dark text
-      if (personId === 'colophon') {
-        siteNav.style.color = 'rgba(255,255,255,0.85)';
-      } else {
-        siteNav.style.color = '';
-      }
-
-      // Save position
-      if (personId && personId !== 'landing') {
-        localStorage.setItem('chosen-orbits-position', personId);
-      }
-
-      // Update bookmark
-      updateBookmarkBtn(personId);
-    }
-
-    /* ===== Bookmark System ===== */
-    function getBookmarks() {
-      try { return JSON.parse(localStorage.getItem('chosen-orbits-bookmarks') || '[]'); }
-      catch { return []; }
-    }
-
-    /* saveBookmark handled inline in click handler */
-
-    function removeBookmark(personId) {
-      let bookmarks = getBookmarks();
-      bookmarks = bookmarks.filter(b => b.person !== personId);
-      localStorage.setItem('chosen-orbits-bookmarks', JSON.stringify(bookmarks));
-      updateBookmarkBtn(personId);
-      buildDropdownItems();
-    }
-
-    function isBookmarked(personId) {
-      return getBookmarks().some(b => b.person === personId);
-    }
-
-    function updateBookmarkBtn(personId) {
-      const btn = document.getElementById('bookmark-btn');
-      if (!btn) return;
-      if (!personId || personId === 'landing') {
-        btn.style.display = 'none';
-        return;
-      }
-      btn.style.display = '';
-      btn.textContent = isBookmarked(personId) ? '\u2605' : '\u2606';
-      btn.title = isBookmarked(personId) ? 'Remove bookmark' : 'Add bookmark';
-    }
-
     /* ===== Path Selection Logic ===== */
-    function selectPath(pathKey, shouldNavigate) {
+    function selectPath(pathKey, shouldScroll) {
       if (!PATHS[pathKey]) return;
       currentPath = pathKey;
       localStorage.setItem('chosen-orbits-path', pathKey);
@@ -3311,13 +3359,24 @@
         if (el) chaptersContainer.appendChild(el);
       });
 
-      // Rebuild dropdown and re-observe
+      // Rebuild dropdown chapter list
       buildDropdownItems();
+
+      // Re-observe sections for intersection
       observeSections();
 
-      if (shouldNavigate !== false) {
+      // Refresh ScrollTrigger positions after DOM reorder
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
+
+      if (shouldScroll !== false) {
         const firstChapter = chaptersContainer.querySelector('.chapter-section');
-        if (firstChapter) firstChapter.scrollIntoView({ behavior: 'smooth' });
+        if (firstChapter) {
+          firstChapter.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+        }
       }
     }
 
@@ -3369,8 +3428,7 @@
         const btn = document.createElement('button');
         btn.className = 'site-nav__dropdown-item';
         btn.setAttribute('role', 'menuitem');
-        const star = isBookmarked(personId) ? ' \u2605' : '';
-        btn.textContent = (i + 1) + '. ' + (PERSON_NAMES[personId] || personId) + star;
+        btn.textContent = (i + 1) + '. ' + (PERSON_NAMES[personId] || personId);
         btn.addEventListener('click', () => {
           const target = document.getElementById('chapter-' + personId);
           if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -3424,31 +3482,82 @@
       }
     });
 
-    // Bookmark button
-    const bookmarkBtn = document.getElementById('bookmark-btn');
-    bookmarkBtn.addEventListener('click', () => {
-      if (!currentPersonId || currentPersonId === 'landing') return;
-      if (isBookmarked(currentPersonId)) {
-        removeBookmark(currentPersonId);
-      } else {
-        // Save bookmark for current section
-        const bookmarks = getBookmarks();
-        const existing = bookmarks.findIndex(b => b.person === currentPersonId);
-        if (existing >= 0) {
-          bookmarks[existing].date = new Date().toLocaleDateString('ko-KR');
-        } else {
-          bookmarks.push({
-            person: currentPersonId,
-            name: PERSON_NAMES[currentPersonId] || currentPersonId,
-            scroll: window.scrollY,
-            date: new Date().toLocaleDateString('ko-KR')
-          });
+    /* ===== Scroll Direction Detection (show/hide nav) ===== */
+    let lastScrollY = window.scrollY;
+    let scrollTicking = false;
+
+    function onScroll() {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        const landingHeight = document.getElementById('landing').offsetHeight;
+
+        // Only show nav once past landing
+        if (currentY < landingHeight * 0.7) {
+          siteNav.classList.add('site-nav--hidden');
+        } else if (currentY < lastScrollY) {
+          // Scrolling up -- show
+          siteNav.classList.remove('site-nav--hidden');
+        } else if (currentY > lastScrollY + 5) {
+          // Scrolling down -- hide
+          siteNav.classList.add('site-nav--hidden');
+          closeDropdown();
         }
-        localStorage.setItem('chosen-orbits-bookmarks', JSON.stringify(bookmarks));
-        updateBookmarkBtn(currentPersonId);
-        buildDropdownItems();
-      }
-    });
+
+        lastScrollY = currentY;
+        scrollTicking = false;
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ===== IntersectionObserver for Active Chapter ===== */
+    let sectionObserver = null;
+
+    function observeSections() {
+      if (sectionObserver) sectionObserver.disconnect();
+
+      sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const personId = entry.target.dataset.person;
+            if (personId && personId !== currentPersonId) {
+              currentPersonId = personId;
+              navPersonName.textContent = PERSON_NAMES[personId] || personId;
+              // Only apply per-person nav colors in default theme
+              if (!document.body.dataset.theme || document.body.dataset.theme === 'default') {
+                siteNav.style.backgroundColor = PERSON_NAV_BG[personId] || 'rgba(242,246,244,0.82)';
+                // Update nav text color for colophon (dark bg)
+                if (personId === 'colophon') {
+                  siteNav.style.color = 'rgba(255,255,255,0.85)';
+                } else {
+                  siteNav.style.color = '';
+                }
+              } else {
+                siteNav.style.backgroundColor = '';
+                siteNav.style.color = '';
+              }
+
+              // Highlight active dropdown item
+              dropdownMenu.querySelectorAll('.site-nav__dropdown-item').forEach(item => {
+                item.classList.remove('site-nav__dropdown-item--active');
+              });
+              const displayName = PERSON_NAMES[personId];
+              dropdownMenu.querySelectorAll('.site-nav__dropdown-item').forEach(item => {
+                if (item.textContent.includes(displayName)) {
+                  item.classList.add('site-nav__dropdown-item--active');
+                }
+              });
+            }
+          }
+        });
+      }, { threshold: 0.3 });
+
+      chaptersContainer.querySelectorAll('.chapter-section').forEach(section => {
+        sectionObserver.observe(section);
+      });
+    }
 
     /* ===== Appendix Tabs ===== */
     document.querySelectorAll('.appendix-tab-btn').forEach(btn => {
@@ -3462,25 +3571,16 @@
       });
     });
 
-    /* No JS wrapping needed — chapters scroll natively */
-
     /* ===== Initialize ===== */
-
     // Restore saved path on load (reorder without scrolling)
     if (PATHS[currentPath]) {
       selectPath(currentPath, false);
     }
 
-    // Restore saved reading mode
+    // Restore saved reading mode on load
     if (readingMode === 'hybrid') {
       applyReadingMode('hybrid');
     }
-
-    // Start observing sections for nav updates
-    observeSections();
-
-    // Always start at top (landing page)
-    window.scrollTo(0, 0);
 
     /* ===== Chapter 11: Diary localStorage + Clipboard ===== */
     const diary = document.getElementById('diary-textarea');
@@ -3500,6 +3600,268 @@
         setTimeout(() => { copyBtn.textContent = 'Copy to Obsidian'; }, 2000);
       });
     }
+
+    /* ===== GSAP Scroll-Triggered Fade-In Animations ===== */
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initScrollAnimations() {
+      // Only animate narrative chapters (exclude my-orbit, appendix, colophon)
+      const narrativeScope = '.chapter-section:not(.section-my-orbit):not(.section-appendix):not(.section-colophon)';
+      const selectors = [
+        narrativeScope + ' .chapter-header',
+        narrativeScope + ' .crisis-hook',
+        narrativeScope + ' .chapter-prose p',
+        narrativeScope + ' .pull-quote'
+      ].join(', ');
+
+      const animTargets = document.querySelectorAll(selectors);
+
+      animTargets.forEach(el => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 20,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            once: true
+          }
+        });
+      });
+    }
+
+    // Only run animations if user has not requested reduced motion
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      initScrollAnimations();
+    }
+
+    /* ===== Reader Enhancements ===== */
+    (function() {
+      var READER_DEFAULTS = { theme: 'default', font: 'batang', size: 3, spacing: 2, lr: 2, tb: 2 };
+      var rState = Object.assign({}, READER_DEFAULTS);
+
+      try {
+        var saved = JSON.parse(localStorage.getItem('co-reader-settings'));
+        if (saved) rState = Object.assign({}, READER_DEFAULTS, saved);
+      } catch(e) {}
+
+      function applyReaderState() {
+        document.body.dataset.theme = rState.theme;
+        document.body.dataset.font = rState.font;
+        document.body.dataset.size = rState.size;
+        document.body.dataset.spacing = rState.spacing;
+        document.body.dataset.lr = rState.lr;
+        document.body.dataset.tb = rState.tb;
+
+        document.querySelectorAll('.font-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.font === rState.font); });
+        document.querySelectorAll('.spacing-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.val === String(rState.spacing)); });
+        document.querySelectorAll('.lr-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.val === String(rState.lr)); });
+        document.querySelectorAll('.tb-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.val === String(rState.tb)); });
+        document.querySelectorAll('.bg-swatch').forEach(function(b) { b.classList.toggle('active', b.dataset.theme === rState.theme); });
+        var sd = document.querySelector('.size-display');
+        if (sd) sd.textContent = rState.size;
+
+        localStorage.setItem('co-reader-settings', JSON.stringify(rState));
+
+        // Clear inline nav styles so CSS theme overrides take effect
+        var nav = document.getElementById('site-nav');
+        if (nav && rState.theme !== 'default') {
+          nav.style.backgroundColor = '';
+          nav.style.color = '';
+        }
+      }
+
+      // Check first visit BEFORE applyReaderState saves to localStorage
+      var isFirstVisit = !localStorage.getItem('co-reader-settings');
+
+      applyReaderState();
+
+      // ===== Settings Panel =====
+      var trigger = document.querySelector('.settings-trigger');
+      var overlay = document.querySelector('.settings-overlay');
+
+      if (trigger && overlay) {
+        trigger.addEventListener('click', function() { overlay.classList.toggle('closed'); });
+        overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.add('closed'); });
+
+        // First visit: show panel so reader discovers settings
+        if (isFirstVisit) {
+          setTimeout(function() { overlay.classList.remove('closed'); }, 800);
+        }
+      }
+
+      // Font buttons
+      document.querySelectorAll('.font-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { rState.font = btn.dataset.font; applyReaderState(); });
+      });
+
+      // Size buttons
+      document.querySelectorAll('.size-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var next = rState.size + parseInt(btn.dataset.dir);
+          if (next >= 1 && next <= 5) { rState.size = next; applyReaderState(); }
+        });
+      });
+
+      // Spacing buttons
+      document.querySelectorAll('.spacing-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { rState.spacing = parseInt(btn.dataset.val); applyReaderState(); });
+      });
+
+      // LR margin buttons
+      document.querySelectorAll('.lr-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { rState.lr = parseInt(btn.dataset.val); applyReaderState(); });
+      });
+
+      // TB margin buttons
+      document.querySelectorAll('.tb-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { rState.tb = parseInt(btn.dataset.val); applyReaderState(); });
+      });
+
+      // Background swatches
+      document.querySelectorAll('.bg-swatch').forEach(function(btn) {
+        btn.addEventListener('click', function() { rState.theme = btn.dataset.theme; applyReaderState(); });
+      });
+
+      // ===== Progress Bar =====
+      var progressBar = document.querySelector('.progress-bar');
+      if (progressBar) {
+        window.addEventListener('scroll', function() {
+          var h = document.documentElement.scrollHeight - window.innerHeight;
+          if (h > 0) progressBar.style.width = (window.scrollY / h * 100) + '%';
+        });
+      }
+
+      // ===== Auto Paragraph Numbering =====
+      document.querySelectorAll('.chapter-section[data-number]').forEach(function(section) {
+        var num = parseInt(section.dataset.number);
+        if (isNaN(num) || num < 1 || num > 10) return;
+        var n = 0;
+        section.querySelectorAll('.chapter-prose p').forEach(function(p) {
+          n++;
+          p.dataset.paraNum = n;
+        });
+      });
+
+      // ===== Add Copy Buttons to Pull Quotes (for mobile) =====
+      document.querySelectorAll('.pull-quote').forEach(function(pq) {
+        if (!pq.querySelector('.pull-quote-copy-btn')) {
+          var btn = document.createElement('button');
+          btn.className = 'pull-quote-copy-btn';
+          btn.textContent = 'Copy';
+          btn.setAttribute('aria-label', 'Copy quote');
+          pq.appendChild(btn);
+        }
+      });
+
+      // ===== Copy with Attribution =====
+      var copyBtn = null, hideTimeout = null;
+      function removeCopyBtn() {
+        if (copyBtn) { copyBtn.remove(); copyBtn = null; }
+        if (hideTimeout) { clearTimeout(hideTimeout); hideTimeout = null; }
+      }
+
+      function getAttribution(node) {
+        var sec = null;
+        try { sec = node.closest('.chapter-section') || node.parentElement.closest('.chapter-section'); } catch(e) {}
+        if (!sec) return '';
+        var ch = sec.dataset.number || '?';
+        var name = PERSON_NAMES[sec.dataset.person] || '';
+        var pq = null;
+        try { pq = node.closest('.pull-quote') || node.parentElement.closest('.pull-quote'); } catch(e) {}
+        if (pq) return 'Chosen Orbits, Ch.' + ch + ' ' + name + ', pull quote';
+        var p = null;
+        try { p = node.closest('p[data-para-num]') || node.parentElement.closest('p[data-para-num]'); } catch(e) {}
+        return 'Chosen Orbits, Ch.' + ch + ' ' + name + ', \u00B6' + (p ? p.dataset.paraNum : '?');
+      }
+
+      function copyWithAttribution(text, node) {
+        var fmt = '\u201C' + text.trim() + '\u201D\n\n\u2014 ' + getAttribution(node);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(fmt).catch(function() { fallbackCopy(fmt); });
+        } else {
+          fallbackCopy(fmt);
+        }
+        var sr = document.getElementById('sr-announce');
+        if (sr) { sr.textContent = ''; requestAnimationFrame(function() { sr.textContent = 'Copied'; }); }
+      }
+
+      function fallbackCopy(text) {
+        var t = document.createElement('textarea');
+        t.value = text;
+        t.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        t.remove();
+      }
+
+      var selT = null;
+      function handleSel() {
+        var sel = window.getSelection();
+        if (!sel || sel.isCollapsed || !sel.toString().trim()) { removeCopyBtn(); return; }
+        var a = sel.anchorNode;
+        var c = null;
+        try { c = a.closest('.chapter-prose, .pull-quote') || a.parentElement.closest('.chapter-prose, .pull-quote'); } catch(e) {}
+        if (!c) { removeCopyBtn(); return; }
+        var rect = sel.getRangeAt(0).getBoundingClientRect();
+        if (!copyBtn) {
+          copyBtn = document.createElement('button');
+          copyBtn.className = 'copy-float-btn';
+          copyBtn.textContent = 'Copy';
+          copyBtn.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            copyWithAttribution(window.getSelection().toString(), a);
+            copyBtn.textContent = 'Copied \u2713';
+            copyBtn.classList.add('copied');
+            hideTimeout = setTimeout(removeCopyBtn, 1500);
+          });
+          document.body.appendChild(copyBtn);
+        }
+        var h = copyBtn.offsetHeight || 28;
+        var top = rect.top - h - 6;
+        if (top < 10) top = rect.bottom + 6;
+        copyBtn.style.top = top + 'px';
+        copyBtn.style.left = (rect.left + rect.width / 2 - (copyBtn.offsetWidth || 50) / 2) + 'px';
+        copyBtn.textContent = 'Copy';
+        copyBtn.classList.remove('copied');
+      }
+
+      if (!window.matchMedia('(max-width: 740px)').matches) {
+        document.addEventListener('selectionchange', function() {
+          clearTimeout(selT);
+          selT = setTimeout(handleSel, 200);
+        });
+      }
+      document.addEventListener('mousedown', function(e) {
+        if (copyBtn && !copyBtn.contains(e.target)) setTimeout(removeCopyBtn, 100);
+      });
+
+      // Keyboard shortcut: Ctrl/Cmd+Shift+C
+      document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
+          var sel = window.getSelection();
+          if (sel && !sel.isCollapsed && sel.toString().trim()) {
+            var a = sel.anchorNode;
+            var c = null;
+            try { c = a.closest('.chapter-prose, .pull-quote') || a.parentElement.closest('.chapter-prose, .pull-quote'); } catch(err) {}
+            if (c) { e.preventDefault(); copyWithAttribution(sel.toString(), a); }
+          }
+        }
+      });
+
+      // Mobile pull-quote copy buttons
+      document.querySelectorAll('.pull-quote-copy-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var q = btn.closest('.pull-quote');
+          copyWithAttribution(q.querySelector('p').textContent, q);
+          btn.textContent = 'Copied \u2713';
+          setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+        });
+      });
+    })();
   </script>
 
 </body>
