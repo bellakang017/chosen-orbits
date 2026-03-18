@@ -261,20 +261,21 @@
 
     .landing__title {
       font-family: var(--font-heading);
-      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      font-size: clamp(2.2rem, 5.5vw, 3rem);
       font-weight: 600;
       color: #2a2520;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       margin-bottom: 0.8rem;
       line-height: 1.15;
       text-transform: uppercase;
+      max-width: calc(100% - 2rem);
     }
 
     .landing__title em {
       display: block;
       font-style: normal;
       font-weight: 600;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
     }
 
     .landing__ornament {
@@ -310,34 +311,73 @@
       letter-spacing: 0.08em;
     }
 
+    /* "읽기 전에" link on book cover */
+    .landing__read-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: auto;
+      padding: 0.7rem 2rem;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: #5a4a3a;
+      border: 1px solid rgba(181, 140, 100, 0.3);
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      min-height: 44px;
+      cursor: pointer;
+    }
+    .landing__read-link:hover {
+      background: rgba(181, 140, 100, 0.08);
+      border-color: rgba(181, 140, 100, 0.5);
+    }
+    .landing__read-link:active {
+      transform: scale(0.97);
+    }
+
+    /* Begin Reading section (page 3) */
+    .begin-reading {
+      min-height: 60vh;
+      min-height: 60dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--morning-dew);
+      padding: 4rem 2rem;
+    }
+    .begin-reading__inner {
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+    }
+    .begin-reading__heading {
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: #8a7a6a;
+      margin-bottom: 2rem;
+    }
+    .begin-reading__rule {
+      width: 32px;
+      height: 1px;
+      background: rgba(181, 140, 100, 0.35);
+      margin: 0 auto 1.5rem;
+    }
+
     /* Path selection — readable, clickable cards */
     .paths {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
       width: 100%;
-      max-width: 340px;
-      position: relative;
-      z-index: 1;
-      margin-top: auto;
-      padding-top: 2rem;
-    }
-
-    .paths__label {
-      font-family: var(--font-heading);
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.25em;
-      color: #8a7a6a;
-      text-align: center;
-      margin-bottom: 0.6rem;
-    }
-
-    .paths__rule {
-      width: 32px;
-      height: 1px;
-      background: rgba(181, 140, 100, 0.35);
-      margin: 0 auto 0.8rem;
+      max-width: 360px;
+      margin: 0 auto;
     }
 
     .path-card {
@@ -483,7 +523,7 @@
       }
 
       .landing__title {
-        font-size: clamp(2rem, 8vw, 2.8rem);
+        font-size: clamp(1.8rem, 7vw, 2.4rem);
       }
     }
 
@@ -1735,22 +1775,28 @@
 
     body[data-theme="sepia"] .chapter-section[class*="person-"],
     body[data-theme="sepia"] .landing,
-    body[data-theme="sepia"] .before-reading {
+    body[data-theme="sepia"] .before-reading,
+    body[data-theme="sepia"] .begin-reading {
       background: #F5EDE0;
       color: #4A3F35;
     }
     body[data-theme="cream"] .chapter-section[class*="person-"],
     body[data-theme="cream"] .landing,
-    body[data-theme="cream"] .before-reading {
+    body[data-theme="cream"] .before-reading,
+    body[data-theme="cream"] .begin-reading {
       background: #FDF8F0;
       color: #3A3530;
     }
     body[data-theme="dark"] .chapter-section[class*="person-"],
     body[data-theme="dark"] .landing,
-    body[data-theme="dark"] .before-reading {
+    body[data-theme="dark"] .before-reading,
+    body[data-theme="dark"] .begin-reading {
       background: #1E2A27;
       color: #D4DAD8;
     }
+    body[data-theme="dark"] .landing__read-link { color: #D4DAD8; border-color: rgba(212,218,216,0.25); }
+    body[data-theme="dark"] .landing__read-link:hover { background: rgba(212,218,216,0.08); }
+    body[data-theme="dark"] .begin-reading__heading { color: #a0b0a8; }
     body[data-theme="dark"] .before-reading__content p { color: #D4DAD8; }
     body[data-theme="dark"] .before-reading__heading { color: #E8B4B8; }
     body[data-theme="dark"] .path-card { border-color: rgba(212,218,216,0.15); background: rgba(212,218,216,0.06); }
@@ -2205,7 +2251,6 @@
           <li class="site-nav__path-switcher" aria-label="Switch reading path">
             <button class="site-nav__path-btn" data-path="chronological">Chrono</button>
             <button class="site-nav__path-btn" data-path="proximity">Proximity</button>
-            <button class="site-nav__path-btn" data-path="thematic">Thematic</button>
           </li>
           <!-- Chapter items populated by JS -->
         </ul>
@@ -2245,35 +2290,9 @@
       </header>
 
 
-      <div class="paths" role="group" aria-label="Choose a reading path">
-        <div class="paths__rule"></div>
-        <div class="paths__label">Begin Reading</div>
-
-        <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
-          <div class="path-card__text">
-            <h2 class="path-card__name">Chronological</h2>
-            <p class="path-card__desc">태어난 순서대로</p>
-          </div>
-          <span class="path-card__arrow" aria-hidden="true">&rarr;</span>
-        </div>
-
-        <div class="path-card" data-path="proximity" tabindex="0" role="button" aria-pressed="false">
-          <div class="path-card__text">
-            <h2 class="path-card__name">Proximity</h2>
-            <p class="path-card__desc">영향을 주고받은 순서로</p>
-          </div>
-          <span class="path-card__arrow" aria-hidden="true">&rarr;</span>
-        </div>
-
-        <div class="path-card" data-path="thematic" tabindex="0" role="button" aria-pressed="false">
-          <div class="path-card__text">
-            <h2 class="path-card__name">Thematic Pairs</h2>
-            <p class="path-card__desc">비슷한 질문을 한 두 사람씩</p>
-          </div>
-          <span class="path-card__arrow" aria-hidden="true">&rarr;</span>
-        </div>
-
-      </div>
+      <a href="#before-reading" class="landing__read-link" aria-label="읽기 전에">
+        <span class="landing__read-link-text">읽기 전에</span>
+      </a>
 
       <div class="landing__footer-ornament">
         <p class="landing__year">MMXXVI</p>
@@ -2295,6 +2314,32 @@
       <p>이런 사람들에게 자꾸 돌아갔습니다. 광고를 공부하는데, 제가 읽는 사람들은 심리학자, 수학자, 의사, 건축가였습니다. 공통점은 하나였습니다. 한 분야에 머물지 않았다는 것. 위기의 순간에 경계를 넘었다는 것.</p>
       <p>이 책은 그 전환의 순간들을 따라갑니다.</p>
       <p class="before-reading__growing">이 책은 계속 자랍니다.</p>
+    </div>
+  </section>
+
+  <!-- ===== Begin Reading (Page 3) ===== -->
+  <section class="begin-reading" id="begin-reading">
+    <div class="begin-reading__inner">
+      <div class="begin-reading__rule"></div>
+      <p class="begin-reading__heading">Begin Reading</p>
+
+      <div class="paths" role="group" aria-label="Choose a reading path">
+        <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
+          <div class="path-card__text">
+            <h2 class="path-card__name">Chronological</h2>
+            <p class="path-card__desc">태어난 순서대로</p>
+          </div>
+          <span class="path-card__arrow" aria-hidden="true">&rarr;</span>
+        </div>
+
+        <div class="path-card" data-path="proximity" tabindex="0" role="button" aria-pressed="false">
+          <div class="path-card__text">
+            <h2 class="path-card__name">Proximity</h2>
+            <p class="path-card__desc">영향을 주고받은 순서로</p>
+          </div>
+          <span class="path-card__arrow" aria-hidden="true">&rarr;</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -3718,7 +3763,7 @@
     const clickLeft = document.getElementById('click-left');
     const clickRight = document.getElementById('click-right');
 
-    let currentPath = localStorage.getItem('chosen-orbits-path') || 'thematic';
+    let currentPath = localStorage.getItem('chosen-orbits-path') || 'chronological';
     let readingMode = localStorage.getItem('chosen-orbits-mode') || 'novel';
     let currentPersonId = null;
 
@@ -3862,6 +3907,16 @@
         }
       });
     });
+
+    // Smooth scroll for landing "읽기 전에" link
+    var readLink = document.querySelector('.landing__read-link');
+    if (readLink) {
+      readLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.getElementById('before-reading');
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
 
     // Attach click handlers to dropdown path switcher buttons
     document.querySelectorAll('.site-nav__path-btn').forEach(btn => {
