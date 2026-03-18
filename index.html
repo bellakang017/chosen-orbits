@@ -1820,24 +1820,27 @@
     }
     .chapter-prose p:hover::before { opacity: 0.7; }
 
-    /* Copy Button */
+    /* Copy Button — floating (desktop, on text selection) */
     .copy-float-btn {
       position: fixed;
       z-index: 999;
-      padding: 4px 12px;
+      padding: 3px 14px;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.85em;
+      font-size: 0.8em;
       font-weight: 600;
+      letter-spacing: 0.06em;
       color: #fff;
-      background: var(--rose-wood);
+      background: rgba(181, 112, 122, 0.85);
       border: none;
-      border-radius: 4px;
+      border-radius: 3px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      transition: background 0.2s;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+      transition: all 0.25s ease;
     }
-    .copy-float-btn:hover { filter: brightness(0.85); }
-    .copy-float-btn.copied { background: #5BAFA6; }
+    .copy-float-btn:hover { background: rgba(181, 112, 122, 1); box-shadow: 0 2px 10px rgba(0,0,0,0.18); }
+    .copy-float-btn.copied { background: rgba(91, 175, 166, 0.85); }
     .copy-float-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
     /* Settings Trigger */
@@ -1974,7 +1977,23 @@
     .bg-swatch[data-theme="dark"] { background: #1E2A27; }
 
     .pull-quote { position: relative; }
-    .pull-quote-copy-btn { display: none; }
+    .pull-quote-copy-btn {
+      display: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65em;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: currentColor;
+      opacity: 0.25;
+      background: none;
+      border: none;
+      padding: 2px 0;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+    .pull-quote-copy-btn:hover { opacity: 0.6; }
+    .pull-quote-copy-btn:active { opacity: 0.8; }
 
     .sr-only {
       position: absolute; width: 1px; height: 1px;
@@ -2030,16 +2049,8 @@
       .pull-quote-copy-btn {
         display: block;
         position: absolute;
-        top: -10px;
-        right: 0;
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 0.8em;
-        color: var(--rose-wood);
-        background: inherit;
-        border: 1px solid rgba(128,128,128,0.2);
-        border-radius: 3px;
-        padding: 2px 10px;
-        cursor: pointer;
+        top: 0.5rem;
+        right: 0.2rem;
       }
       .settings-trigger { bottom: 1.5rem; right: 1.5rem; width: 44px; height: 44px; font-size: 1em; }
     }
