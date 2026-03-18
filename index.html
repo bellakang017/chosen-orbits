@@ -261,14 +261,16 @@
 
     .landing__title {
       font-family: var(--font-heading);
-      font-size: clamp(2.2rem, 5.5vw, 3rem);
+      font-size: clamp(1.9rem, 4.5vw, 2.6rem);
       font-weight: 600;
       color: #2a2520;
       letter-spacing: 0.1em;
       margin-bottom: 0.8rem;
       line-height: 1.15;
       text-transform: uppercase;
-      max-width: calc(100% - 2rem);
+      max-width: calc(100% - 3rem);
+      overflow-wrap: break-word;
+      word-break: keep-all;
     }
 
     .landing__title em {
@@ -318,24 +320,27 @@
       justify-content: center;
       gap: 0.5rem;
       margin-top: auto;
-      padding: 0.8rem 2.5rem;
-      font-family: var(--font-body);
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--rose-wood);
-      border: 1.5px solid var(--rose-wood);
-      border-radius: 4px;
+      padding: 0.7rem 2.2rem;
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: #5a4a3a;
+      border: 1px solid rgba(90, 74, 58, 0.4);
+      border-radius: 0;
       text-decoration: none;
+      text-transform: uppercase;
       transition: all 0.3s ease;
       position: relative;
       z-index: 1;
       min-height: 44px;
       cursor: pointer;
+      background: rgba(237, 231, 220, 0.5);
     }
     .landing__read-link:hover {
-      background: var(--rose-wood);
-      color: #fff;
+      background: #5a4a3a;
+      color: #F5F0E8;
+      border-color: #5a4a3a;
     }
     .landing__read-link:active {
       transform: scale(0.97);
@@ -1760,35 +1765,12 @@
     body { transition: background-color 0.3s, color 0.3s; }
 
     /* Theme Overrides */
-    body[data-theme="sepia"] {
-      --rose-wood: #A0685A;
-      background-color: #F5EDE0;
-      color: #4A3F35;
-    }
-    body[data-theme="cream"] {
-      background-color: #FDF8F0;
-      color: #3A3530;
-    }
     body[data-theme="dark"] {
       --rose-wood: #D4909A;
       background-color: #1E2A27;
       color: #D4DAD8;
     }
 
-    body[data-theme="sepia"] .chapter-section[class*="person-"],
-    body[data-theme="sepia"] .landing,
-    body[data-theme="sepia"] .before-reading,
-    body[data-theme="sepia"] .begin-reading {
-      background: #F5EDE0;
-      color: #4A3F35;
-    }
-    body[data-theme="cream"] .chapter-section[class*="person-"],
-    body[data-theme="cream"] .landing,
-    body[data-theme="cream"] .before-reading,
-    body[data-theme="cream"] .begin-reading {
-      background: #FDF8F0;
-      color: #3A3530;
-    }
     body[data-theme="dark"] .chapter-section[class*="person-"],
     body[data-theme="dark"] .landing,
     body[data-theme="dark"] .before-reading,
@@ -1796,8 +1778,8 @@
       background: #1E2A27;
       color: #D4DAD8;
     }
-    body[data-theme="dark"] .landing__read-link { color: #E8B4B8; border-color: #E8B4B8; }
-    body[data-theme="dark"] .landing__read-link:hover { background: #E8B4B8; color: #1E2A27; }
+    body[data-theme="dark"] .landing__read-link { color: #D4DAD8; border-color: rgba(212,218,216,0.4); background: rgba(212,218,216,0.08); }
+    body[data-theme="dark"] .landing__read-link:hover { background: #D4DAD8; color: #1E2A27; border-color: #D4DAD8; }
     body[data-theme="dark"] .begin-reading__heading { color: #a0b0a8; }
     body[data-theme="dark"] .before-reading__content p { color: #D4DAD8; }
     body[data-theme="dark"] .before-reading__heading { color: #E8B4B8; }
@@ -1807,8 +1789,6 @@
     body[data-theme="dark"] .path-card__desc { color: #a0b0a8; }
     body[data-theme="dark"] .path-card__arrow { color: #a0b0a8; }
 
-    body[data-theme="sepia"] .site-nav { background-color: rgba(245,237,224,0.92); }
-    body[data-theme="cream"] .site-nav { background-color: rgba(253,248,240,0.92); }
     body[data-theme="dark"] .site-nav {
       background-color: rgba(30,42,39,0.92);
       border-bottom-color: rgba(255,255,255,0.06);
@@ -1975,8 +1955,6 @@
       border-top: 1px solid rgba(128,128,128,0.2);
       padding: 1.5rem 2rem calc(2rem + env(safe-area-inset-bottom, 0px));
     }
-    body[data-theme="sepia"] .settings-panel { background: #F5EDE0; }
-    body[data-theme="cream"] .settings-panel { background: #FDF8F0; }
     body[data-theme="dark"] .settings-panel { background: #1E2A27; }
 
     .setting-row {
@@ -2063,33 +2041,35 @@
     .bg-swatch:active { transform: scale(0.92); }
     .bg-swatch.active { border: 2px solid currentColor; }
     .bg-swatch[data-theme="default"] { background: #F2F6F4; }
-    .bg-swatch[data-theme="sepia"] { background: #F5EDE0; }
-    .bg-swatch[data-theme="cream"] { background: #FDF8F0; }
     .bg-swatch[data-theme="dark"] { background: #1E2A27; }
 
     .pull-quote { position: relative; }
     .pull-quote-copy-btn {
       display: none;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.65em;
-      font-weight: 600;
-      letter-spacing: 0.12em;
+      font-family: var(--font-heading);
+      font-size: 0.6em;
+      font-weight: 500;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       color: currentColor;
-      opacity: 0.25;
+      opacity: 0.35;
       background: none;
-      border: none;
-      padding: 2px 0;
+      border: 1px solid currentColor;
+      border-radius: 0;
+      padding: 4px 10px;
       cursor: pointer;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s ease, background 0.3s ease;
+      -webkit-user-select: none;
+      user-select: none;
     }
-    .pull-quote-copy-btn:hover { opacity: 0.6; }
-    .pull-quote-copy-btn:active { opacity: 0.8; }
+    .pull-quote-copy-btn:hover { opacity: 0.7; background: rgba(128,128,128,0.08); }
+    .pull-quote-copy-btn:active { opacity: 0.9; }
 
     .sr-only {
       position: absolute; width: 1px; height: 1px;
       padding: 0; margin: -1px; overflow: hidden;
-      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+      clip: rect(0,0,0,0); clip-path: inset(50%);
+      white-space: nowrap; border: 0;
     }
 
     /* Before Reading — transitional page between cover and chapters */
@@ -4117,8 +4097,6 @@
         var saved = JSON.parse(localStorage.getItem('co-reader-settings'));
         if (saved) rState = Object.assign({}, READER_DEFAULTS, saved);
       } catch(e) {}
-
-      var isFirstVisit = !localStorage.getItem('co-reader-settings');
 
       function applyReaderState() {
         document.body.dataset.theme = rState.theme;
