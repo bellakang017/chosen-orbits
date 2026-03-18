@@ -307,13 +307,13 @@
       letter-spacing: 0.08em;
     }
 
-    /* Path selection — compact, cover-bottom style */
+    /* Path selection — readable, clickable cards */
     .paths {
       display: flex;
       flex-direction: column;
-      gap: 0;
+      gap: 0.5rem;
       width: 100%;
-      max-width: 260px;
+      max-width: 340px;
       position: relative;
       z-index: 1;
       margin-top: auto;
@@ -322,40 +322,48 @@
 
     .paths__label {
       font-family: var(--font-heading);
-      font-size: 0.58rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.25em;
       color: #8a7a6a;
-      opacity: 0.7;
       text-align: center;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.6rem;
     }
 
     .paths__rule {
       width: 32px;
       height: 1px;
       background: rgba(181, 140, 100, 0.35);
-      margin: 0 auto 1rem;
+      margin: 0 auto 0.8rem;
     }
 
     .path-card {
-      background: transparent;
-      border: none;
-      border-radius: 0;
-      padding: 0.5rem 1.2rem;
+      background: rgba(181, 140, 100, 0.06);
+      border: 1px solid rgba(181, 140, 100, 0.18);
+      border-radius: 6px;
+      padding: 0.65rem 1rem;
       cursor: pointer;
       transition: all 0.25s ease;
-      text-align: center;
+      text-align: left;
       position: relative;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .path-card:hover .path-card__name {
+    .path-card:hover {
+      background: rgba(181, 140, 100, 0.14);
+      border-color: rgba(181, 140, 100, 0.35);
+    }
+
+    .path-card:hover .path-card__arrow {
+      transform: translateX(3px);
       color: var(--rose-wood);
     }
 
-    .path-card:hover .path-card__name::after {
-      width: 100%;
+    .path-card.active {
+      border-color: var(--rose-wood);
+      background: rgba(181, 112, 122, 0.08);
     }
 
     .path-card.active .path-card__name {
@@ -367,7 +375,7 @@
     }
 
     .path-card__text {
-      display: inline-block;
+      display: block;
     }
 
     .path-card__name {
@@ -375,27 +383,25 @@
       font-weight: 500;
       font-size: 1.05rem;
       color: #5a4a3a;
-      margin-bottom: 0;
-      letter-spacing: 0.06em;
-      position: relative;
-      display: inline-block;
-    }
-
-    /* Underline animation on hover */
-    .path-card__name::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 1px;
-      background: var(--rose-wood);
-      transition: width 0.3s ease;
+      margin-bottom: 0.1rem;
+      letter-spacing: 0.04em;
+      display: block;
     }
 
     .path-card__desc {
-      display: none;
+      display: block;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      color: #8a7a6a;
+      line-height: 1.4;
+    }
+
+    .path-card__arrow {
+      font-size: 1rem;
+      color: #a09080;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 0.5rem;
     }
 
     .path-card__preview {
@@ -1708,20 +1714,30 @@
     }
 
     body[data-theme="sepia"] .chapter-section[class*="person-"],
-    body[data-theme="sepia"] .landing {
-      background-color: #F5EDE0;
+    body[data-theme="sepia"] .landing,
+    body[data-theme="sepia"] .before-reading {
+      background: #F5EDE0;
       color: #4A3F35;
     }
     body[data-theme="cream"] .chapter-section[class*="person-"],
-    body[data-theme="cream"] .landing {
-      background-color: #FDF8F0;
+    body[data-theme="cream"] .landing,
+    body[data-theme="cream"] .before-reading {
+      background: #FDF8F0;
       color: #3A3530;
     }
     body[data-theme="dark"] .chapter-section[class*="person-"],
-    body[data-theme="dark"] .landing {
-      background-color: #1E2A27;
+    body[data-theme="dark"] .landing,
+    body[data-theme="dark"] .before-reading {
+      background: #1E2A27;
       color: #D4DAD8;
     }
+    body[data-theme="dark"] .before-reading__content p { color: #D4DAD8; }
+    body[data-theme="dark"] .before-reading__heading { color: #E8B4B8; }
+    body[data-theme="dark"] .path-card { border-color: rgba(212,218,216,0.15); background: rgba(212,218,216,0.06); }
+    body[data-theme="dark"] .path-card:hover { border-color: rgba(212,218,216,0.3); background: rgba(212,218,216,0.1); }
+    body[data-theme="dark"] .path-card__name { color: #D4DAD8; }
+    body[data-theme="dark"] .path-card__desc { color: #a0b0a8; }
+    body[data-theme="dark"] .path-card__arrow { color: #a0b0a8; }
 
     body[data-theme="sepia"] .site-nav { background-color: rgba(245,237,224,0.92); }
     body[data-theme="cream"] .site-nav { background-color: rgba(253,248,240,0.92); }
@@ -1966,38 +1982,41 @@
       clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
 
-    /* Before Reading Intro */
-    .landing__intro {
-      max-width: 32em;
-      margin: 2.5rem auto 2rem;
-      text-align: left;
-      border-top: 1px solid rgba(181, 112, 122, 0.2);
-      padding-top: 2rem;
+    /* Before Reading — transitional page between cover and chapters */
+    .before-reading {
+      min-height: 75vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #EDE7DC 0%, #F5F0E8 30%, #F2F6F4 100%);
+      padding: 4rem 2rem;
     }
-    .landing__intro-heading {
+    .before-reading__content {
+      max-width: 28em;
+      text-align: left;
+    }
+    .before-reading__heading {
       font-family: var(--font-heading);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      letter-spacing: 0.15em;
       text-transform: uppercase;
-      opacity: 0.4;
-      margin-bottom: 1.2rem;
+      letter-spacing: 0.25em;
+      color: var(--rose-wood);
+      margin-bottom: 2.5rem;
       text-align: center;
     }
-    .landing__intro p {
+    .before-reading__content p {
       font-family: var(--font-body);
-      font-size: clamp(0.9rem, 1.6vw, 1rem);
-      line-height: 1.85;
+      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+      line-height: 2;
       color: #3a3a3a;
-      margin-bottom: 1rem;
+      margin-bottom: 1.4rem;
     }
-    .landing__intro p:last-child { margin-bottom: 0; }
-    .landing__intro .intro-update {
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(181, 112, 122, 0.12);
-      font-size: clamp(0.82rem, 1.4vw, 0.9rem);
-      opacity: 0.7;
+    .before-reading__content p:last-child { margin-bottom: 0; }
+    .before-reading__growing {
+      margin-top: 2rem;
+      font-style: italic;
+      opacity: 0.55;
     }
 
     @media (max-width: 740px) {
@@ -2149,14 +2168,6 @@
       <p class="landing__author">written by Bella Kang</p>
       </header>
 
-    <div class="landing__intro">
-      <p class="landing__intro-heading">읽기 전에</p>
-      <p>이 책은 경계를 넘은 열 명의 사람들에 대한 이야기입니다.</p>
-      <p>생물학에서 인식론으로, 의학에서 교육으로, 수학에서 컴퓨터 과학으로. 한 분야에 머물지 않고 자기만의 궤도를 그린 사람들입니다. 석사를 마무리하며 물었습니다. 내가 배우고 싶은 사람은 누구인가. 답을 주는 사람이 아니라, 질문하는 방식을 바꿔준 사람. 전문가가 아니라, 분야와 분야 사이에서 새로운 것을 만들어낸 사람.</p>
-      <p>다섯 가지 기준으로 골랐습니다. 둘 이상의 분야를 자기 것으로 만든 사람. 적용하기 전에 이해하는 사람. 무엇보다 왜를 먼저 묻는 사람. 부분이 아니라 전체를 보는 사람. 정해진 길 바깥에서 시작한 사람.</p>
-      <p>각 챕터는 한 사람의 위기와 전환을 따라갑니다. 아래에서 세 가지 읽기 경로 중 하나를 고를 수 있습니다. 마지막 챕터는 비어 있습니다. 당신의 궤도를 위해.</p>
-      <p class="intro-update">이 책은 완성되지 않았습니다. 챕터가 깊어지고, 새로운 인물이 추가되고, 읽는 경험 자체가 바뀔 수 있습니다. 자라는 책입니다.</p>
-    </div>
 
       <div class="paths" role="group" aria-label="Choose a reading path">
         <div class="paths__rule"></div>
@@ -2165,19 +2176,25 @@
         <div class="path-card" data-path="chronological" tabindex="0" role="button" aria-pressed="false">
           <div class="path-card__text">
             <h2 class="path-card__name">Chronological</h2>
+            <p class="path-card__desc">태어난 순서대로</p>
           </div>
+          <span class="path-card__arrow" aria-hidden="true">&rarr;</span>
         </div>
 
         <div class="path-card" data-path="proximity" tabindex="0" role="button" aria-pressed="false">
           <div class="path-card__text">
             <h2 class="path-card__name">Proximity</h2>
+            <p class="path-card__desc">영향을 주고받은 순서로</p>
           </div>
+          <span class="path-card__arrow" aria-hidden="true">&rarr;</span>
         </div>
 
         <div class="path-card" data-path="thematic" tabindex="0" role="button" aria-pressed="false">
           <div class="path-card__text">
             <h2 class="path-card__name">Thematic Pairs</h2>
+            <p class="path-card__desc">비슷한 질문을 한 두 사람씩</p>
           </div>
+          <span class="path-card__arrow" aria-hidden="true">&rarr;</span>
         </div>
 
       </div>
@@ -2191,6 +2208,17 @@
     <div class="scroll-indicator" aria-hidden="true">
       <div class="scroll-indicator__chevron"></div>
       <div class="scroll-indicator__chevron"></div>
+    </div>
+  </section>
+
+  <!-- ===== Before Reading ===== -->
+  <section class="before-reading" id="before-reading">
+    <div class="before-reading__content">
+      <p class="before-reading__heading">읽기 전에</p>
+      <p>피아제는 열한 살에 알비노 참새를 보고 논문을 썼습니다. 편집자는 저자가 소년인 줄 몰랐습니다. 몬테소리는 이탈리아 최초의 여성 의사가 되었지만, 자기 아이는 포기해야 했습니다.</p>
+      <p>이런 사람들에게 자꾸 돌아갔습니다. 광고를 공부하는데, 제가 읽는 사람들은 심리학자, 수학자, 의사, 건축가였습니다. 공통점은 하나였습니다. 한 분야에 머물지 않았다는 것. 위기의 순간에 경계를 넘었다는 것.</p>
+      <p>이 책은 그 전환의 순간들을 따라갑니다.</p>
+      <p class="before-reading__growing">이 책은 계속 자랍니다.</p>
     </div>
   </section>
 
@@ -3974,9 +4002,7 @@
         trigger.addEventListener('click', function() { overlay.classList.toggle('closed'); });
         overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.add('closed'); });
 
-        if (isFirstVisit) {
-          setTimeout(function() { overlay.classList.remove('closed'); }, 800);
-        }
+        /* First-visit auto-open removed */
       }
 
       document.querySelectorAll('.font-btn').forEach(function(btn) {
