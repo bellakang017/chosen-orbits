@@ -1912,9 +1912,12 @@
     .copy-float-btn.copied { background: rgba(91, 175, 166, 0.85); }
     .copy-float-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
-    /* Settings Trigger */
+    /* Settings Trigger — hidden on landing, visible when reading */
     .settings-trigger {
       position: fixed;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, background 0.2s, border-color 0.2s, box-shadow 0.2s;
       bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
       right: calc(2rem + env(safe-area-inset-right, 0px));
       width: 48px;
@@ -1932,9 +1935,12 @@
       cursor: pointer;
       z-index: 100;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
       line-height: 1;
       touch-action: manipulation;
+    }
+    .settings-trigger.visible {
+      opacity: 1;
+      pointer-events: auto;
     }
     .settings-trigger:hover {
       background: rgba(255,255,255,0.95);
@@ -2227,8 +2233,6 @@
         <span class="setting-label">배경</span>
         <div class="setting-options bg-options">
           <button class="bg-swatch active" data-theme="default" aria-label="기본"></button>
-          <button class="bg-swatch" data-theme="sepia" aria-label="세피아"></button>
-          <button class="bg-swatch" data-theme="cream" aria-label="크림"></button>
           <button class="bg-swatch" data-theme="dark" aria-label="다크"></button>
         </div>
       </div>
@@ -4066,6 +4070,21 @@
 
     // Start observing sections for nav updates
     observeSections();
+
+    // Show/hide Aa button based on scroll (hidden on landing + before-reading)
+    var settingsTrigger = document.querySelector('.settings-trigger');
+    if (settingsTrigger) {
+      var landingEl = document.getElementById('landing');
+      var beforeReadingEl = document.getElementById('before-reading');
+      var beginReadingEl = document.getElementById('begin-reading');
+      var aaObserver = new IntersectionObserver(function(entries) {
+        var anyPreContentVisible = entries.some(function(e) { return e.isIntersecting; });
+        settingsTrigger.classList.toggle('visible', !anyPreContentVisible);
+      }, { threshold: 0.3 });
+      if (landingEl) aaObserver.observe(landingEl);
+      if (beforeReadingEl) aaObserver.observe(beforeReadingEl);
+      if (beginReadingEl) aaObserver.observe(beginReadingEl);
+    }
 
     // Always start at top (landing page)
     window.scrollTo(0, 0);
