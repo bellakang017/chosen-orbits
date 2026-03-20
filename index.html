@@ -261,23 +261,20 @@
 
     .landing__title {
       font-family: var(--font-heading);
-      font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+      font-size: clamp(2rem, 5vw, 2.8rem);
       font-weight: 600;
       color: #2a2520;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       margin-bottom: 0.8rem;
-      line-height: 1.15;
+      line-height: 1.2;
       text-transform: uppercase;
-      max-width: calc(100% - 3rem);
-      overflow-wrap: break-word;
-      word-break: keep-all;
+      text-align: center;
+      white-space: nowrap;
     }
 
     .landing__title em {
-      display: block;
       font-style: normal;
       font-weight: 600;
-      letter-spacing: 0.1em;
     }
 
     .landing__ornament {
@@ -530,7 +527,8 @@
       }
 
       .landing__title {
-        font-size: clamp(1.8rem, 7vw, 2.4rem);
+        font-size: clamp(1.5rem, 6.5vw, 2.2rem);
+        letter-spacing: 0.08em;
       }
     }
 
@@ -1892,45 +1890,49 @@
     .copy-float-btn.copied { background: rgba(91, 175, 166, 0.85); }
     .copy-float-btn:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
-    /* Settings Trigger — hidden on landing, visible when reading */
+    /* Settings Trigger — fades in/out with chapter transitions */
     .settings-trigger {
       position: fixed;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease, background 0.2s, border-color 0.2s, box-shadow 0.2s;
       bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
       right: calc(2rem + env(safe-area-inset-right, 0px));
-      width: 48px;
-      height: 48px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15em;
+      font-size: 0.9em;
       font-weight: 600;
-      color: #3a3a3a;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 50%;
+      color: currentColor;
+      background: none;
+      border: none;
+      border-radius: 0;
       cursor: pointer;
       z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
       line-height: 1;
       touch-action: manipulation;
+      letter-spacing: 0.05em;
     }
     .settings-trigger.visible {
-      opacity: 1;
+      opacity: 0.25;
       pointer-events: auto;
     }
     .settings-trigger:hover {
-      background: rgba(255,255,255,0.95);
-      border-color: rgba(0,0,0,0.2);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      opacity: 0.6;
+    }
+    .settings-trigger:active {
+      opacity: 0.8;
+    }
+    /* Hide during page transitions */
+    .settings-trigger.transitioning {
+      opacity: 0 !important;
+      transition: opacity 0.15s ease;
     }
     body[data-theme="dark"] .settings-trigger {
       color: #D4DAD8;
-      background: rgba(50,65,60,0.85);
-      border-color: rgba(255,255,255,0.12);
     }
 
     /* Settings Panel */
@@ -2047,23 +2049,25 @@
     .pull-quote-copy-btn {
       display: none;
       font-family: var(--font-heading);
-      font-size: 0.6em;
+      font-size: 0.55em;
       font-weight: 500;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: currentColor;
-      opacity: 0.35;
+      opacity: 0;
       background: none;
-      border: 1px solid currentColor;
-      border-radius: 0;
-      padding: 4px 10px;
+      border: none;
+      border-bottom: 1px solid currentColor;
+      padding: 4px 0;
       cursor: pointer;
-      transition: opacity 0.3s ease, background 0.3s ease;
+      transition: opacity 0.3s ease;
       -webkit-user-select: none;
       user-select: none;
+      margin-top: 0.8rem;
     }
-    .pull-quote-copy-btn:hover { opacity: 0.7; background: rgba(128,128,128,0.08); }
-    .pull-quote-copy-btn:active { opacity: 0.9; }
+    .pull-quote:hover .pull-quote-copy-btn { opacity: 0.4; }
+    .pull-quote-copy-btn:hover { opacity: 0.7 !important; }
+    .pull-quote-copy-btn:active { opacity: 0.9 !important; }
 
     .sr-only {
       position: absolute; width: 1px; height: 1px;
@@ -2120,19 +2124,17 @@
       .copy-float-btn { display: none !important; }
       .pull-quote-copy-btn {
         display: block;
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        opacity: 0.5;
-        padding: 8px 12px;
+        position: static;
+        opacity: 0.4;
+        padding: 6px 0;
         min-height: 44px;
-        min-width: 44px;
+        text-align: right;
       }
-      .settings-trigger { bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); right: calc(1.5rem + env(safe-area-inset-right, 0px)); width: 44px; height: 44px; font-size: 1em; }
+      .settings-trigger { bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); right: calc(1.5rem + env(safe-area-inset-right, 0px)); width: 36px; height: 36px; }
     }
 
     @media (max-width: 480px) {
-      .settings-trigger { bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); right: calc(1rem + env(safe-area-inset-right, 0px)); width: 44px; height: 44px; font-size: 0.95em; }
+      .settings-trigger { bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); right: calc(1rem + env(safe-area-inset-right, 0px)); }
     }
 
     /* Landscape mode on phones */
@@ -4051,19 +4053,38 @@
     // Start observing sections for nav updates
     observeSections();
 
-    // Show/hide Aa button based on scroll (hidden on landing + before-reading)
+    // Show/hide Aa button — hidden on pre-content pages, fades during chapter transitions
     var settingsTrigger = document.querySelector('.settings-trigger');
     if (settingsTrigger) {
       var landingEl = document.getElementById('landing');
       var beforeReadingEl = document.getElementById('before-reading');
       var beginReadingEl = document.getElementById('begin-reading');
+      var preContentVisible = true;
+
+      // Hide on landing/intro/begin-reading
       var aaObserver = new IntersectionObserver(function(entries) {
-        var anyPreContentVisible = entries.some(function(e) { return e.isIntersecting; });
-        settingsTrigger.classList.toggle('visible', !anyPreContentVisible);
+        preContentVisible = entries.some(function(e) { return e.isIntersecting; });
+        settingsTrigger.classList.toggle('visible', !preContentVisible);
       }, { threshold: 0.3 });
       if (landingEl) aaObserver.observe(landingEl);
       if (beforeReadingEl) aaObserver.observe(beforeReadingEl);
       if (beginReadingEl) aaObserver.observe(beginReadingEl);
+
+      // Fade out/in during chapter transitions
+      var chapterSections = document.querySelectorAll('.chapter-section');
+      var transitionTimer = null;
+      var chapterTransitionObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !preContentVisible) {
+            settingsTrigger.classList.add('transitioning');
+            clearTimeout(transitionTimer);
+            transitionTimer = setTimeout(function() {
+              settingsTrigger.classList.remove('transitioning');
+            }, 400);
+          }
+        });
+      }, { threshold: 0.05 });
+      chapterSections.forEach(function(s) { chapterTransitionObserver.observe(s); });
     }
 
     // Always start at top (landing page)
