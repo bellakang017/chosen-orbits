@@ -1769,6 +1769,28 @@
       color: #D4DAD8;
     }
 
+    /* Warm theme */
+    body[data-theme="warm"] {
+      --rose-wood: #A0685A;
+      background-color: #F0E6D6;
+      color: #4A3F35;
+    }
+    body[data-theme="warm"] .chapter-section[class*="person-"],
+    body[data-theme="warm"] .landing,
+    body[data-theme="warm"] .before-reading,
+    body[data-theme="warm"] .begin-reading {
+      background: #F0E6D6;
+      color: #4A3F35;
+    }
+    body[data-theme="warm"] .site-nav {
+      background-color: rgba(240,230,214,0.92);
+      border-bottom-color: rgba(0,0,0,0.06);
+    }
+    body[data-theme="warm"] .settings-panel { background: #F0E6D6; }
+    body[data-theme="warm"] .landing__frame {
+      background: linear-gradient(175deg, #F5EDE0 0%, #EDE4D4 40%, #E8DDCC 100%);
+    }
+
     body[data-theme="dark"] .chapter-section[class*="person-"],
     body[data-theme="dark"] .landing,
     body[data-theme="dark"] .before-reading,
@@ -1829,8 +1851,14 @@
     /* Margin Overrides */
     body[data-lr="1"] .chapter-prose { max-width: 700px; }
     body[data-lr="3"] .chapter-prose { max-width: 500px; }
-    body[data-tb="1"] .chapter-prose p { margin-bottom: 0.8rem; }
-    body[data-tb="3"] .chapter-prose p { margin-bottom: 2rem; }
+    body[data-tb="1"] .chapter-prose { padding-top: 1rem; padding-bottom: 1rem; }
+    body[data-tb="1"] .chapter-prose p { margin-bottom: 0.6rem; }
+    body[data-tb="1"] .chapter-header { padding-top: 2rem; }
+    body[data-tb="1"] .pull-quote { margin: 1.5rem 0; }
+    body[data-tb="3"] .chapter-prose { padding-top: 4rem; padding-bottom: 4rem; }
+    body[data-tb="3"] .chapter-prose p { margin-bottom: 2.2rem; }
+    body[data-tb="3"] .chapter-header { padding-top: 6rem; }
+    body[data-tb="3"] .pull-quote { margin: 3.5rem 0; }
 
     /* Progress Bar */
     .progress-bar {
@@ -2043,6 +2071,7 @@
     .bg-swatch:active { transform: scale(0.92); }
     .bg-swatch.active { border: 2px solid currentColor; }
     .bg-swatch[data-theme="default"] { background: #F2F6F4; }
+    .bg-swatch[data-theme="warm"] { background: #F0E6D6; }
     .bg-swatch[data-theme="dark"] { background: #1E2A27; }
 
     .pull-quote { position: relative; }
@@ -2215,6 +2244,7 @@
         <span class="setting-label">배경</span>
         <div class="setting-options bg-options">
           <button class="bg-swatch active" data-theme="default" aria-label="기본"></button>
+          <button class="bg-swatch" data-theme="warm" aria-label="따뜻한"></button>
           <button class="bg-swatch" data-theme="dark" aria-label="다크"></button>
         </div>
       </div>
